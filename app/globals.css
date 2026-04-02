@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+:root {
+  /* Setup these colors - Modern light green theme */
+  --background: #ffffff;
+  --background-light: #f0fdf4;
+  --primary: #10b981;
+  --primary-light: #34d399;
+  --text: #064e3b;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-light: var(--background-light);
+
+  /* Background */
+  --bg-background: var(--color-background);
+  --bg-background-light: var(--color-background-light);
+
+  /* Text */
+  --color-primary: var(--primary);
+
+
+  /* Background */
+  --bg-primary: var(--color-primary);
+
+
+  /* Border */
+  --border-primary: var(--color-primary);
+
+
+  /* Ring */
+  --ring-primary: var(--color-primary);
+
+
+  /* Ring offset */
+  --ring-offset-primary: var(--color-primary);
+
+
+  /* Placeholder */
+  --placeholder-primary: var(--color-primary);
+
+
+  /* Accent */
+  --accent-1: var(--color-primary);
+
+
+  /* Storke */
+  --storke-primary: var(--color-primary);
+
+
+  /* Fill */
+  --fill-primary: var(--color-primary);
+
+}
+
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-light)
+}
+
+body {
+  background: var(--background);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes progress {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+.animate-progress {
+  animation: progress 2s ease-in-out;
+}

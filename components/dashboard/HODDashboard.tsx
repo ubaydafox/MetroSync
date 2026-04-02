@@ -1,0 +1,308 @@
+"use client";
+
+import { getHODDashboardData } from "@/services/stat";
+import React, { useEffect } from "react";
+import {
+  FaBook,
+  FaCalendarAlt,
+  FaUserGraduate,
+  FaChalkboardTeacher,
+  FaUserTie,
+  FaPlus,
+  FaEdit,
+  FaEye,
+  FaUserCheck,
+} from "react-icons/fa";
+
+export default function HODDashboard() {
+
+
+  const [hodDashboardData, setHODDashboardData] = React.useState({
+    stats: {
+      totalCourses: 0,
+      totalTeachers: 0,
+      totalStudents: 0,
+      activeSemesters: 0,
+    },
+    recentCourses: [
+      {
+        id: 1,
+        name: "Loading...",
+        code: "Loading...",
+        teacher: "Loading...",
+        students: 0,
+        semester: "Loading...",
+      },
+    ],
+    teachers: [
+      {
+        id: 1,
+        name: "Loading...",
+        department: "Loading...",
+        courses: 0,
+        status: "Loading...",
+      },
+    ],
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+        
+        const data = await getHODDashboardData(token);
+        setHODDashboardData(data);
+        if (data.overviewData) {
+        }
+      } catch (error) {
+        console.error("Error fetching overview data:", error);
+      } finally {
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Welcome Section */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            HOD Dashboard
+          </h1>
+          <p className="text-gray-600">Manage your department efficiently</p>
+        </div>
+
+        {/* Stats Overview */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {/* Total Courses Card */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-blue-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-500 text-sm font-medium">
+                  Total Courses
+                </p>
+                <h3 className="text-3xl font-bold text-gray-800 mt-1">
+                  {hodDashboardData.stats.totalCourses}
+                </h3>
+              </div>
+              <div className="p-3 rounded-full bg-blue-100">
+                <FaBook className="text-blue-600 text-xl" />
+              </div>
+            </div>
+          </div>
+
+          {/* Total Teachers Card */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-green-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-500 text-sm font-medium">
+                  Total Teachers
+                </p>
+                <h3 className="text-3xl font-bold text-gray-800 mt-1">
+                  {hodDashboardData.stats.totalTeachers}
+                </h3>
+              </div>
+              <div className="p-3 rounded-full bg-green-100">
+                <FaChalkboardTeacher className="text-green-600 text-xl" />
+              </div>
+            </div>
+          </div>
+
+          {/* Total Students Card */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-purple-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-500 text-sm font-medium">
+                  Total Students
+                </p>
+                <h3 className="text-3xl font-bold text-gray-800 mt-1">
+                  {hodDashboardData.stats.totalStudents}
+                </h3>
+              </div>
+              <div className="p-3 rounded-full bg-purple-100">
+                <FaUserGraduate className="text-purple-600 text-xl" />
+              </div>
+            </div>
+          </div>
+
+          {/* Active Semesters Card */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-orange-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-500 text-sm font-medium">
+                  Active Semesters
+                </p>
+                <h3 className="text-3xl font-bold text-gray-800 mt-1">
+                  {hodDashboardData.stats.activeSemesters}
+                </h3>
+              </div>
+              <div className="p-3 rounded-full bg-orange-100">
+                <FaCalendarAlt className="text-orange-600 text-xl" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="mb-8">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">
+            Quick Actions
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <button className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group">
+              <div className="flex flex-col items-center text-center">
+                <div className="p-3 rounded-full bg-blue-100 group-hover:bg-blue-200 transition-colors mb-3">
+                  <FaPlus className="text-blue-600 text-lg" />
+                </div>
+                <span className="text-sm font-medium text-gray-700">
+                  Add Course
+                </span>
+              </div>
+            </button>
+
+            <button className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group">
+              <div className="flex flex-col items-center text-center">
+                <div className="p-3 rounded-full bg-green-100 group-hover:bg-green-200 transition-colors mb-3">
+                  <FaUserTie className="text-green-600 text-lg" />
+                </div>
+                <span className="text-sm font-medium text-gray-700">
+                  Add Teacher
+                </span>
+              </div>
+            </button>
+
+            <button className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group">
+              <div className="flex flex-col items-center text-center">
+                <div className="p-3 rounded-full bg-purple-100 group-hover:bg-purple-200 transition-colors mb-3">
+                  <FaUserCheck className="text-purple-600 text-lg" />
+                </div>
+                <span className="text-sm font-medium text-gray-700">
+                  Add CR
+                </span>
+              </div>
+            </button>
+
+            <button className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group">
+              <div className="flex flex-col items-center text-center">
+                <div className="p-3 rounded-full bg-orange-100 group-hover:bg-orange-200 transition-colors mb-3">
+                  <FaCalendarAlt className="text-orange-600 text-lg" />
+                </div>
+                <span className="text-sm font-medium text-gray-700">
+                  Manage Schedule
+                </span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        {/* Main Content - Full Width Layout */}
+        <div className="space-y-6">
+          {/* Recent Courses */}
+          <div className="bg-white rounded-2xl shadow-lg p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-gray-800 flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-blue-100">
+                  <FaBook className="text-blue-600" />
+                </div>
+                Course Management
+              </h2>
+              <button className="text-blue-600 hover:text-blue-700 font-medium transition-colors">
+                View All →
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              {hodDashboardData.recentCourses.map((course) => (
+                <div
+                  key={course.id}
+                  className="bg-linear-to-r from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-100 hover:shadow-md transition-all duration-300"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-gray-800 text-lg">
+                        {course.name}
+                      </h3>
+                      <p className="text-gray-600 text-sm mt-1">
+                        Code: {course.code} | Teacher: {course.teacher}
+                      </p>
+                      <div className="mt-2 flex flex-wrap gap-4 text-sm text-gray-600">
+                        <span className="bg-white px-3 py-1 rounded-full">
+                          {course.students} Students
+                        </span>
+                        <span className="bg-white px-3 py-1 rounded-full">
+                          {course.semester}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex gap-2 ml-4">
+                      <button className="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors">
+                        <FaEye />
+                      </button>
+                      <button className="p-2 text-green-600 hover:bg-green-100 rounded-lg transition-colors">
+                        <FaEdit />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Teachers Management */}
+          <div className="bg-white rounded-2xl shadow-lg p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-gray-800 flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-green-100">
+                  <FaChalkboardTeacher className="text-green-600" />
+                </div>
+                Teacher Management
+              </h2>
+              <button className="text-green-600 hover:text-green-700 font-medium transition-colors">
+                View All →
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              {hodDashboardData.teachers.map((teacher) => (
+                <div
+                  key={teacher.id}
+                  className="bg-linear-to-r from-green-50 to-emerald-50 rounded-xl p-5 border border-green-100 hover:shadow-md transition-all duration-300"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-gray-800 text-lg">
+                        {teacher.name}
+                      </h3>
+                      <p className="text-gray-600 text-sm mt-1">
+                        {teacher.department}
+                      </p>
+                      <div className="mt-2 flex flex-wrap gap-4 text-sm text-gray-600">
+                        <span className="bg-white px-3 py-1 rounded-full">
+                          {teacher.courses} Courses
+                        </span>
+                        <span className="bg-green-200 text-green-800 px-3 py-1 rounded-full">
+                          {teacher.status}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex gap-2 ml-4">
+                      <button className="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors">
+                        <FaEye />
+                      </button>
+                      <button className="p-2 text-green-600 hover:bg-green-100 rounded-lg transition-colors">
+                        <FaEdit />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
