@@ -1,4 +1,5 @@
-import { apiFetch } from "@/utils/api";
+import { collection, getDocs, doc, addDoc, updateDoc, deleteDoc, query, where } from "firebase/firestore";
+import { db } from "@/utils/firebase";
 import { toast } from "react-toastify";
 
 export interface Course {
@@ -6,18 +7,11 @@ export interface Course {
   code: string;
   name: string;
   credits: number;
+  teacher_id: number;
   teacher_name: string;
-  student_count: number;
-  schedule: string;
-}
-
-export interface CourseDetails {
-  id: number;
-  code: string;
-  name: string;
-  credits: number;
-  teacher: string;
-  teacher_name: string;
+  batch_id: number;
+  department_id: number;
+  department: string;
   room: string;
   description: string;
   student_count: number;
@@ -30,124 +24,87 @@ export interface CourseDetails {
 export interface CreateCourseData {
   code: string;
   name: string;
-  credits: number;
-  teacher?: number;
-  batch?: number;
-  department?: number;
-  room?: string;
-  description?: string;
+  credits?: number;
+  teacher_id?: number;
+  batch_id?: number;
+  department_id?: number;
 }
 
 export interface UpdateCourseData {
   code?: string;
   name?: string;
   credits?: number;
-  teacher?: number;
-  room?: string;
-  description?: string;
+  teacher_id?: number;
+  batch_id?: number;
 }
 
-export const getCourses = async (token: string): Promise<Course[]> => {
-  const res = await apiFetch(`courses/`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
+// Get all courses
+export async function getCourses(_token: string): Promise<Course[]> {
+  const snap = await getDocs(collection(db, "courses"));
+  return snap.docs.map((d) => d.data() as Course).sort((a, b) => a.id - b.id);
+}
 
-  if (!res.ok) {
-    toast.error((await res.json()).error || "Failed to fetch courses");
-    throw new Error("Failed to fetch courses");
+// Get courses by batch
+export async function getCoursesByBatch(_token: string, batchId: number): Promise<Course[]> {
+  const snap = await getDocs(query(collection(db, "courses"), where("batch_id", "==", batchId)));
+  return snap.docs.map((d) => d.data() as Course);
+}
+
+// Get courses by department
+export async function getCoursesByDepartment(_token: string, deptId: number): Promise<Course[]> {
+  const snap = await getDocs(query(collection(db, "courses"), where("department_id", "==", deptId)));
+  return snap.docs.map((d) => d.data() as Course);
+}
+
+// Get a single course by id
+export async function getCourse(_token: string, courseId: string | number): Promise<Course> {
+  const snap = await getDocs(query(collection(db, "courses"), where("id", "==", Number(courseId))));
+  if (snap.empty) throw new Error("Course not found");
+  return snap.docs[0].data() as Course;
+}
+
+// Create a new course
+export async function createCourse(_token: string, data: CreateCourseData): Promise<Course> {
+  try {
+    const allSnap = await getDocs(collection(db, "courses"));
+    const nextId = allSnap.size + 1;
+    const newCourse: Course = {
+      id: nextId,
+      code: data.code,
+      name: data.name,
+      credits: data.credits || 3,
+      teacher_id: data.teacher_id || 0,
+      teacher_name: "",
+      batch_id: data.batch_id || 0,
+      department_id: data.department_id || 0,
+      department: "",
+      room: "",
+      description: "",
+      student_count: 0,
+      material_count: 0,
+      task_count: 0,
+      notice_count: 0,
+      active_task_count: 0,
+    };
+    await addDoc(collection(db, "courses"), newCourse);
+    toast.success("Course created successfully");
+    return newCourse;
+  } catch (e) {
+    toast.error("Failed to create course");
+    throw e;
   }
+}
 
-  const data = await res.json();
-  // Handle both direct array and object with courses property
-  return Array.isArray(data) ? data : data.courses || [];
-};
+// Update a course
+export async function updateCourse(_token: string, courseId: string | number, data: UpdateCourseData): Promise<Course> {
+  const snap = await getDocs(query(collection(db, "courses"), where("id", "==", Number(courseId))));
+  if (snap.empty) throw new Error("Course not found");
+  await updateDoc(snap.docs[0].ref, { ...data });
+  return { ...snap.docs[0].data(), ...data } as Course;
+}
 
-export const getCourseById = async (
-  token: string,
-  courseId: string
-): Promise<CourseDetails> => {
-  const res = await apiFetch(`courses/${courseId}/`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!res.ok) {
-    toast.error((await res.json()).error || "Failed to fetch course details");
-    throw new Error("Failed to fetch course details");
-  }
-
-  const course = await res.json();
-  return course;
-};
-
-export const createCourse = async (
-  token: string,
-  data: CreateCourseData
-): Promise<Course> => {
-  const res = await apiFetch(`courses/`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!res.ok) {
-    toast.error((await res.json()).error || "Failed to create course");
-    throw new Error("Failed to create course");
-  }
-
-  const responseData = await res.json();
-  // Handle nested response structure: {message: "...", course: {...}}
-  return responseData.course || responseData;
-};
-
-export const updateCourse = async (
-  token: string,
-  courseId: number,
-  data: UpdateCourseData
-): Promise<Course> => {
-  const res = await apiFetch(`courses/${courseId}/`, {
-    method: "PATCH",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!res.ok) {
-    toast.error((await res.json()).error || "Failed to update course");
-    throw new Error("Failed to update course");
-  }
-
-  const responseData = await res.json();
-  // Handle nested response structure: {message: "...", course: {...}}
-  return responseData.course || responseData;
-};
-
-export const deleteCourse = async (
-  token: string,
-  courseId: number
-): Promise<void> => {
-  const res = await apiFetch(`courses/${courseId}/`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!res.ok) {
-    toast.error((await res.json()).error || "Failed to delete course");
-    throw new Error("Failed to delete course");
-  }
-};
+// Delete a course
+export async function deleteCourse(_token: string, courseId: string | number): Promise<void> {
+  const snap = await getDocs(query(collection(db, "courses"), where("id", "==", Number(courseId))));
+  if (!snap.empty) await deleteDoc(snap.docs[0].ref);
+}

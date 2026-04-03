@@ -18,7 +18,7 @@ import {
 import { signInWithGoogle } from "@/services/firebaseAuth";
 import { FcGoogle } from "react-icons/fc";
 import { useGlobal } from "@/app/context/GlobalContext";
-import { Batch } from "@/services/batch";
+import { Batch, getBatchesByDepartment } from "@/services/batch";
 
 export default function Signup() {
   const router = useRouter();
@@ -53,19 +53,8 @@ export default function Signup() {
 
       setLoadingBatches(true);
       try {
-        // Fetch batches from public endpoint with department filter
-        const response = await fetch(
-          `${
-            process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api"
-          }/public/batches/?department_id=${formData.department}`
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch batches");
-        }
-
-        const data = await response.json();
-        setFilteredBatches(Array.isArray(data) ? data : []);
+        const batches = await getBatchesByDepartment(Number(formData.department));
+        setFilteredBatches(batches);
       } catch (error) {
         console.error("Error fetching batches:", error);
         setFilteredBatches([]);

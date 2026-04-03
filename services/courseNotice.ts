@@ -1,4 +1,5 @@
-import { apiFetch } from "@/utils/api";
+import { collection, getDocs, doc, setDoc, updateDoc, deleteDoc, query, where } from "firebase/firestore";
+import { db } from "@/utils/firebase";
 import { toast } from "react-toastify";
 
 export interface CourseNotice {
@@ -7,13 +8,14 @@ export interface CourseNotice {
   message: string;
   author: string;
   date: string;
-  course: number;
+  course_id: number;
 }
 
 export interface CreateCourseNoticeData {
   title: string;
   message: string;
   course: number;
+  author?: string;
 }
 
 export interface UpdateCourseNoticeData {
@@ -21,97 +23,55 @@ export interface UpdateCourseNoticeData {
   message: string;
 }
 
-// Get all notices for a specific course
-export async function getCourseNotices(
-  token: string,
-  courseId: string
-): Promise<CourseNotice[]> {
-  const response = await apiFetch(`courses/${courseId}/notices/`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    toast.error(
-      (await response.json()).error || "Failed to fetch course notices"
-    );
-    throw new Error("Failed to fetch course notices");
+export async function getCourseNotices(_token: string, courseId: string): Promise<CourseNotice[]> {
+  try {
+    const snap = await getDocs(query(collection(db, "course_notices"), where("course_id", "==", Number(courseId))));
+    return snap.docs.map((d) => d.data() as CourseNotice).sort((a, b) => b.id - a.id);
+  } catch (e) {
+    toast.error("Failed to fetch course notices");
+    throw e;
   }
-
-  const data = await response.json();
-  return data.notices || [];
 }
 
-// Create a new course notice
-export async function createCourseNotice(
-  token: string,
-  data: CreateCourseNoticeData
-): Promise<CourseNotice> {
-  const response = await apiFetch(`courses/${data.course}/notices/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    toast.error(
-      (await response.json()).error || "Failed to create course notice"
-    );
-    throw new Error("Failed to create course notice");
+export async function createCourseNotice(_token: string, data: CreateCourseNoticeData): Promise<CourseNotice> {
+  try {
+    const snap = await getDocs(collection(db, "course_notices"));
+    const nextId = snap.size + 1;
+    const now = new Date().toISOString().split("T")[0];
+    const newNotice: CourseNotice = {
+      id: nextId,
+      title: data.title,
+      message: data.message,
+      author: data.author || "Teacher",
+      date: now,
+      course_id: data.course,
+    };
+    await setDoc(doc(db, "course_notices", `cn_${nextId}`), newNotice);
+    toast.success("Notice posted");
+    return newNotice;
+  } catch (e) {
+    toast.error("Failed to create course notice");
+    throw e;
   }
-
-  const responseData = await response.json();
-  return responseData.notice || responseData;
 }
 
-// Update a course notice
-export async function updateCourseNotice(
-  token: string,
-  courseId: string,
-  noticeId: number,
-  data: UpdateCourseNoticeData
-): Promise<CourseNotice> {
-  const response = await apiFetch(`courses/${courseId}/notices/${noticeId}/`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    toast.error(
-      (await response.json()).error || "Failed to update course notice"
-    );
-    throw new Error("Failed to update course notice");
+export async function updateCourseNotice(_token: string, courseId: string, noticeId: number, data: UpdateCourseNoticeData): Promise<CourseNotice> {
+  try {
+    const ref = doc(db, "course_notices", `cn_${noticeId}`);
+    await updateDoc(ref, { ...data });
+    const snap = await getDocs(query(collection(db, "course_notices"), where("id", "==", noticeId)));
+    return snap.docs[0].data() as CourseNotice;
+  } catch (e) {
+    toast.error("Failed to update course notice");
+    throw e;
   }
-
-  const responseData = await response.json();
-  return responseData.notice || responseData;
 }
 
-// Delete a course notice
-export async function deleteCourseNotice(
-  token: string,
-  courseId: string,
-  noticeId: number
-): Promise<void> {
-  const response = await apiFetch(`courses/${courseId}/notices/${noticeId}/`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    toast.error(
-      (await response.json()).error || "Failed to delete course notice"
-    );
-    throw new Error("Failed to delete course notice");
+export async function deleteCourseNotice(_token: string, courseId: string, noticeId: number): Promise<void> {
+  try {
+    await deleteDoc(doc(db, "course_notices", `cn_${noticeId}`));
+  } catch (e) {
+    toast.error("Failed to delete course notice");
+    throw e;
   }
 }

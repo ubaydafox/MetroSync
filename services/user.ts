@@ -1,8 +1,10 @@
-import { apiFetch } from "@/utils/api";
+import { collection, getDocs, doc, updateDoc, query, where } from "firebase/firestore";
+import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
+import { db, auth } from "@/utils/firebase";
 import { toast } from "react-toastify";
 
-export interface User {
-  id: number;
+export interface UserProfile {
+  id: string;
   name: string;
   email: string;
   role: string;
@@ -17,72 +19,45 @@ export interface ChangePasswordData {
   new_password: string;
 }
 
-// Update user profile (name)
-export const updateProfile = async (
-  token: string,
-  data: UpdateProfileData
-): Promise<{ message: string; user: any }> => {
-  const res = await apiFetch(`user/update-profile/`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!res.ok) {
-    const errorData = await res
-      .json()
-      .catch(() => ({ error: "Failed to update profile" }));
-    toast.error(errorData.error || "Failed to update profile");
-    throw new Error(errorData.error || "Failed to update profile");
+// Update user profile name in Firestore
+export const updateProfile = async (_token: string, data: UpdateProfileData): Promise<{ message: string; user: UserProfile }> => {
+  try {
+    const currentUser = auth.currentUser;
+    if (!currentUser) throw new Error("Not authenticated");
+    const ref = doc(db, "users", currentUser.uid);
+    await updateDoc(ref, { name: data.name });
+    toast.success("Profile updated");
+    return { message: "Profile updated", user: { id: currentUser.uid, name: data.name, email: currentUser.email || "", role: "" } };
+  } catch (e) {
+    toast.error("Failed to update profile");
+    throw e;
   }
-
-  return res.json();
 };
 
-// Change password
-export const changePassword = async (
-  token: string,
-  data: ChangePasswordData
-): Promise<{ message: string }> => {
-  const res = await apiFetch(`user/change-password/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!res.ok) {
-    const errorData = await res
-      .json()
-      .catch(() => ({ error: "Failed to change password" }));
-    toast.error(errorData.error || "Failed to change password");
-    throw new Error(errorData.error || "Failed to change password");
+// Change password via Firebase Auth
+export const changePassword = async (_token: string, data: ChangePasswordData): Promise<{ message: string }> => {
+  try {
+    const currentUser = auth.currentUser;
+    if (!currentUser || !currentUser.email) throw new Error("Not authenticated");
+    const credential = EmailAuthProvider.credential(currentUser.email, data.current_password);
+    await reauthenticateWithCredential(currentUser, credential);
+    await updatePassword(currentUser, data.new_password);
+    toast.success("Password changed successfully");
+    return { message: "Password changed" };
+  } catch (e: unknown) {
+    const msg = (e instanceof Error) ? e.message : "Failed to change password";
+    toast.error(msg);
+    throw e;
   }
-
-  return res.json();
 };
 
-// Get all HOD users
-export const getHODs = async (token: string): Promise<User[]> => {
-  const res = await apiFetch(`users/?role=hod`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!res.ok) {
-    toast.error((await res.json()).error || "Failed to fetch HODs");
-    throw new Error("Failed to fetch HODs");
+// Get all HOD users from Firestore
+export const getHODs = async (_token: string): Promise<UserProfile[]> => {
+  try {
+    const snap = await getDocs(query(collection(db, "users"), where("role", "==", "hod")));
+    return snap.docs.map((d) => ({ id: d.id, ...d.data() }) as UserProfile);
+  } catch (e) {
+    toast.error("Failed to fetch HODs");
+    throw e;
   }
-
-  const data = await res.json();
-  // Handle both array response and object response with users array
-  return Array.isArray(data) ? data : data.users || [];
 };

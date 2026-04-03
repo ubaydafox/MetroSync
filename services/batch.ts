@@ -1,4 +1,15 @@
-import { apiFetch } from "@/utils/api";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  doc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  serverTimestamp,
+} from "firebase/firestore";
+import { db } from "@/utils/firebase";
 import { toast } from "react-toastify";
 
 export interface Batch {
@@ -9,6 +20,8 @@ export interface Batch {
   department_id?: number;
   students: number;
   created_at: string;
+  // Firestore doc id stored separately
+  firestoreId?: string;
 }
 
 export interface CreateBatchData {
@@ -23,87 +36,105 @@ export interface UpdateBatchData {
   department_id?: number;
 }
 
-// Get all batches
-export async function getBatches(token: string): Promise<Batch[]> {
-  const response = await apiFetch(`batches/`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to fetch batches");
-    throw new Error("Failed to fetch batches");
+// Get all batches from Firestore
+export async function getBatches(_token: string): Promise<Batch[]> {
+  try {
+    const snapshot = await getDocs(collection(db, "batches"));
+    const batches = snapshot.docs.map((d) => ({
+      firestoreId: d.id,
+      ...(d.data() as Omit<Batch, "firestoreId">),
+    }));
+    return batches.sort((a, b) => a.id - b.id);
+  } catch (error) {
+    toast.error("Failed to fetch batches");
+    throw error;
   }
+}
 
-  const data = await response.json();
-  // Handle both array response and object response with batches array
-  return Array.isArray(data) ? data : data.batches || [];
+// Get batches filtered by department_id (used on signup/onboarding)
+export async function getBatchesByDepartment(departmentId: number): Promise<Batch[]> {
+  try {
+    const q = query(
+      collection(db, "batches"),
+      where("department_id", "==", departmentId)
+    );
+    const snapshot = await getDocs(q);
+    const batches = snapshot.docs.map((d) => ({
+      firestoreId: d.id,
+      ...(d.data() as Omit<Batch, "firestoreId">),
+    }));
+    // Sort by year descending in JS (avoids Firestore composite index requirement)
+    return batches.sort((a, b) => b.year - a.year);
+  } catch (error) {
+    console.error("Failed to fetch batches by department:", error);
+    return [];
+  }
 }
 
 // Create a new batch
 export async function createBatch(
-  token: string,
+  _token: string,
   data: CreateBatchData
 ): Promise<Batch> {
-  const response = await apiFetch(`batches/`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+  try {
+    // Get current max id
+    const snapshot = await getDocs(collection(db, "batches"));
+    const maxId = snapshot.docs.reduce((max, d) => {
+      const id = (d.data() as Batch).id || 0;
+      return id > max ? id : max;
+    }, 0);
+    const newId = maxId + 1;
 
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to create batch");
-    throw new Error("Failed to create batch");
+    const batchData = {
+      ...data,
+      id: newId,
+      department: "",
+      students: 0,
+      created_at: new Date().toISOString(),
+      createdAt: serverTimestamp(),
+    };
+
+    const docRef = await addDoc(collection(db, "batches"), batchData);
+    return { ...batchData, firestoreId: docRef.id };
+  } catch (error) {
+    toast.error("Failed to create batch");
+    throw error;
   }
-
-  const result = await response.json();
-  // Handle response that wraps batch in an object
-  return result.batch || result;
 }
 
 // Update a batch
 export async function updateBatch(
-  token: string,
+  _token: string,
   id: number,
   data: UpdateBatchData
 ): Promise<Batch> {
-  const response = await apiFetch(`batches/${id}/`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+  try {
+    const snapshot = await getDocs(collection(db, "batches"));
+    const target = snapshot.docs.find((d) => (d.data() as Batch).id === id);
+    if (!target) throw new Error("Batch not found");
 
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to update batch");
-    throw new Error("Failed to update batch");
+    await updateDoc(doc(db, "batches", target.id), {
+      ...data,
+      updatedAt: serverTimestamp(),
+    });
+
+    return { id, ...(target.data() as Omit<Batch, "id">), ...data, firestoreId: target.id };
+  } catch (error) {
+    toast.error("Failed to update batch");
+    throw error;
   }
-
-  const result = await response.json();
-  // Handle response that wraps batch in an object
-  return result.batch || result;
 }
 
 // Delete a batch
-export async function deleteBatch(token: string, id: number): Promise<void> {
-  const response = await apiFetch(`batches/${id}/`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
+export async function deleteBatch(_token: string, id: number): Promise<void> {
+  try {
+    const snapshot = await getDocs(collection(db, "batches"));
+    const target = snapshot.docs.find((d) => (d.data() as Batch).id === id);
+    if (!target) throw new Error("Batch not found");
 
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to delete batch");
-    throw new Error("Failed to delete batch");
+    await deleteDoc(doc(db, "batches", target.id));
+  } catch (error) {
+    toast.error("Failed to delete batch");
+    throw error;
   }
 }

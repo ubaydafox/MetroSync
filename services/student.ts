@@ -1,11 +1,15 @@
-import { apiFetch } from "@/utils/api";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "@/utils/firebase";
 import { toast } from "react-toastify";
 
 export interface Student {
-  id: number;
+  id: string;
   name: string;
   roll: string;
   email: string;
+  batch?: string;
+  batch_id?: number;
+  department_id?: number;
 }
 
 export interface CreateStudentData {
@@ -13,75 +17,42 @@ export interface CreateStudentData {
   course: number;
 }
 
-export interface UpdateStudentData {
-  // Reserved for future updates
-}
+// Get students enrolled in a batch (proxy for course students)
+export const getCourseStudents = async (_token: string, courseId: string): Promise<Student[]> => {
+  try {
+    // Get the course to find batch_id
+    const courseSnap = await getDocs(query(collection(db, "courses"), where("id", "==", Number(courseId))));
+    if (courseSnap.empty) return [];
+    const course = courseSnap.docs[0].data();
 
-// Get all students enrolled in a course
-export const getCourseStudents = async (
-  token: string,
-  courseId: string
-): Promise<Student[]> => {
-  const response = await apiFetch(`courses/${courseId}/students/`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    toast.error(errorData.error || "Failed to fetch students");
-    throw new Error(errorData.error || "Failed to fetch students");
+    // Get users in that batch
+    const usersSnap = await getDocs(query(collection(db, "users"), where("batch", "==", String(course.batch_id))));
+    return usersSnap.docs.map((d) => {
+      const data = d.data();
+      return {
+        id: d.id,
+        name: data.name || "",
+        roll: data.roll || "",
+        email: data.email || "",
+        batch: data.batch || "",
+        batch_id: Number(data.batch) || 0,
+        department_id: Number(data.department) || 0,
+      };
+    });
+  } catch (e) {
+    toast.error("Failed to fetch students");
+    throw e;
   }
-
-  const data = await response.json();
-  return data.students || [];
 };
 
-// Add a student to a course
-export const addStudentToCourse = async (
-  token: string,
-  data: CreateStudentData
-): Promise<Student> => {
-  const response = await apiFetch(`courses/${data.course}/students/`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to add student");
-    throw new Error("Failed to add student");
-  }
-
-  const responseData = await response.json();
-  return responseData.student || responseData;
+// Add student — in this Firebase-only architecture, students register themselves
+// This is kept for API compatibility but is a no-op
+export const addStudentToCourse = async (_token: string, _data: CreateStudentData): Promise<Student> => {
+  toast.info("Students self-enroll by registering with their batch ID.");
+  return { id: "", name: "", roll: "", email: "" };
 };
 
-// Remove a student from a course
-export const removeStudentFromCourse = async (
-  token: string,
-  courseId: string,
-  studentId: number
-): Promise<void> => {
-  const response = await apiFetch(
-    `courses/${courseId}/students/${studentId}/`,
-    {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    }
-  );
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    toast.error(errorData.error || "Failed to remove student");
-    throw new Error(errorData.error || "Failed to remove student");
-  }
+// Remove student — no-op in self-enroll architecture
+export const removeStudentFromCourse = async (_token: string, _courseId: string, _studentId: number): Promise<void> => {
+  toast.info("Students manage their own enrollment.");
 };

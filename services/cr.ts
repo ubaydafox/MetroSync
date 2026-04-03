@@ -1,4 +1,5 @@
-import { apiFetch } from "@/utils/api";
+import { collection, getDocs, doc, setDoc, updateDoc, deleteDoc, query, where } from "firebase/firestore";
+import { db } from "@/utils/firebase";
 import { toast } from "react-toastify";
 
 export interface CR {
@@ -6,96 +7,76 @@ export interface CR {
   name: string;
   email: string;
   batch: string;
+  batch_id?: number;
   roll: string;
+  department_id?: number;
   students: number;
 }
 
 export interface CreateCRData {
   roll: string;
+  name?: string;
+  email?: string;
+  batch_id?: number;
+  department_id?: number;
 }
 
 export interface UpdateCRData {
   roll: string;
+  name?: string;
+  email?: string;
 }
 
-// Get all CRs
-export async function getCRs(token: string): Promise<CR[]> {
-  const response = await apiFetch(`crs/`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to fetch CRs");
-    throw new Error("Failed to fetch CRs");
+export async function getCRs(_token: string): Promise<CR[]> {
+  try {
+    const snap = await getDocs(collection(db, "crs"));
+    return snap.docs.map((d) => d.data() as CR).sort((a, b) => a.id - b.id);
+  } catch (e) {
+    toast.error("Failed to fetch CRs");
+    throw e;
   }
-
-  const data = await response.json();
-  // Handle both array response and object response with crs array
-  return Array.isArray(data) ? data : data.crs || [];
 }
 
-// Create a new CR
-export async function createCR(token: string, data: CreateCRData): Promise<CR> {
-  const response = await apiFetch(`crs/`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to create CR");
-    throw new Error("Failed to create CR");
+export async function createCR(_token: string, data: CreateCRData): Promise<CR> {
+  try {
+    const snap = await getDocs(collection(db, "crs"));
+    const nextId = snap.size + 1;
+    const newCR: CR = {
+      id: nextId,
+      name: data.name || "",
+      email: data.email || "",
+      batch: "",
+      batch_id: data.batch_id,
+      roll: data.roll,
+      department_id: data.department_id,
+      students: 0,
+    };
+    await setDoc(doc(db, "crs", `cr_${nextId}`), newCR);
+    toast.success("CR assigned");
+    return newCR;
+  } catch (e) {
+    toast.error("Failed to create CR");
+    throw e;
   }
-
-  const result = await response.json();
-  // Handle response that wraps CR in an object
-  return result.cr || result;
 }
 
-// Update a CR
-export async function updateCR(
-  token: string,
-  id: number,
-  data: UpdateCRData
-): Promise<CR> {
-  const response = await apiFetch(`crs/${id}/`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to update CR");
-    throw new Error("Failed to update CR");
+export async function updateCR(_token: string, id: number, data: UpdateCRData): Promise<CR> {
+  try {
+    const ref = doc(db, "crs", `cr_${id}`);
+    await updateDoc(ref, { ...data });
+    const snap = await getDocs(query(collection(db, "crs"), where("id", "==", id)));
+    return snap.docs[0].data() as CR;
+  } catch (e) {
+    toast.error("Failed to update CR");
+    throw e;
   }
-
-  const result = await response.json();
-  // Handle response that wraps CR in an object
-  return result.cr || result;
 }
 
-// Delete a CR
-export async function deleteCR(token: string, id: number): Promise<void> {
-  const response = await apiFetch(`crs/${id}/`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to delete CR");
-    throw new Error("Failed to delete CR");
+export async function deleteCR(_token: string, id: number): Promise<void> {
+  try {
+    await deleteDoc(doc(db, "crs", `cr_${id}`));
+  } catch (e) {
+    toast.error("Failed to delete CR");
+    throw e;
   }
 }

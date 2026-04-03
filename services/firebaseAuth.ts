@@ -3,8 +3,13 @@ import {
   signOut as firebaseSignOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { apiFetch } from "@/utils/api";
-import { auth, googleProvider } from "@/utils/firebase";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  serverTimestamp,
+} from "firebase/firestore";
+import { auth, googleProvider, db } from "@/utils/firebase";
 
 export interface FirebaseUser {
   uid: string;
@@ -38,52 +43,39 @@ export const signInWithGoogle = async (): Promise<{
       emailVerified: result.user.emailVerified,
     };
 
-    // Check if user exists in backend
-    const checkResponse = await apiFetch(`auth/check-user/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        firebase_uid: firebaseUser.uid,
-        email: firebaseUser.email,
-      }),
-    });
+    // Check if user profile exists in Firestore
+    const userDocRef = doc(db, "users", firebaseUser.uid);
+    const userDoc = await getDoc(userDocRef);
 
-    if (checkResponse.ok) {
-      const userData = await checkResponse.json();
-
-      if (userData.exists) {
-        // User exists, get token
-        const tokenResponse = await apiFetch(`auth/firebase-login/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            firebase_uid: firebaseUser.uid,
-            email: firebaseUser.email,
-          }),
-        });
-
-        if (tokenResponse.ok) {
-          const { token, user } = await tokenResponse.json();
-          return {
-            firebaseUser,
-            backendToken: token,
-            needsOnboarding: false,
-          };
-        }
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+      // Check if onboarding is complete (has department set)
+      if (userData.department) {
+        return {
+          firebaseUser,
+          needsOnboarding: false,
+        };
       } else {
-        // User doesn't exist, needs onboarding
         return {
           firebaseUser,
           needsOnboarding: true,
         };
       }
+    } else {
+      // User doesn't exist in Firestore — create a stub and send to onboarding
+      await setDoc(userDocRef, {
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        name: firebaseUser.displayName || "",
+        photoURL: firebaseUser.photoURL || "",
+        role: "student",
+        createdAt: serverTimestamp(),
+      });
+      return {
+        firebaseUser,
+        needsOnboarding: true,
+      };
     }
-
-    throw new Error("Failed to check user status");
   } catch (error) {
     console.error("Google sign-in error:", error);
     throw error;
@@ -121,7 +113,7 @@ export const onAuthStateChange = (
   });
 };
 
-// Complete onboarding
+// Complete onboarding — write full profile to Firestore
 export const completeOnboarding = async (
   firebaseUser: FirebaseUser,
   onboardingData: {
@@ -132,28 +124,35 @@ export const completeOnboarding = async (
   }
 ): Promise<{ token: string; user: BackendUser }> => {
   try {
-    const response = await apiFetch(`auth/firebase-signup/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        firebase_uid: firebaseUser.uid,
-        email: firebaseUser.email,
-        name: onboardingData.name || firebaseUser.displayName,
-        department: onboardingData.department,
-        batch: onboardingData.batch,
-        roll: onboardingData.roll,
-      }),
-    });
+    const userDocRef = doc(db, "users", firebaseUser.uid);
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || "Failed to complete onboarding");
-    }
+    const profileData = {
+      uid: firebaseUser.uid,
+      email: firebaseUser.email,
+      name: onboardingData.name || firebaseUser.displayName || "",
+      photoURL: firebaseUser.photoURL || "",
+      role: "student",
+      department: onboardingData.department,
+      batch: onboardingData.batch || "",
+      roll: onboardingData.roll || "",
+      updatedAt: serverTimestamp(),
+    };
 
-    const { token, user } = await response.json();
-    return { token, user };
+    await setDoc(userDocRef, profileData, { merge: true });
+
+    // Use Firebase ID token as the session token
+    const idToken = await auth.currentUser!.getIdToken();
+    localStorage.setItem("token", idToken);
+
+    const user: BackendUser = {
+      id: firebaseUser.uid,
+      name: profileData.name,
+      email: profileData.email || "",
+      role: profileData.role,
+      department: profileData.department,
+    };
+
+    return { token: idToken, user };
   } catch (error) {
     console.error("Onboarding error:", error);
     throw error;

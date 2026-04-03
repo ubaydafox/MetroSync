@@ -1,4 +1,5 @@
-import { apiFetch } from "@/utils/api";
+import { collection, getDocs, doc, setDoc, updateDoc, deleteDoc, query, where } from "firebase/firestore";
+import { db } from "@/utils/firebase";
 import { toast } from "react-toastify";
 
 export interface Schedule {
@@ -6,10 +7,14 @@ export interface Schedule {
   start_time: string;
   end_time: string;
   day: string;
+  course_id: number;
   course_name: string;
   course_code: string;
+  teacher_id: number;
   teacher_name: string;
+  batch_id: number;
   batch_name: string;
+  department_id: number;
   department_name: string;
   room: string;
 }
@@ -36,86 +41,67 @@ export interface UpdateScheduleData {
   room?: string;
 }
 
-export const getSchedules = async (token: string): Promise<Schedule[]> => {
-  const res = await apiFetch(`schedules/`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!res.ok) {
-    toast.error((await res.json()).error || "Failed to fetch schedules");
-    throw new Error("Failed to fetch schedules");
+export const getSchedules = async (_token: string): Promise<Schedule[]> => {
+  try {
+    const snap = await getDocs(collection(db, "schedules"));
+    return snap.docs.map((d) => d.data() as Schedule).sort((a, b) => a.id - b.id);
+  } catch (e) {
+    toast.error("Failed to fetch schedules");
+    throw e;
   }
-
-  const data = await res.json();
-  // Handle both direct array and object with schedules property
-  return Array.isArray(data) ? data : data.schedules || [];
 };
 
-export const createSchedule = async (
-  token: string,
-  data: CreateScheduleData
-): Promise<Schedule> => {
-  const res = await apiFetch(`schedules/`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!res.ok) {
-    toast.error((await res.json()).error || "Failed to create schedule");
-    throw new Error("Failed to create schedule");
-  }
-
-  const responseData = await res.json();
-  // Handle nested response structure: {message: "...", schedule: {...}}
-  return responseData.schedule || responseData;
+export const getSchedulesByBatch = async (batchId: number): Promise<Schedule[]> => {
+  const snap = await getDocs(query(collection(db, "schedules"), where("batch_id", "==", batchId)));
+  return snap.docs.map((d) => d.data() as Schedule);
 };
 
-export const updateSchedule = async (
-  token: string,
-  id: number,
-  data: UpdateScheduleData
-): Promise<Schedule> => {
-  const res = await apiFetch(`schedules/${id}/`, {
-    method: "PATCH",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!res.ok) {
-    toast.error((await res.json()).error || "Failed to update schedule");
-    throw new Error("Failed to update schedule");
+export const createSchedule = async (_token: string, data: CreateScheduleData): Promise<Schedule> => {
+  try {
+    const snap = await getDocs(collection(db, "schedules"));
+    const nextId = snap.size + 1;
+    const newSchedule: Schedule = {
+      id: nextId,
+      start_time: data.start_time,
+      end_time: data.end_time,
+      day: data.day,
+      course_id: data.course,
+      course_name: "",
+      course_code: "",
+      teacher_id: data.teacher,
+      teacher_name: "",
+      batch_id: data.batch,
+      batch_name: "",
+      department_id: data.department,
+      department_name: "",
+      room: data.room,
+    };
+    await setDoc(doc(db, "schedules", `schedule_${nextId}`), newSchedule);
+    toast.success("Schedule created");
+    return newSchedule;
+  } catch (e) {
+    toast.error("Failed to create schedule");
+    throw e;
   }
-
-  const responseData = await res.json();
-  // Handle nested response structure: {message: "...", schedule: {...}}
-  return responseData.schedule || responseData;
 };
 
-export const deleteSchedule = async (
-  token: string,
-  id: number
-): Promise<void> => {
-  const res = await apiFetch(`schedules/${id}/`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
+export const updateSchedule = async (_token: string, id: number, data: UpdateScheduleData): Promise<Schedule> => {
+  try {
+    const ref = doc(db, "schedules", `schedule_${id}`);
+    await updateDoc(ref, { ...data });
+    const snap = await getDocs(query(collection(db, "schedules"), where("id", "==", id)));
+    return snap.docs[0].data() as Schedule;
+  } catch (e) {
+    toast.error("Failed to update schedule");
+    throw e;
+  }
+};
 
-  if (!res.ok) {
-    toast.error((await res.json()).error || "Failed to delete schedule");
-    throw new Error("Failed to delete schedule");
+export const deleteSchedule = async (_token: string, id: number): Promise<void> => {
+  try {
+    await deleteDoc(doc(db, "schedules", `schedule_${id}`));
+  } catch (e) {
+    toast.error("Failed to delete schedule");
+    throw e;
   }
 };

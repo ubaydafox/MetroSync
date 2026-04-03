@@ -48,16 +48,10 @@ export default function HODDashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) return;
-        
-        const data = await getHODDashboardData(token);
+        const data = await getHODDashboardData("");
         setHODDashboardData(data);
-        if (data.overviewData) {
-        }
       } catch (error) {
         console.error("Error fetching overview data:", error);
-      } finally {
       }
     };
 

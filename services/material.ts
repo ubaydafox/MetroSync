@@ -1,4 +1,5 @@
-import { apiFetch } from "@/utils/api";
+import { collection, getDocs, doc, setDoc, updateDoc, deleteDoc, query, where } from "firebase/firestore";
+import { db } from "@/utils/firebase";
 import { toast } from "react-toastify";
 
 export interface Material {
@@ -8,7 +9,7 @@ export interface Material {
   link: string;
   uploaded_by: string;
   date: string;
-  course: number;
+  course_id: number;
 }
 
 export interface CreateMaterialData {
@@ -24,94 +25,56 @@ export interface UpdateMaterialData {
   link: string;
 }
 
-// Get all materials for a specific course
-export async function getCourseMaterials(
-  token: string,
-  courseId: string
-): Promise<Material[]> {
-  const response = await apiFetch(`courses/${courseId}/materials/`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to fetch materials");
-    throw new Error("Failed to fetch materials");
+export async function getCourseMaterials(_token: string, courseId: string): Promise<Material[]> {
+  try {
+    const snap = await getDocs(query(collection(db, "materials"), where("course_id", "==", Number(courseId))));
+    return snap.docs.map((d) => d.data() as Material).sort((a, b) => a.id - b.id);
+  } catch (e) {
+    toast.error("Failed to fetch materials");
+    throw e;
   }
-
-  const data = await response.json();
-  // Handle both array response and object with materials property
-  return Array.isArray(data) ? data : (data.materials || []);
 }
 
-// Create a new material
-export async function createMaterial(
-  token: string,
-  data: CreateMaterialData
-): Promise<Material> {
-  const response = await apiFetch(`courses/${data.course}/materials/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to create material");
-    throw new Error("Failed to create material");
+export async function createMaterial(_token: string, data: CreateMaterialData): Promise<Material> {
+  try {
+    const snap = await getDocs(collection(db, "materials"));
+    const nextId = snap.size + 1;
+    const now = new Date().toISOString().split("T")[0];
+    const newMaterial: Material = {
+      id: nextId,
+      title: data.title,
+      type: data.type,
+      link: data.link,
+      course_id: data.course,
+      uploaded_by: "Teacher",
+      date: now,
+    };
+    await setDoc(doc(db, "materials", `material_${nextId}`), newMaterial);
+    toast.success("Material added");
+    return newMaterial;
+  } catch (e) {
+    toast.error("Failed to create material");
+    throw e;
   }
-
-  return response.json();
 }
 
-// Update a material
-export async function updateMaterial(
-  token: string,
-  courseId: string,
-  materialId: number,
-  data: UpdateMaterialData
-): Promise<Material> {
-  const response = await apiFetch(
-    `courses/${courseId}/materials/${materialId}/`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(data),
-    }
-  );
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to update material");
-    throw new Error("Failed to update material");
+export async function updateMaterial(_token: string, courseId: string, materialId: number, data: UpdateMaterialData): Promise<Material> {
+  try {
+    const ref = doc(db, "materials", `material_${materialId}`);
+    await updateDoc(ref, { ...data });
+    const snap = await getDocs(query(collection(db, "materials"), where("id", "==", materialId)));
+    return snap.docs[0].data() as Material;
+  } catch (e) {
+    toast.error("Failed to update material");
+    throw e;
   }
-
-  return response.json();
 }
 
-// Delete a material
-export async function deleteMaterial(
-  token: string,
-  courseId: string,
-  materialId: number
-): Promise<void> {
-  const response = await apiFetch(
-    `courses/${courseId}/materials/${materialId}/`,
-    {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to delete material");
-    throw new Error("Failed to delete material");
+export async function deleteMaterial(_token: string, courseId: string, materialId: number): Promise<void> {
+  try {
+    await deleteDoc(doc(db, "materials", `material_${materialId}`));
+  } catch (e) {
+    toast.error("Failed to delete material");
+    throw e;
   }
 }

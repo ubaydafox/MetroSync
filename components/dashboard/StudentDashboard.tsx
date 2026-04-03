@@ -20,12 +20,7 @@ export default function StudentDashboard() {
       try {
         setLoading(true);
         setError(null);
-        const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("No authentication token found");
-        }
-
-        const data = await getStudentDashboardData(token);
+        const data = await getStudentDashboardData("");
         setDashboardData(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch dashboard data");

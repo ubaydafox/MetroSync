@@ -26,7 +26,7 @@ export default function ManageTeachersPage() {
     }
   }, [user, router]);
 
-  // Fetch teachers from backend
+  // Fetch teachers from Firestore
   useEffect(() => {
     if (user?.role !== "hod" && user?.role !== "admin") return;
     
@@ -34,11 +34,7 @@ export default function ManageTeachersPage() {
       try {
         setLoading(true);
         setError(null);
-        const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("No authentication token found");
-        }
-        const data = await getTeachers(token);
+        const data = await getTeachers("", user.department ? Number(user.department) : undefined);
         setTeachers(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch teachers");
@@ -62,25 +58,21 @@ export default function ManageTeachersPage() {
 
   const handleAddTeacher = async () => {
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        toast.error("No authentication token found");
-        return;
-      }
-
       if (!addForm.name || !addForm.email) {
         toast.warn("Please fill in all fields");
         return;
       }
 
-      const newTeacher = await createTeacher(token, {
+      const newTeacher = await createTeacher("", {
         name: addForm.name,
         email: addForm.email,
+        department_id: user?.department ? Number(user.department) : undefined,
       });
 
       setTeachers([...teachers, newTeacher]);
       setShowAddModal(false);
       setAddForm({ name: "", email: "" });
+      toast.success("Teacher added successfully");
     } catch (err) {
       console.error("Error creating teacher:", err);
       toast.error("Failed to add teacher. Please try again.");
@@ -91,13 +83,7 @@ export default function ManageTeachersPage() {
     if (!selectedTeacher) return;
     
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        toast.error("No authentication token found");
-        return;
-      }
-
-      const updatedTeacher = await updateTeacher(token, selectedTeacher.id, {
+      const updatedTeacher = await updateTeacher("", selectedTeacher.id, {
         name: editForm.name,
         email: editForm.email,
       });
@@ -108,6 +94,7 @@ export default function ManageTeachersPage() {
       setShowEditModal(false);
       setSelectedTeacher(null);
       setEditForm({ name: "", email: "" });
+      toast.success("Teacher updated");
     } catch (err) {
       console.error("Error updating teacher:", err);
       toast.error("Failed to update teacher. Please try again.");
@@ -118,16 +105,10 @@ export default function ManageTeachersPage() {
     if (!confirm(`Are you sure you want to remove ${name} from the department?`)) {
       return;
     }
-
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        toast.error("No authentication token found");
-        return;
-      }
-
-      await deleteTeacher(token, id);
+      await deleteTeacher("", id);
       setTeachers(teachers.filter(t => t.id !== id));
+      toast.success("Teacher removed");
     } catch (err) {
       console.error("Error deleting teacher:", err);
       toast.error("Failed to delete teacher. Please try again.");

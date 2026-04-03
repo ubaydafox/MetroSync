@@ -1,4 +1,5 @@
-import { apiFetch } from "@/utils/api";
+import { collection, getDocs, doc, setDoc, updateDoc, deleteDoc, query, where } from "firebase/firestore";
+import { db } from "@/utils/firebase";
 import { toast } from "react-toastify";
 
 export interface HOD {
@@ -6,6 +7,9 @@ export interface HOD {
   name: string;
   email: string;
   department: string;
+  department_id?: number;
+  phone?: string;
+  office?: string;
   teachers?: number;
   students?: number;
 }
@@ -20,87 +24,53 @@ export interface UpdateHODData {
   department_id?: number;
 }
 
-// Get all HODs
-export async function getHODs(token: string): Promise<HOD[]> {
-  const response = await apiFetch(`hods/`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to fetch HODs");
-    throw new Error("Failed to fetch HODs");
+export async function getHODs(_token: string): Promise<HOD[]> {
+  try {
+    const snap = await getDocs(collection(db, "hods"));
+    return snap.docs.map((d) => d.data() as HOD).sort((a, b) => a.id - b.id);
+  } catch (e) {
+    toast.error("Failed to fetch HODs");
+    throw e;
   }
-
-  const data = await response.json();
-  // Handle both array response and object response with hods array
-  return Array.isArray(data) ? data : data.hods || [];
 }
 
-// Create a new HOD
-export async function createHOD(
-  token: string,
-  data: CreateHODData
-): Promise<HOD> {
-  const response = await apiFetch(`hods/`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to create HOD");
-    throw new Error("Failed to create HOD");
+export async function createHOD(_token: string, data: CreateHODData): Promise<HOD> {
+  try {
+    const snap = await getDocs(collection(db, "hods"));
+    const nextId = snap.size + 1;
+    const newHOD: HOD = {
+      id: nextId,
+      name: "",
+      email: "",
+      department: "",
+      department_id: data.department_id,
+    };
+    await setDoc(doc(db, "hods", `hod_${nextId}`), newHOD);
+    toast.success("HOD assigned");
+    return newHOD;
+  } catch (e) {
+    toast.error("Failed to create HOD");
+    throw e;
   }
-
-  const result = await response.json();
-  // Handle response that wraps HOD in an object
-  return result.hod || result;
 }
 
-// Update a HOD
-export async function updateHOD(
-  token: string,
-  id: number,
-  data: UpdateHODData
-): Promise<HOD> {
-  const response = await apiFetch(`hods/${id}/`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to update HOD");
-    throw new Error("Failed to update HOD");
+export async function updateHOD(_token: string, id: number, data: UpdateHODData): Promise<HOD> {
+  try {
+    const ref = doc(db, "hods", `hod_${id}`);
+    await updateDoc(ref, { ...data });
+    const snap = await getDocs(query(collection(db, "hods"), where("id", "==", id)));
+    return snap.docs[0].data() as HOD;
+  } catch (e) {
+    toast.error("Failed to update HOD");
+    throw e;
   }
-
-  const result = await response.json();
-  // Handle response that wraps HOD in an object
-  return result.hod || result;
 }
 
-// Delete a HOD
-export async function deleteHOD(token: string, id: number): Promise<void> {
-  const response = await apiFetch(`hods/${id}/`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to delete HOD");
-    throw new Error("Failed to delete HOD");
+export async function deleteHOD(_token: string, id: number): Promise<void> {
+  try {
+    await deleteDoc(doc(db, "hods", `hod_${id}`));
+  } catch (e) {
+    toast.error("Failed to delete HOD");
+    throw e;
   }
 }

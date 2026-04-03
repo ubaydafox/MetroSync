@@ -13,7 +13,7 @@ import {
   FaUsers,
 } from "react-icons/fa";
 import { useGlobal } from "@/app/context/GlobalContext";
-import { Batch } from "@/services/batch";
+import { Batch, getBatchesByDepartment } from "@/services/batch";
 
 interface OnboardingProps {
   firebaseUser: FirebaseUser;
@@ -44,19 +44,8 @@ export default function Onboarding({ firebaseUser }: OnboardingProps) {
 
       setLoadingBatches(true);
       try {
-        // Fetch batches from public endpoint with department filter
-        const response = await fetch(
-          `${
-            process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api"
-          }/public/batches/?department_id=${formData.department}`
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch batches");
-        }
-
-        const data = await response.json();
-        setFilteredBatches(Array.isArray(data) ? data : []);
+        const batches = await getBatchesByDepartment(Number(formData.department));
+        setFilteredBatches(batches);
       } catch (error) {
         console.error("Error fetching batches:", error);
         setFilteredBatches([]);
@@ -81,15 +70,13 @@ export default function Onboarding({ firebaseUser }: OnboardingProps) {
     setIsLoading(true);
 
     try {
-      const { token } = await completeOnboarding(firebaseUser, {
+      // completeOnboarding writes to Firestore and stores the Firebase ID token in localStorage
+      await completeOnboarding(firebaseUser, {
         name: formData.name,
         department: formData.department,
         batch: formData.batch,
         roll: formData.roll,
       });
-
-      // Store token and user data
-      localStorage.setItem("token", token);
 
       toast.success(
         "Welcome to MetroSync! Your account has been created successfully."

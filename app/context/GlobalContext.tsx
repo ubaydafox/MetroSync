@@ -5,16 +5,21 @@ import React, {
   useState,
   useContext,
   useEffect,
+  useCallback,
   Dispatch,
   SetStateAction,
 } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { Department, getAllDepartments } from "@/services/department";
 
-import { signOut as firebaseSignOut } from 'firebase/auth';
-import { auth } from '@/utils/firebase';
-import { apiFetch } from "@/utils/api";
+import {
+  signInWithEmailAndPassword,
+  signOut as firebaseSignOut,
+  onAuthStateChanged,
+} from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "@/utils/firebase";
+import { Department, getAllDepartments } from "@/services/department";
 
 type User = {
   id: string;
@@ -22,6 +27,8 @@ type User = {
   email: string;
   role: string;
   department: string;
+  batch?: string;
+  roll?: string;
 };
 
 interface GlobalContextType {
@@ -48,131 +55,108 @@ export const useGlobal = () => {
 export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [departments, setDepartments] = useState<Department[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // Login function
+  // Login with email/password via Firebase Auth
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
-      const res = await apiFetch(`auth/login/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ email, password }),
-      });
+      const credential = await signInWithEmailAndPassword(auth, email, password);
+      const firebaseUser = credential.user;
 
-      if (!res.ok) {
-        const errorText = await res.json();
-        const errorMsg = errorText.error || "Unknown error";
-        console.log(errorMsg);
-        toast.error(errorMsg);
-        throw new Error(errorMsg);
+      // Fetch user profile from Firestore
+      const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
+      if (!userDoc.exists()) {
+        throw new Error("User profile not found. Please register first.");
       }
 
-      const { token, user } = await res.json();
-      if (!token) {
-        toast.error("Login failed");
-        throw new Error("Login failed");
-      }
-
-      // Store token
-      localStorage.setItem("token", token);
-
-      // Set Cookies
-      // "Set-Cookie": `token=${token}; HttpOnly; Path=/; Max-Age=2592000; SameSite=Strict; Secure`,
-      
-
-      const userData = {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role || "",
-        department: user.department || "",
+      const data = userDoc.data();
+      const userData: User = {
+        id: firebaseUser.uid,
+        name: data.name || firebaseUser.displayName || "",
+        email: data.email || firebaseUser.email || "",
+        role: data.role || "student",
+        department: data.department || "",
+        batch: data.batch || "",
+        roll: data.roll || "",
       };
 
       setUser(userData);
-      
-      router.push('/dashboard');
-      // location.reload();
-    } catch (error) {
+
+      // Store Firebase ID token
+      const idToken = await firebaseUser.getIdToken();
+      localStorage.setItem("token", idToken);
+
+      router.push("/dashboard");
+    } catch (error: unknown) {
       console.error("Login error:", error);
+      const message =
+        error instanceof Error ? error.message : "Login failed";
+      toast.error(message);
       return Promise.reject(error);
     } finally {
       setLoading(false);
     }
   };
 
-  // Logout function
-  const logout = React.useCallback(async () => {
+  // Logout — sign out from Firebase and clear local state
+  const logout = useCallback(async () => {
     setLoading(true);
     try {
-      await apiFetch(`auth/logout/`, { method: "POST" });
-      // Also sign out from Firebase
       await firebaseSignOut(auth);
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
       localStorage.removeItem("token");
       setUser(null);
-
       router.push("/login");
       setLoading(false);
     }
   }, [router]);
 
-  // Check authentication on component mount
+  // Listen to Firebase Auth state changes to restore session on refresh
   useEffect(() => {
-    const checkAuth = async () => {
-      setLoading(true);
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          setLoading(false);
-          return;
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        try {
+          const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
+          if (userDoc.exists()) {
+            const data = userDoc.data();
+            // Only set user if onboarding is complete (has department)
+            if (data.department) {
+              setUser({
+                id: firebaseUser.uid,
+                name: data.name || firebaseUser.displayName || "",
+                email: data.email || firebaseUser.email || "",
+                role: data.role || "student",
+                department: data.department || "",
+                batch: data.batch || "",
+                roll: data.roll || "",
+              });
+            }
+          }
+        } catch (error) {
+          console.error("Auth state restore error:", error);
         }
-
-        const res = await apiFetch(`user/getUser/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ token }),
-        });
-
-        if (!res.ok) {
-          throw new Error("Authentication failed");
-        }
-
-        const { user: userData } = await res.json();
-
-        const userObject = {
-          id: userData.id,
-          name: userData.name,
-          email: userData.email,
-          role: userData.role || "",
-          department: userData.department || "",
-        };
-
-        setUser(userObject);
-      } catch (error) {
-        console.error("Auth check failed:", error);
-        logout();
-      } finally {
-        setLoading(false);
+      } else {
+        setUser(null);
+        localStorage.removeItem("token");
       }
-    };
-    checkAuth();
-  }, [logout]);
+      setLoading(false);
+    });
 
-  // Fetch departments on component mount
+    return () => unsubscribe();
+  }, []);
+
+  // Fetch departments from Firestore on mount
   useEffect(() => {
     async function fetchDepartments() {
       try {
         const res = await getAllDepartments();
-        // Sort departments
-        const sortedDepartments = res.sort((a: Department, b: Department) => a.id - b.id);
+        const sortedDepartments = res.sort(
+          (a: Department, b: Department) => a.id - b.id
+        );
         setDepartments(sortedDepartments);
       } catch (error) {
         console.error("Failed to fetch departments:", error);

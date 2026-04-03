@@ -1,4 +1,5 @@
-import { apiFetch } from "@/utils/api";
+import { collection, getDocs, doc, setDoc, updateDoc, deleteDoc, query, where } from "firebase/firestore";
+import { db } from "@/utils/firebase";
 import { toast } from "react-toastify";
 
 export interface Task {
@@ -8,7 +9,7 @@ export interface Task {
   due_date: string;
   points: number;
   description: string;
-  course: number;
+  course_id: number;
   created_by: string;
   created_at: string;
 }
@@ -30,88 +31,58 @@ export interface UpdateTaskData {
   description: string;
 }
 
-// Get all tasks for a specific course
-export async function getCourseTasks(
-  token: string,
-  courseId: string
-): Promise<Task[]> {
-  const response = await apiFetch(`courses/${courseId}/tasks/`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to fetch tasks");
-    throw new Error("Failed to fetch tasks");
+export async function getCourseTasks(_token: string, courseId: string): Promise<Task[]> {
+  try {
+    const snap = await getDocs(query(collection(db, "tasks"), where("course_id", "==", Number(courseId))));
+    return snap.docs.map((d) => d.data() as Task).sort((a, b) => a.id - b.id);
+  } catch (e) {
+    toast.error("Failed to fetch tasks");
+    throw e;
   }
-
-  const data = await response.json();
-  // Handle both array response and object with tasks property
-  return Array.isArray(data) ? data : (data.tasks || []);
 }
 
-// Create a new task
-export async function createTask(
-  token: string,
-  data: CreateTaskData
-): Promise<Task> {
-  const response = await apiFetch(`courses/${data.course}/tasks/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to create task");
-    throw new Error("Failed to create task");
+export async function createTask(_token: string, data: CreateTaskData): Promise<Task> {
+  try {
+    const snap = await getDocs(collection(db, "tasks"));
+    const nextId = snap.size + 1;
+    const now = new Date().toISOString().split("T")[0];
+    const newTask: Task = {
+      id: nextId,
+      title: data.title,
+      type: data.type,
+      due_date: data.due_date,
+      points: data.points,
+      description: data.description,
+      course_id: data.course,
+      created_by: "Teacher",
+      created_at: now,
+    };
+    await setDoc(doc(db, "tasks", `task_${nextId}`), newTask);
+    toast.success("Task created");
+    return newTask;
+  } catch (e) {
+    toast.error("Failed to create task");
+    throw e;
   }
-
-  return response.json();
 }
 
-// Update a task
-export async function updateTask(
-  token: string,
-  courseId: string,
-  taskId: number,
-  data: UpdateTaskData
-): Promise<Task> {
-  const response = await apiFetch(`courses/${courseId}/tasks/${taskId}/`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to update task");
-    throw new Error("Failed to update task");
+export async function updateTask(_token: string, courseId: string, taskId: number, data: UpdateTaskData): Promise<Task> {
+  try {
+    const ref = doc(db, "tasks", `task_${taskId}`);
+    await updateDoc(ref, { ...data });
+    const snap = await getDocs(query(collection(db, "tasks"), where("id", "==", taskId)));
+    return snap.docs[0].data() as Task;
+  } catch (e) {
+    toast.error("Failed to update task");
+    throw e;
   }
-
-  return response.json();
 }
 
-// Delete a task
-export async function deleteTask(
-  token: string,
-  courseId: string,
-  taskId: number
-): Promise<void> {
-  const response = await apiFetch(`courses/${courseId}/tasks/${taskId}/`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to delete task");
-    throw new Error("Failed to delete task");
+export async function deleteTask(_token: string, courseId: string, taskId: number): Promise<void> {
+  try {
+    await deleteDoc(doc(db, "tasks", `task_${taskId}`));
+  } catch (e) {
+    toast.error("Failed to delete task");
+    throw e;
   }
 }

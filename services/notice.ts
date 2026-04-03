@@ -1,4 +1,5 @@
-import { apiFetch } from "@/utils/api";
+import { collection, getDocs, doc, setDoc, updateDoc, deleteDoc, query, where } from "firebase/firestore";
+import { db } from "@/utils/firebase";
 import { toast } from "react-toastify";
 
 export interface Notice {
@@ -9,6 +10,7 @@ export interface Notice {
   course: string;
   date: string;
   author: string;
+  department_id?: number;
 }
 
 export interface CreateNoticeData {
@@ -16,6 +18,8 @@ export interface CreateNoticeData {
   message: string;
   type: "info" | "warning" | "important";
   course?: string;
+  department_id?: number;
+  author?: string;
 }
 
 export interface UpdateNoticeData {
@@ -25,81 +29,60 @@ export interface UpdateNoticeData {
   course?: string;
 }
 
-// Get all notices
-export async function getNotices(token: string): Promise<Notice[]> {
-  const response = await apiFetch(`notices/`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to fetch notices");
-    throw new Error("Failed to fetch notices");
+export async function getNotices(_token: string, departmentId?: number): Promise<Notice[]> {
+  try {
+    const q = departmentId
+      ? query(collection(db, "notices"), where("department_id", "==", departmentId))
+      : collection(db, "notices");
+    const snap = await getDocs(q);
+    return snap.docs.map((d) => d.data() as Notice).sort((a, b) => b.id - a.id);
+  } catch (e) {
+    toast.error("Failed to fetch notices");
+    throw e;
   }
-
-  return response.json();
 }
 
-// Create a new notice
-export async function createNotice(
-  token: string,
-  data: CreateNoticeData
-): Promise<Notice> {
-  const response = await apiFetch(`notices/`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to create notice");
-    throw new Error("Failed to create notice");
+export async function createNotice(_token: string, data: CreateNoticeData): Promise<Notice> {
+  try {
+    const snap = await getDocs(collection(db, "notices"));
+    const nextId = snap.size + 1;
+    const now = new Date().toISOString().split("T")[0];
+    const newNotice: Notice = {
+      id: nextId,
+      title: data.title,
+      message: data.message,
+      type: data.type,
+      course: data.course || "",
+      date: now,
+      author: data.author || "Admin",
+      department_id: data.department_id || 0,
+    };
+    await setDoc(doc(db, "notices", `notice_${nextId}`), newNotice);
+    toast.success("Notice created");
+    return newNotice;
+  } catch (e) {
+    toast.error("Failed to create notice");
+    throw e;
   }
-
-  return response.json();
 }
 
-// Update a notice
-export async function updateNotice(
-  token: string,
-  id: number,
-  data: UpdateNoticeData
-): Promise<Notice> {
-  const response = await apiFetch(`notices/${id}/`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to update notice");
-    throw new Error("Failed to update notice");
+export async function updateNotice(_token: string, id: number, data: UpdateNoticeData): Promise<Notice> {
+  try {
+    const ref = doc(db, "notices", `notice_${id}`);
+    await updateDoc(ref, { ...data });
+    const snap = await getDocs(query(collection(db, "notices"), where("id", "==", id)));
+    return snap.docs[0].data() as Notice;
+  } catch (e) {
+    toast.error("Failed to update notice");
+    throw e;
   }
-
-  return response.json();
 }
 
-// Delete a notice
-export async function deleteNotice(token: string, id: number): Promise<void> {
-  const response = await apiFetch(`notices/${id}/`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!response.ok) {
-    toast.error((await response.json()).error || "Failed to delete notice");
-    throw new Error("Failed to delete notice");
+export async function deleteNotice(_token: string, id: number): Promise<void> {
+  try {
+    await deleteDoc(doc(db, "notices", `notice_${id}`));
+  } catch (e) {
+    toast.error("Failed to delete notice");
+    throw e;
   }
 }
