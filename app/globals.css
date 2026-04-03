@@ -9,6 +9,14 @@
   --text: #064e3b;
 }
 
+.dark {
+  --background: #0f172a;
+  --background-light: #1e293b;
+  --primary: #10b981;
+  --primary-light: #059669;
+  --text: #f8fafc;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-background-light: var(--background-light);

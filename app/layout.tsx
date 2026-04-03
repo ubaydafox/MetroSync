@@ -4,6 +4,8 @@ import "./globals.css";
 import { GlobalProvider } from "./context/GlobalContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,14 +28,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased transition-colors duration-300`}
       >
-        <GlobalProvider>
-           <ToastContainer theme="light" position="top-center" />
-          {children}
-        </GlobalProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem={true}>
+          <GlobalProvider>
+             <ToastContainer theme="colored" position="top-center" />
+            {children}
+            <ThemeToggle />
+          </GlobalProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
