@@ -103,7 +103,7 @@ export default function Onboarding({ firebaseUser }: OnboardingProps) {
         </div>
 
         {/* Form Card */}
-        <div className="bg-white/80 backdrop-blur-md rounded-xl shadow-lg p-8 relative z-10 border border-(--primary)/10">
+        <div className="bg-background/80 backdrop-blur-md rounded-xl shadow-lg p-8 relative z-10 border border-(--primary)/10">
           {/* Back Button */}
           <button
             onClick={() => router.push("/login")}
@@ -148,7 +148,7 @@ export default function Onboarding({ firebaseUser }: OnboardingProps) {
                   required
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full pl-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-white/50 backdrop-blur-sm transition-all duration-300"
+                  className="w-full pl-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300"
                   placeholder="Enter your full name"
                 />
               </div>
@@ -172,7 +172,7 @@ export default function Onboarding({ firebaseUser }: OnboardingProps) {
                   required
                   value={formData.department}
                   onChange={handleChange}
-                  className="w-full pl-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-white/50 backdrop-blur-sm transition-all duration-300 appearance-none"
+                  className="w-full pl-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300 appearance-none"
                 >
                   <option value="" disabled>
                     Select your department
@@ -205,7 +205,7 @@ export default function Onboarding({ firebaseUser }: OnboardingProps) {
                   value={formData.batch}
                   onChange={handleChange}
                   disabled={!formData.department || loadingBatches}
-                  className="w-full pl-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-white/50 backdrop-blur-sm transition-all duration-300 appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full pl-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300 appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <option value="" disabled>
                     {loadingBatches
@@ -242,7 +242,7 @@ export default function Onboarding({ firebaseUser }: OnboardingProps) {
                   required
                   value={formData.roll}
                   onChange={handleChange}
-                  className="w-full pl-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-white/50 backdrop-blur-sm transition-all duration-300"
+                  className="w-full pl-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300"
                   placeholder="Enter your roll number"
                 />
               </div>

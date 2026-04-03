@@ -27,7 +27,7 @@ export default function Input({
           required={required}
           placeholder={placeholder}
           rows={rows}
-          className="text-sm md:text-base resize-none rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          className="text-sm md:text-base resize-none rounded-lg border border-(--primary)/30 p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />
       ) : (
         <input
@@ -39,7 +39,7 @@ export default function Input({
           required={required}
           placeholder={placeholder}
           minLength={minLength}
-          className="text-sm md:text-base rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          className="text-sm md:text-base rounded-lg border border-(--primary)/30 p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />
       )}
     </div>

@@ -184,7 +184,7 @@ export default function NoticesPage() {
       <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading notices...</p>
+          <p className="text-(--text)/70 font-medium">Loading notices...</p>
         </div>
       </div>
     );
@@ -194,12 +194,12 @@ export default function NoticesPage() {
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 p-6">
-        <div className="bg-white rounded-2xl shadow-lg p-8 text-center max-w-md">
+        <div className="bg-background rounded-2xl shadow-lg p-8 text-center max-w-md">
           <div className="text-red-600 text-5xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+          <h2 className="text-2xl font-bold text-(--text) mb-2">
             Error Loading Notices
           </h2>
-          <p className="text-gray-600 mb-4">{error}</p>
+          <p className="text-(--text)/70 mb-4">{error}</p>
           <button
             onClick={() => window.location.reload()}
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -216,8 +216,8 @@ export default function NoticesPage() {
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">Batch Notices</h1>
-            <p className="text-gray-600 mt-1">
+            <h1 className="text-3xl font-bold text-(--text)">Batch Notices</h1>
+            <p className="text-(--text)/70 mt-1">
               {canManage
                 ? "View and manage batch notices"
                 : "Stay updated with important announcements"}
@@ -243,14 +243,14 @@ export default function NoticesPage() {
         </div>
 
         {/* Filter Tabs */}
-        <div className="bg-white rounded-2xl shadow-lg p-4 mb-6">
+        <div className="bg-background rounded-2xl shadow-lg p-4 mb-6">
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setFilter("all")}
               className={`px-4 py-2 rounded-lg transition-colors ${
                 filter === "all"
                   ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  : "bg-background-light text-(--text)/80 hover:bg-background-light/50"
               }`}
             >
               All
@@ -260,7 +260,7 @@ export default function NoticesPage() {
               className={`px-4 py-2 rounded-lg transition-colors ${
                 filter === "important"
                   ? "bg-red-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  : "bg-background-light text-(--text)/80 hover:bg-background-light/50"
               }`}
             >
               Important
@@ -270,7 +270,7 @@ export default function NoticesPage() {
               className={`px-4 py-2 rounded-lg transition-colors ${
                 filter === "warning"
                   ? "bg-yellow-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  : "bg-background-light text-(--text)/80 hover:bg-background-light/50"
               }`}
             >
               Warnings
@@ -280,7 +280,7 @@ export default function NoticesPage() {
               className={`px-4 py-2 rounded-lg transition-colors ${
                 filter === "info"
                   ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  : "bg-background-light text-(--text)/80 hover:bg-background-light/50"
               }`}
             >
               Info
@@ -293,29 +293,29 @@ export default function NoticesPage() {
           {filteredNotifications.map((notification) => (
             <div
               key={notification.id}
-              className={`bg-white rounded-2xl shadow-lg p-6 border-l-4 ${getTypeBg(
+              className={`bg-background rounded-2xl shadow-lg p-6 border-l-4 ${getTypeBg(
                 notification.type
               )} hover:shadow-xl transition-all`}
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-4 flex-1">
-                  <div className="p-3 rounded-xl bg-white shadow-sm">
+                  <div className="p-3 rounded-xl bg-background shadow-sm">
                     {getTypeIcon(notification.type)}
                   </div>
 
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2 flex-wrap">
-                      <h3 className="text-lg font-bold text-gray-800">
+                      <h3 className="text-lg font-bold text-(--text)">
                         {notification.title}
                       </h3>
-                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-700">
+                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-background-light/50 text-(--text)/80">
                         {notification.course}
                       </span>
                     </div>
 
-                    <p className="text-gray-600 mb-3">{notification.message}</p>
+                    <p className="text-(--text)/70 mb-3">{notification.message}</p>
 
-                    <div className="flex items-center gap-4 text-sm text-gray-500">
+                    <div className="flex items-center gap-4 text-sm text-(--text)/60">
                       <span>By {notification.author}</span>
                       <span>•</span>
                       <span>{notification.date}</span>
@@ -345,12 +345,12 @@ export default function NoticesPage() {
         </div>
 
         {filteredNotifications.length === 0 && (
-          <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
-            <FaBell className="text-6xl text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+          <div className="bg-background rounded-2xl shadow-lg p-12 text-center">
+            <FaBell className="text-6xl text-(--text)/40 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-(--text) mb-2">
               No notifications
             </h3>
-            <p className="text-gray-600">You&apos;re all caught up!</p>
+            <p className="text-(--text)/70">You&apos;re all caught up!</p>
           </div>
         )}
       </div>
@@ -358,14 +358,14 @@ export default function NoticesPage() {
       {/* Add Notice Modal */}
       {showAddModal && canManage && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          <div className="bg-background rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <h2 className="text-2xl font-bold text-(--text) mb-6">
               Post Notice
             </h2>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">
                   Notice Type
                 </label>
                 <select
@@ -376,7 +376,7 @@ export default function NoticesPage() {
                       type: e.target.value as "info" | "warning" | "important",
                     })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="info">Info</option>
                   <option value="warning">Warning</option>
@@ -385,7 +385,7 @@ export default function NoticesPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">
                   Course (Optional)
                 </label>
                 <input
@@ -395,12 +395,12 @@ export default function NoticesPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, course: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">
                   Title
                 </label>
                 <input
@@ -410,12 +410,12 @@ export default function NoticesPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, title: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">
                   Message
                 </label>
                 <textarea
@@ -425,7 +425,7 @@ export default function NoticesPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, message: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
                 ></textarea>
               </div>
             </div>
@@ -441,14 +441,14 @@ export default function NoticesPage() {
                     message: "",
                   });
                 }}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                className="flex-1 px-4 py-2 border border-(--primary)/30 rounded-lg hover:bg-background-light"
               >
                 Cancel
               </button>
               <button
                 onClick={handleAddNotice}
                 disabled={!formData.title || !formData.message}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-background-light/80 disabled:cursor-not-allowed"
               >
                 Post Notice
               </button>
@@ -460,14 +460,14 @@ export default function NoticesPage() {
       {/* Edit Notice Modal */}
       {showEditModal && canManage && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          <div className="bg-background rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <h2 className="text-2xl font-bold text-(--text) mb-6">
               Edit Notice
             </h2>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">
                   Notice Type
                 </label>
                 <select
@@ -478,7 +478,7 @@ export default function NoticesPage() {
                       type: e.target.value as "info" | "warning" | "important",
                     })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="info">Info</option>
                   <option value="warning">Warning</option>
@@ -487,7 +487,7 @@ export default function NoticesPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">
                   Course
                 </label>
                 <input
@@ -497,12 +497,12 @@ export default function NoticesPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, course: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">
                   Title
                 </label>
                 <input
@@ -512,12 +512,12 @@ export default function NoticesPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, title: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">
                   Message
                 </label>
                 <textarea
@@ -527,7 +527,7 @@ export default function NoticesPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, message: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
                 ></textarea>
               </div>
             </div>
@@ -544,14 +544,14 @@ export default function NoticesPage() {
                     message: "",
                   });
                 }}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                className="flex-1 px-4 py-2 border border-(--primary)/30 rounded-lg hover:bg-background-light"
               >
                 Cancel
               </button>
               <button
                 onClick={handleEditNotice}
                 disabled={!formData.title || !formData.message}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-background-light/80 disabled:cursor-not-allowed"
               >
                 Update Notice
               </button>

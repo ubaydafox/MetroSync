@@ -138,7 +138,7 @@ export default function Home() {
           >
             <div className="relative">
               {/* Main dashboard mockup */}
-              <div className="w-full h-[400px] bg-white rounded-xl shadow-2xl overflow-hidden border border-gray-200 transform rotate-3 hover:rotate-0 transition-transform duration-500">
+              <div className="w-full h-[400px] bg-background rounded-xl shadow-2xl overflow-hidden border border-(--primary)/20 transform rotate-3 hover:rotate-0 transition-transform duration-500">
                 <div className="h-10 bg-[var(--background-light)] border-b flex items-center px-4">
                   <div className="flex space-x-2">
                     <div className="w-3 h-3 bg-primary/20 rounded-full"></div>
@@ -169,7 +169,7 @@ export default function Home() {
               <div className="absolute -top-6 -left-6 w-40 h-40 bg-[var(--primary-light)]/10 rounded-full blur-3xl"></div>
 
               {/* Floating notification */}
-              <div className="absolute top-40 -right-10 bg-white p-3 rounded-lg shadow-lg border border-[var(--primary)]/20 w-64 transform hover:scale-105 transition-transform duration-300">
+              <div className="absolute top-40 -right-10 bg-background p-3 rounded-lg shadow-lg border border-[var(--primary)]/20 w-64 transform hover:scale-105 transition-transform duration-300">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
                     <svg
@@ -239,7 +239,7 @@ export default function Home() {
             {/* Student Feature */}
             <div className="group w-full md:w-[340px] p-1 relative transition-all duration-500 hover:scale-105">
               <div className="absolute inset-0 bg-linear-to-br from-[var(--primary)] to-[var(--primary-light)] opacity-30 blur-xl group-hover:opacity-40 transition-opacity"></div>
-              <div className="relative bg-white/95 backdrop-blur-md rounded-xl overflow-hidden shadow-lg border border-(--primary)/10">
+              <div className="relative bg-background/95 backdrop-blur-md rounded-xl overflow-hidden shadow-lg border border-(--primary)/10">
                 <div className="absolute top-0 right-0 w-20 h-20 bg-primary/10 rounded-full blur-xl"></div>
                 <div className="p-8 relative">
                   <div className="flex items-center mb-6">
@@ -310,7 +310,7 @@ export default function Home() {
             {/* Teacher Feature */}
             <div className="group w-full md:w-[340px] p-1 relative transition-all duration-500 hover:scale-105 mt-10 md:mt-0">
               <div className="absolute inset-0 bg-linear-to-br from-[var(--primary)] to-[var(--primary-light)] opacity-30 blur-xl group-hover:opacity-40 transition-opacity"></div>
-              <div className="relative bg-white/95 backdrop-blur-md rounded-xl overflow-hidden shadow-lg border border-(--primary)/10">
+              <div className="relative bg-background/95 backdrop-blur-md rounded-xl overflow-hidden shadow-lg border border-(--primary)/10">
                 <div className="absolute top-0 right-0 w-20 h-20 bg-primary/10 rounded-full blur-xl"></div>
                 <div className="p-8 relative">
                   <div className="flex items-center mb-6">
@@ -381,7 +381,7 @@ export default function Home() {
             {/* HOD Feature */}
             <div className="group w-full md:w-[340px] p-1 relative transition-all duration-500 hover:scale-105 mt-10 md:mt-0">
               <div className="absolute inset-0 bg-linear-to-br from-[var(--primary)] to-[var(--primary-light)] opacity-30 blur-xl group-hover:opacity-40 transition-opacity"></div>
-              <div className="relative bg-white/95 backdrop-blur-md rounded-xl overflow-hidden shadow-lg border border-(--primary)/10">
+              <div className="relative bg-background/95 backdrop-blur-md rounded-xl overflow-hidden shadow-lg border border-(--primary)/10">
                 <div className="absolute top-0 right-0 w-20 h-20 bg-primary/10 rounded-full blur-xl"></div>
                 <div className="p-8 relative">
                   <div className="flex items-center mb-6">
@@ -491,7 +491,7 @@ export default function Home() {
                 <div className="lg:w-1/2 lg:pr-12 mb-8 lg:mb-0 lg:text-right order-2 lg:order-1">
                   <div className="p-1 relative group transition-all">
                     <div className="absolute inset-0 bg-gradient-to-tr from-[var(--primary)] to-[var(--primary-light)] opacity-20 blur-xl group-hover:opacity-30 rounded-xl transition-opacity"></div>
-                    <div className="bg-white/95 rounded-xl p-8 shadow-lg relative">
+                    <div className="bg-background/95 rounded-xl p-8 shadow-lg relative">
                       <h3 className="text-2xl font-bold text-(--text) mb-4 group-hover:text-primary transition-colors duration-300">
                         Centralized Communication
                       </h3>
@@ -522,17 +522,17 @@ export default function Home() {
                 </div>
 
                 <div className="hidden lg:flex flex-col items-center justify-center z-10 order-2">
-                  <div className="w-12 h-12 rounded-full bg-white shadow-xl border-4 border-[var(--primary)]/20 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-full bg-background shadow-xl border-4 border-[var(--primary)]/20 flex items-center justify-center">
                     <div className="w-4 h-4 rounded-full bg-primary"></div>
                   </div>
                 </div>
 
                 <div className="lg:w-1/2 lg:pl-12 order-1 lg:order-3">
-                  <div className="aspect-video bg-white/90 rounded-xl shadow-lg overflow-hidden relative">
+                  <div className="aspect-video bg-background/90 rounded-xl shadow-lg overflow-hidden relative">
                     <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMTBiOTgxIiBzdHJva2Utd2lkdGg9IjAuNSIgc3Ryb2tlLW9wYWNpdHk9IjAuMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"></div>
                     <div className="absolute inset-0 flex items-center justify-center">
                       {/* Mockup of communication interface */}
-                      <div className="w-4/5 h-4/5 bg-white rounded-lg shadow-lg flex flex-col border border-(--primary)/10">
+                      <div className="w-4/5 h-4/5 bg-background rounded-lg shadow-lg flex flex-col border border-(--primary)/10">
                         <div className="h-8 bg-primary/10 flex items-center px-4 border-b border-(--primary)/10">
                           <div className="flex space-x-1">
                             <div className="w-2 h-2 rounded-full bg-primary/20"></div>
@@ -559,11 +559,11 @@ export default function Home() {
               {/* Benefit 2 */}
               <div className="flex flex-col lg:flex-row items-center">
                 <div className="lg:w-1/2 lg:pr-12 mb-8 lg:mb-0 order-2 lg:order-1">
-                  <div className="aspect-video bg-white/90 rounded-xl shadow-lg overflow-hidden relative">
+                  <div className="aspect-video bg-background/90 rounded-xl shadow-lg overflow-hidden relative">
                     <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMTBiOTgxIiBzdHJva2Utd2lkdGg9IjAuNSIgc3Ryb2tlLW9wYWNpdHk9IjAuMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"></div>
                     <div className="absolute inset-0 flex items-center justify-center">
                       {/* Mockup of task management */}
-                      <div className="w-4/5 h-4/5 bg-white rounded-lg shadow-lg flex flex-col border border-(--primary)/10">
+                      <div className="w-4/5 h-4/5 bg-background rounded-lg shadow-lg flex flex-col border border-(--primary)/10">
                         <div className="h-8 bg-primary/10 flex items-center px-4 border-b border-(--primary)/10">
                           <div className="flex space-x-1">
                             <div className="w-2 h-2 rounded-full bg-primary/20"></div>
@@ -602,7 +602,7 @@ export default function Home() {
                 </div>
 
                 <div className="hidden lg:flex flex-col items-center justify-center z-10 order-2">
-                  <div className="w-12 h-12 rounded-full bg-white shadow-xl border-4 border-[var(--primary)]/20 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-full bg-background shadow-xl border-4 border-[var(--primary)]/20 flex items-center justify-center">
                     <div className="w-4 h-4 rounded-full bg-primary"></div>
                   </div>
                 </div>
@@ -610,7 +610,7 @@ export default function Home() {
                 <div className="lg:w-1/2 lg:pl-12 lg:text-left order-1 lg:order-3">
                   <div className="p-1 relative group transition-all">
                     <div className="absolute inset-0 bg-gradient-to-tr from-[var(--primary)] to-[var(--primary-light)] opacity-20 blur-xl group-hover:opacity-30 rounded-xl transition-opacity"></div>
-                    <div className="bg-white/95 rounded-xl p-8 shadow-lg relative">
+                    <div className="bg-background/95 rounded-xl p-8 shadow-lg relative">
                       <h3 className="text-2xl font-bold text-(--text) mb-4 group-hover:text-primary transition-colors duration-300">
                         Task Management
                       </h3>
@@ -840,7 +840,7 @@ export default function Home() {
         </div>
 
         <div className="max-w-6xl mx-auto px-4 relative z-10">
-          <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-8 md:p-12 overflow-hidden relative">
+          <div className="bg-background/90 backdrop-blur-md rounded-2xl shadow-xl p-8 md:p-12 overflow-hidden relative">
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-2xl"></div>
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-[var(--primary-light)]/5 rounded-full blur-2xl"></div>
 
@@ -909,7 +909,7 @@ export default function Home() {
                   {/* Floating device mockups */}
                   <div className="relative h-80 w-full">
                     {/* Desktop */}
-                    <div className="absolute top-0 right-0 w-3/4 h-48 bg-white rounded-lg shadow-xl border border-(--primary)/10 transform rotate-3 hover:rotate-0 transition-transform duration-500 z-20">
+                    <div className="absolute top-0 right-0 w-3/4 h-48 bg-background rounded-lg shadow-xl border border-(--primary)/10 transform rotate-3 hover:rotate-0 transition-transform duration-500 z-20">
                       <div className="h-3 bg-[var(--background-light)]/50 rounded-t-lg flex items-center px-2">
                         <div className="flex space-x-1">
                           <div className="w-1 h-1 rounded-full bg-primary/20"></div>
@@ -929,7 +929,7 @@ export default function Home() {
                     </div>
 
                     {/* Tablet */}
-                    <div className="absolute bottom-0 left-0 w-1/2 h-64 bg-white rounded-lg shadow-xl border border-(--primary)/10 transform -rotate-6 hover:rotate-0 transition-transform duration-500 z-10">
+                    <div className="absolute bottom-0 left-0 w-1/2 h-64 bg-background rounded-lg shadow-xl border border-(--primary)/10 transform -rotate-6 hover:rotate-0 transition-transform duration-500 z-10">
                       <div className="h-3 bg-[var(--background-light)]/50 rounded-t-lg flex items-center justify-center">
                         <div className="w-8 h-1 rounded-full bg-primary/20"></div>
                       </div>
@@ -940,7 +940,7 @@ export default function Home() {
                     </div>
 
                     {/* Mobile */}
-                    <div className="absolute bottom-10 right-16 w-24 h-40 bg-white rounded-lg shadow-xl border border-(--primary)/10 transform rotate-12 hover:rotate-0 transition-transform duration-500 z-30">
+                    <div className="absolute bottom-10 right-16 w-24 h-40 bg-background rounded-lg shadow-xl border border-(--primary)/10 transform rotate-12 hover:rotate-0 transition-transform duration-500 z-30">
                       <div className="h-2 bg-[var(--background-light)]/50 rounded-t-lg"></div>
                       <div className="p-1">
                         <div className="h-3 w-12 mx-auto bg-primary/30 rounded-sm mb-1"></div>

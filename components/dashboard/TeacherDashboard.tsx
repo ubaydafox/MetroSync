@@ -39,7 +39,7 @@ export default function TeacherDashboard() {
       <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading dashboard...</p>
+          <p className="text-(--text)/70 font-medium">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -49,10 +49,10 @@ export default function TeacherDashboard() {
   if (error || !dashboardData) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 p-6">
-        <div className="bg-white rounded-2xl shadow-lg p-8 text-center max-w-md">
+        <div className="bg-background rounded-2xl shadow-lg p-8 text-center max-w-md">
           <div className="text-red-600 text-5xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Error Loading Dashboard</h2>
-          <p className="text-gray-600 mb-4">{error || "Failed to load dashboard data"}</p>
+          <h2 className="text-2xl font-bold text-(--text) mb-2">Error Loading Dashboard</h2>
+          <p className="text-(--text)/70 mb-4">{error || "Failed to load dashboard data"}</p>
           <button 
             onClick={() => window.location.reload()}
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -71,19 +71,19 @@ export default function TeacherDashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+          <h1 className="text-3xl font-bold text-(--text) mb-2">
             Teacher Dashboard
           </h1>
-          <p className="text-gray-600">Manage your courses and students</p>
+          <p className="text-(--text)/70">Manage your courses and students</p>
         </div>
 
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-blue-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="bg-background rounded-2xl shadow-lg p-6 border-l-4 border-blue-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 text-sm font-medium">My Courses</p>
-                <h3 className="text-3xl font-bold text-gray-800 mt-1">
+                <p className="text-(--text)/60 text-sm font-medium">My Courses</p>
+                <h3 className="text-3xl font-bold text-(--text) mt-1">
                   {stats.total_courses}
                 </h3>
               </div>
@@ -93,13 +93,13 @@ export default function TeacherDashboard() {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-green-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="bg-background rounded-2xl shadow-lg p-6 border-l-4 border-green-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 text-sm font-medium">
+                <p className="text-(--text)/60 text-sm font-medium">
                   Total Students
                 </p>
-                <h3 className="text-3xl font-bold text-gray-800 mt-1">
+                <h3 className="text-3xl font-bold text-(--text) mt-1">
                   {stats.total_students}
                 </h3>
               </div>
@@ -109,13 +109,13 @@ export default function TeacherDashboard() {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-purple-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="bg-background rounded-2xl shadow-lg p-6 border-l-4 border-purple-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 text-sm font-medium">
+                <p className="text-(--text)/60 text-sm font-medium">
                   Today&apos;s Classes
                 </p>
-                <h3 className="text-3xl font-bold text-gray-800 mt-1">
+                <h3 className="text-3xl font-bold text-(--text) mt-1">
                   {stats.upcoming_classes}
                 </h3>
               </div>
@@ -128,19 +128,19 @@ export default function TeacherDashboard() {
 
         {/* Quick Actions */}
         <div className="mb-8">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">
+          <h2 className="text-xl font-bold text-(--text) mb-4">
             Quick Actions
           </h2>
           <div className="grid grid-cols-2 gap-4">
             <Link
               href="/dashboard/courses"
-              className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group"
+              className="bg-background rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group"
             >
               <div className="flex flex-col items-center text-center">
                 <div className="p-3 rounded-full bg-blue-100 group-hover:bg-blue-200 transition-colors mb-3">
                   <FaBook className="text-blue-600 text-lg" />
                 </div>
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-(--text)/80">
                   My Courses
                 </span>
               </div>
@@ -148,13 +148,13 @@ export default function TeacherDashboard() {
 
             <Link
               href="/dashboard/schedule"
-              className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group"
+              className="bg-background rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group"
             >
               <div className="flex flex-col items-center text-center">
                 <div className="p-3 rounded-full bg-purple-100 group-hover:bg-purple-200 transition-colors mb-3">
                   <FaCalendarAlt className="text-purple-600 text-lg" />
                 </div>
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-(--text)/80">
                   Schedule
                 </span>
               </div>
@@ -165,9 +165,9 @@ export default function TeacherDashboard() {
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* My Courses */}
-          <div className="bg-white rounded-2xl shadow-lg p-6">
+          <div className="bg-background rounded-2xl shadow-lg p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-gray-800 flex items-center gap-3">
+              <h2 className="text-xl font-bold text-(--text) flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-blue-100">
                   <FaBook className="text-blue-600" />
                 </div>
@@ -189,18 +189,18 @@ export default function TeacherDashboard() {
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <h3 className="font-semibold text-gray-800 text-lg">
+                      <h3 className="font-semibold text-(--text) text-lg">
                         {course.name}
                       </h3>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="text-sm text-(--text)/70 mt-1">
                         {course.code} - Section {course.section}
                       </p>
                       <div className="mt-3 flex flex-wrap gap-2 text-sm">
-                        <span className="bg-white px-3 py-1 rounded-full text-gray-600">
+                        <span className="bg-background px-3 py-1 rounded-full text-(--text)/70">
                           <FaUserGraduate className="inline mr-1" />{" "}
                           {course.students} students
                         </span>
-                        <span className="bg-white px-3 py-1 rounded-full text-gray-600">
+                        <span className="bg-background px-3 py-1 rounded-full text-(--text)/70">
                           <FaClock className="inline mr-1" /> {course.next_class}
                         </span>
                       </div>
@@ -212,9 +212,9 @@ export default function TeacherDashboard() {
           </div>
 
           {/* Today's Classes */}
-          <div className="bg-white rounded-2xl shadow-lg p-6">
+          <div className="bg-background rounded-2xl shadow-lg p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-gray-800 flex items-center gap-3">
+              <h2 className="text-xl font-bold text-(--text) flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-purple-100">
                   <FaCalendarAlt className="text-purple-600" />
                 </div>
@@ -233,17 +233,17 @@ export default function TeacherDashboard() {
                       <FaBook className="text-purple-600 text-lg" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-semibold text-gray-800">
+                      <h3 className="font-semibold text-(--text)">
                         {cls.course} - Section {cls.section}
                       </h3>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="text-sm text-(--text)/70 mt-1">
                         Topic: {cls.topic}
                       </p>
-                      <div className="mt-2 flex flex-wrap gap-2 text-sm text-gray-600">
-                        <span className="bg-white px-3 py-1 rounded-full">
+                      <div className="mt-2 flex flex-wrap gap-2 text-sm text-(--text)/70">
+                        <span className="bg-background px-3 py-1 rounded-full">
                           <FaClock className="inline mr-1" /> {cls.time}
                         </span>
-                        <span className="bg-white px-3 py-1 rounded-full">
+                        <span className="bg-background px-3 py-1 rounded-full">
                           {cls.room}
                         </span>
                       </div>

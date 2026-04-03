@@ -25,7 +25,7 @@ export default function NotFound() {
       {/* Main content */}
       <div className="relative z-10 min-h-screen flex items-center justify-center p-6">
         <div className="max-w-4xl w-full">
-          <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl p-12 md:p-16 text-center relative overflow-hidden border border-(--primary)/10">
+          <div className="bg-background/90 backdrop-blur-md rounded-2xl shadow-2xl p-12 md:p-16 text-center relative overflow-hidden border border-(--primary)/10">
             {/* Decorative elements */}
             <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full blur-3xl"></div>
             <div className="absolute bottom-0 left-0 w-40 h-40 bg-[var(--primary-light)]/5 rounded-full blur-3xl"></div>

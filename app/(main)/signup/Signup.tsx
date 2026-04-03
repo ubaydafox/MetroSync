@@ -188,7 +188,7 @@ export default function Signup() {
         </div>
 
         {/* Form Card */}
-        <div className="bg-white/80 backdrop-blur-md rounded-xl shadow-lg p-8 relative z-10 border border-(--primary)/10">
+        <div className="bg-background/80 backdrop-blur-md rounded-xl shadow-lg p-8 relative z-10 border border-(--primary)/10">
           <div className="text-center mb-6">
             <div className="inline-block p-2 rounded-full bg-linear-to-r from-[var(--primary)]/20 to-[var(--primary-light)]/20 backdrop-blur-sm mb-4">
               <div className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center text-xl font-bold">
@@ -223,7 +223,7 @@ export default function Signup() {
                   required
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full pl-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-white/50 backdrop-blur-sm transition-all duration-300"
+                  className="w-full pl-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300"
                   placeholder="Your Full Name"
                 />
               </div>
@@ -249,7 +249,7 @@ export default function Signup() {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full pl-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-white/50 backdrop-blur-sm transition-all duration-300"
+                  className="w-full pl-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300"
                   placeholder="[EMAIL_ADDRESS]"
                 />
               </div>
@@ -273,7 +273,7 @@ export default function Signup() {
                   required
                   value={formData.department}
                   onChange={handleChange}
-                  className="w-full pl-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-white/50 backdrop-blur-sm transition-all duration-300 appearance-none"
+                  className="w-full pl-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300 appearance-none"
                 >
                   <option value="" disabled>
                     Select department
@@ -306,7 +306,7 @@ export default function Signup() {
                   value={formData.batch}
                   onChange={handleChange}
                   disabled={!formData.department || loadingBatches}
-                  className="w-full pl-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-white/50 backdrop-blur-sm transition-all duration-300 appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full pl-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300 appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <option value="" disabled>
                     {loadingBatches
@@ -343,7 +343,7 @@ export default function Signup() {
                   required
                   value={formData.roll}
                   onChange={handleChange}
-                  className="w-full pl-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-white/50 backdrop-blur-sm transition-all duration-300"
+                  className="w-full pl-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300"
                   placeholder="Enter your roll number"
                 />
               </div>
@@ -368,7 +368,7 @@ export default function Signup() {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-white/50 backdrop-blur-sm transition-all duration-300"
+                  className="w-full pl-10 pr-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300"
                   placeholder="••••••••"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -413,7 +413,7 @@ export default function Signup() {
                   required
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-white/50 backdrop-blur-sm transition-all duration-300"
+                  className="w-full pl-10 pr-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300"
                   placeholder="••••••••"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -512,7 +512,7 @@ export default function Signup() {
                 <div className="w-full border-t border-[var(--primary)]/20"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-(--text)/70">
+                <span className="px-2 bg-background text-(--text)/70">
                   Or sign up with
                 </span>
               </div>
@@ -524,7 +524,7 @@ export default function Signup() {
                 type="button"
                 onClick={handleGoogleSignUp}
                 disabled={isLoading}
-                className="group relative w-full flex justify-center items-center py-3 px-4 border border-[var(--primary)]/20 rounded-md text-(--text) bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--primary)] transition-colors duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+                className="group relative w-full flex justify-center items-center py-3 px-4 border border-[var(--primary)]/20 rounded-md text-(--text) bg-background hover:bg-background-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--primary)] transition-colors duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 <FcGoogle className="h-5 w-5 mr-3" />
                 {isLoading ? (

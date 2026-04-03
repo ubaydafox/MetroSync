@@ -30,7 +30,7 @@ export default function LogoutPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--background-light)]">
-      <div className="p-8 max-w-md w-full bg-white rounded-xl shadow-lg border border-(--primary)/10">
+      <div className="p-8 max-w-md w-full bg-background rounded-xl shadow-lg border border-(--primary)/10">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-(--text) mb-4">
             Logging out...
@@ -38,7 +38,7 @@ export default function LogoutPage() {
           <p className="text-(--text)/70 mb-6">
             You are being logged out of MetroSync.
           </p>
-          <div className="relative h-1 bg-gray-200 rounded-full overflow-hidden">
+          <div className="relative h-1 bg-background-light/50 rounded-full overflow-hidden">
             <div className="absolute top-0 left-0 h-1 bg-primary rounded-full animate-progress"></div>
           </div>
         </div>

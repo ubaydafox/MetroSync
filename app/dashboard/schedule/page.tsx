@@ -284,7 +284,7 @@ export default function SchedulePage() {
       <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading schedules...</p>
+          <p className="text-(--text)/70 font-medium">Loading schedules...</p>
         </div>
       </div>
     );
@@ -294,10 +294,10 @@ export default function SchedulePage() {
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 p-6">
-        <div className="bg-white rounded-2xl shadow-lg p-8 text-center max-w-md">
+        <div className="bg-background rounded-2xl shadow-lg p-8 text-center max-w-md">
           <div className="text-red-600 text-5xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Error Loading Schedules</h2>
-          <p className="text-gray-600 mb-4">{error}</p>
+          <h2 className="text-2xl font-bold text-(--text) mb-2">Error Loading Schedules</h2>
+          <p className="text-(--text)/70 mb-4">{error}</p>
           <button 
             onClick={() => window.location.reload()}
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -314,8 +314,8 @@ export default function SchedulePage() {
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">Class Schedule</h1>
-            <p className="text-gray-600 mt-1">
+            <h1 className="text-3xl font-bold text-(--text)">Class Schedule</h1>
+            <p className="text-(--text)/70 mt-1">
               {canManage ? "Manage department class schedules" : "Your weekly class schedule"}
             </p>
           </div>
@@ -331,14 +331,14 @@ export default function SchedulePage() {
         </div>
 
         {/* Day Filter */}
-        <div className="bg-white rounded-2xl shadow-lg p-4 mb-6">
+        <div className="bg-background rounded-2xl shadow-lg p-4 mb-6">
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setSelectedDay("all")}
               className={`px-4 py-2 rounded-lg transition-colors ${
                 selectedDay === "all" 
                   ? "bg-blue-600 text-white" 
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  : "bg-background-light text-(--text)/80 hover:bg-background-light/50"
               }`}
             >
               All Days
@@ -350,7 +350,7 @@ export default function SchedulePage() {
                 className={`px-4 py-2 rounded-lg transition-colors ${
                   selectedDay === day 
                     ? "bg-blue-600 text-white" 
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    : "bg-background-light text-(--text)/80 hover:bg-background-light/50"
                 }`}
               >
                 {day}
@@ -364,7 +364,7 @@ export default function SchedulePage() {
           {filteredSchedule.map((item) => {
             const rawItem = rawSchedule.find(s => s.id === item.id);
             return (
-            <div key={item.id} className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-blue-500">
+            <div key={item.id} className="bg-background rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-blue-500">
               <div className="flex items-start justify-between mb-4">
                 <div className="p-3 rounded-xl bg-blue-100">
                   <FaBook className="text-blue-600 text-xl" />
@@ -388,30 +388,30 @@ export default function SchedulePage() {
               </div>
 
               <div className="flex items-center gap-2 mb-3">
-                <h3 className="text-lg font-bold text-gray-800">{item.courseName}</h3>
+                <h3 className="text-lg font-bold text-(--text)">{item.courseName}</h3>
               </div>
               <p className="text-blue-600 font-semibold mb-4">{item.course !== "none" ? item.course : "Extra Curricular"}</p>
 
-              <div className="space-y-2 text-sm text-gray-600">
+              <div className="space-y-2 text-sm text-(--text)/70">
                 <div className="flex items-center gap-2">
-                  <FaCalendar className="text-gray-400" />
+                  <FaCalendar className="text-(--text)/50" />
                   <span>{item.day}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <FaClock className="text-gray-400" />
+                  <FaClock className="text-(--text)/50" />
                   <span>{item.time}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <FaMapMarkerAlt className="text-gray-400" />
+                  <FaMapMarkerAlt className="text-(--text)/50" />
                   <span>{item.room}</span>
                 </div>
               </div>
 
-              <div className="mt-4 pt-4 border-t border-gray-100 space-y-1">
-                <p className="text-sm text-gray-600">
+              <div className="mt-4 pt-4 border-t border-(--primary)/10 space-y-1">
+                <p className="text-sm text-(--text)/70">
                   <span className="font-medium">Teacher:</span> {item.teacher}
                 </p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-(--text)/70">
                   <span className="font-medium">Batch:</span> {item.batch}
                 </p>
               </div>
@@ -421,10 +421,10 @@ export default function SchedulePage() {
         </div>
 
         {filteredSchedule.length === 0 && (
-          <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
-            <FaCalendar className="text-6xl text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">No classes scheduled</h3>
-            <p className="text-gray-600">
+          <div className="bg-background rounded-2xl shadow-lg p-12 text-center">
+            <FaCalendar className="text-6xl text-(--text)/40 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-(--text) mb-2">No classes scheduled</h3>
+            <p className="text-(--text)/70">
               {selectedDay === "all" ? "No classes found" : `No classes on ${selectedDay}`}
             </p>
           </div>
@@ -434,16 +434,16 @@ export default function SchedulePage() {
       {/* Add Class Modal - HOD Only */}
       {showAddModal && canManage && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Add Class Schedule</h2>
+          <div className="bg-background rounded-2xl shadow-2xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
+            <h2 className="text-2xl font-bold text-(--text) mb-6">Add Class Schedule</h2>
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Course *</label>
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">Course *</label>
                 <select 
                   value={scheduleForm.course}
                   onChange={(e) => setScheduleForm({...scheduleForm, course: e.target.value})}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
                   disabled={loadingCourses}
                 >
                   <option value="">Select Course</option>
@@ -456,11 +456,11 @@ export default function SchedulePage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Batch *</label>
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">Batch *</label>
                 <select 
                   value={scheduleForm.batch}
                   onChange={(e) => setScheduleForm({...scheduleForm, batch: e.target.value})}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
                   disabled={loadingBatches}
                 >
                   <option value="">Select Batch</option>
@@ -473,11 +473,11 @@ export default function SchedulePage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Teacher *</label>
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">Teacher *</label>
                 <select 
                   value={scheduleForm.teacher}
                   onChange={(e) => setScheduleForm({...scheduleForm, teacher: e.target.value})}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
                   disabled={loadingTeachers}
                 >
                   <option value="">Select Teacher</option>
@@ -490,11 +490,11 @@ export default function SchedulePage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Day *</label>
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">Day *</label>
                 <select 
                   value={scheduleForm.day}
                   onChange={(e) => setScheduleForm({...scheduleForm, day: e.target.value})}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">Select Day</option>
                   {days.map(day => <option key={day} value={day}>{day}</option>)}
@@ -503,33 +503,33 @@ export default function SchedulePage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Start Time *</label>
+                  <label className="block text-sm font-medium text-(--text)/80 mb-2">Start Time *</label>
                   <input 
                     type="time" 
                     value={scheduleForm.start_time}
                     onChange={(e) => setScheduleForm({...scheduleForm, start_time: e.target.value})}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" 
+                    className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500" 
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">End Time *</label>
+                  <label className="block text-sm font-medium text-(--text)/80 mb-2">End Time *</label>
                   <input 
                     type="time" 
                     value={scheduleForm.end_time}
                     onChange={(e) => setScheduleForm({...scheduleForm, end_time: e.target.value})}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" 
+                    className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500" 
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Room *</label>
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">Room *</label>
                 <input 
                   type="text" 
                   placeholder="e.g., Room 301, Lab A" 
                   value={scheduleForm.room}
                   onChange={(e) => setScheduleForm({...scheduleForm, room: e.target.value})}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" 
+                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500" 
                 />
               </div>
             </div>
@@ -548,7 +548,7 @@ export default function SchedulePage() {
                     room: ""
                   });
                 }} 
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                className="flex-1 px-4 py-2 border border-(--primary)/30 rounded-lg hover:bg-background-light"
               >
                 Cancel
               </button>
@@ -566,16 +566,16 @@ export default function SchedulePage() {
       {/* Edit Schedule Modal - HOD Only */}
       {showEditModal && canManage && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Edit Class Schedule</h2>
+          <div className="bg-background rounded-2xl shadow-2xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
+            <h2 className="text-2xl font-bold text-(--text) mb-6">Edit Class Schedule</h2>
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Course</label>
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">Course</label>
                 <select 
                   value={scheduleForm.course}
                   onChange={(e) => setScheduleForm({...scheduleForm, course: e.target.value})}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
                   disabled={loadingCourses}
                 >
                   <option value="">Keep Current Course</option>
@@ -588,11 +588,11 @@ export default function SchedulePage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Batch</label>
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">Batch</label>
                 <select 
                   value={scheduleForm.batch}
                   onChange={(e) => setScheduleForm({...scheduleForm, batch: e.target.value})}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
                   disabled={loadingBatches}
                 >
                   <option value="">Keep Current Batch</option>
@@ -605,11 +605,11 @@ export default function SchedulePage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Teacher</label>
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">Teacher</label>
                 <select 
                   value={scheduleForm.teacher}
                   onChange={(e) => setScheduleForm({...scheduleForm, teacher: e.target.value})}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
                   disabled={loadingTeachers}
                 >
                   <option value="">Keep Current Teacher</option>
@@ -622,11 +622,11 @@ export default function SchedulePage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Day *</label>
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">Day *</label>
                 <select 
                   value={scheduleForm.day}
                   onChange={(e) => setScheduleForm({...scheduleForm, day: e.target.value})}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">Select Day</option>
                   {days.map(day => <option key={day} value={day}>{day}</option>)}
@@ -635,33 +635,33 @@ export default function SchedulePage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Start Time *</label>
+                  <label className="block text-sm font-medium text-(--text)/80 mb-2">Start Time *</label>
                   <input 
                     type="time" 
                     value={scheduleForm.start_time}
                     onChange={(e) => setScheduleForm({...scheduleForm, start_time: e.target.value})}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" 
+                    className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500" 
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">End Time *</label>
+                  <label className="block text-sm font-medium text-(--text)/80 mb-2">End Time *</label>
                   <input 
                     type="time" 
                     value={scheduleForm.end_time}
                     onChange={(e) => setScheduleForm({...scheduleForm, end_time: e.target.value})}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" 
+                    className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500" 
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Room *</label>
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">Room *</label>
                 <input 
                   type="text" 
                   placeholder="e.g., Room 301, Lab A" 
                   value={scheduleForm.room}
                   onChange={(e) => setScheduleForm({...scheduleForm, room: e.target.value})}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" 
+                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500" 
                 />
               </div>
             </div>
@@ -681,7 +681,7 @@ export default function SchedulePage() {
                     room: ""
                   });
                 }} 
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                className="flex-1 px-4 py-2 border border-(--primary)/30 rounded-lg hover:bg-background-light"
               >
                 Cancel
               </button>

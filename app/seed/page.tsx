@@ -426,15 +426,15 @@ export default function SeedPage() {
   const totalExpected = COLLECTIONS.reduce((s, c) => s + c.data.length, 0);
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
-      <div className="bg-white rounded-2xl shadow-xl border border-gray-200 max-w-2xl w-full p-8">
+    <div className="min-h-screen bg-background-light flex items-center justify-center p-6">
+      <div className="bg-background rounded-2xl shadow-xl border border-(--primary)/20 max-w-2xl w-full p-8">
         {/* Header */}
         <div className="text-center mb-6">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center mx-auto mb-3 text-3xl shadow-lg">
             🔥
           </div>
-          <h1 className="text-2xl font-bold text-gray-800">Full Database Seed</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-(--text)">Full Database Seed</h1>
+          <p className="text-sm text-(--text)/60 mt-1">
             Populating <strong>{totalExpected}</strong> records across <strong>{COLLECTIONS.length}</strong> collections
           </p>
         </div>
@@ -449,16 +449,16 @@ export default function SeedPage() {
         </div>
 
         {/* Progress list */}
-        <div className="space-y-1 mb-5 max-h-80 overflow-y-auto border border-gray-100 rounded-lg p-3 bg-gray-50">
+        <div className="space-y-1 mb-5 max-h-80 overflow-y-auto border border-(--primary)/10 rounded-lg p-3 bg-background-light">
           {items.length === 0 && running && (
-            <p className="text-sm text-gray-400 text-center animate-pulse py-4">Connecting to Firestore…</p>
+            <p className="text-sm text-(--text)/50 text-center animate-pulse py-4">Connecting to Firestore…</p>
           )}
           {items.map((item) => (
             <div key={item.label} className="flex items-start gap-2 text-xs py-0.5">
               <span className="text-sm leading-tight mt-0.5 flex-shrink-0">{statusIcon(item.status)}</span>
-              <span className={item.status === "error" ? "text-red-600 flex-1" : "text-gray-600 flex-1"}>
+              <span className={item.status === "error" ? "text-red-600 flex-1" : "text-(--text)/70 flex-1"}>
                 {item.label}
-                {item.detail && <span className="ml-1 text-gray-400">({item.detail})</span>}
+                {item.detail && <span className="ml-1 text-(--text)/50">({item.detail})</span>}
               </span>
             </div>
           ))}
@@ -504,21 +504,21 @@ export default function SeedPage() {
         </div>
 
         <div className="flex gap-3 mt-3">
-          <Link href="/signup" className="flex-1 py-2.5 rounded-xl border border-gray-300 text-gray-700 text-sm font-medium text-center hover:bg-gray-50 transition-colors">
+          <Link href="/signup" className="flex-1 py-2.5 rounded-xl border border-(--primary)/30 text-(--text)/80 text-sm font-medium text-center hover:bg-background-light transition-colors">
             → Signup
           </Link>
-          <Link href="/login" className="flex-1 py-2.5 rounded-xl border border-gray-300 text-gray-700 text-sm font-medium text-center hover:bg-gray-50 transition-colors">
+          <Link href="/login" className="flex-1 py-2.5 rounded-xl border border-(--primary)/30 text-(--text)/80 text-sm font-medium text-center hover:bg-background-light transition-colors">
             → Login
           </Link>
-          <Link href="/dashboard" className="flex-1 py-2.5 rounded-xl border border-gray-300 text-gray-700 text-sm font-medium text-center hover:bg-gray-50 transition-colors">
+          <Link href="/dashboard" className="flex-1 py-2.5 rounded-xl border border-(--primary)/30 text-(--text)/80 text-sm font-medium text-center hover:bg-background-light transition-colors">
             → Dashboard
           </Link>
         </div>
 
         {/* Demo User Credentials */}
-        <div className="mt-6 border-t border-gray-100 pt-6">
+        <div className="mt-6 border-t border-(--primary)/10 pt-6">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="font-bold text-gray-800 text-sm">👤 Demo User Accounts</h2>
+            <h2 className="font-bold text-(--text) text-sm">👤 Demo User Accounts</h2>
             <button
               onClick={createDemoUsers}
               disabled={creatingUsers || running}
@@ -532,27 +532,27 @@ export default function SeedPage() {
             {DEMO_USERS.map((u) => {
               const us = userStatuses.find((s) => s.email === u.email);
               return (
-                <div key={u.email} className="flex items-center gap-3 bg-gray-50 rounded-xl p-3 border border-gray-100">
+                <div key={u.email} className="flex items-center gap-3 bg-background-light rounded-xl p-3 border border-(--primary)/10">
                   <div className="text-xl w-8 text-center flex-shrink-0">{u.badge}</div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="font-semibold text-gray-800 text-sm">{u.name}</span>
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-gray-200 text-gray-600 font-medium capitalize">{u.role}</span>
+                      <span className="font-semibold text-(--text) text-sm">{u.name}</span>
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-background-light/50 text-(--text)/70 font-medium capitalize">{u.role}</span>
                       {us && (
                         <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                           us.status === "ok" ? "bg-green-100 text-green-700" :
                           us.status === "skip" ? "bg-yellow-100 text-yellow-700" :
                           us.status === "error" ? "bg-red-100 text-red-700" :
-                          "bg-gray-100 text-gray-500"
+                          "bg-background-light text-(--text)/60"
                         }`}>
                           {us.status === "ok" ? "✅ Created" : us.status === "skip" ? "⏭ Exists" : us.status === "error" ? `❌ ${us.detail}` : "⏳"}
                         </span>
                       )}
                     </div>
                     <div className="flex gap-4 mt-1">
-                      <span className="text-xs text-gray-500 font-mono">{u.email}</span>
-                      <span className="text-xs text-gray-400">•</span>
-                      <span className="text-xs text-gray-500 font-mono font-semibold">{u.password}</span>
+                      <span className="text-xs text-(--text)/60 font-mono">{u.email}</span>
+                      <span className="text-xs text-(--text)/50">•</span>
+                      <span className="text-xs text-(--text)/60 font-mono font-semibold">{u.password}</span>
                     </div>
                   </div>
                 </div>
@@ -567,7 +567,7 @@ export default function SeedPage() {
           )}
         </div>
 
-        <p className="text-xs text-gray-400 text-center mt-4">
+        <p className="text-xs text-(--text)/50 text-center mt-4">
           For development only. Remove this page before production deployment.
         </p>
       </div>

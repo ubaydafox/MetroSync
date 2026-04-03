@@ -35,7 +35,7 @@ export default function Contact() {
             <div className="lg:w-1/3">
               <div className="sticky top-8">
                 {/* Email */}
-                <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-6 mb-6 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
+                <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 mb-6 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
                   <div className="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-bl-3xl group-hover:bg-primary/20 transition-colors duration-300"></div>
                   <div className="relative">
                     <div className="flex items-start">
@@ -54,7 +54,7 @@ export default function Contact() {
                 </div>
                 
                 {/* Phone */}
-                <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-6 mb-6 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
+                <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 mb-6 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
                   <div className="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-bl-3xl group-hover:bg-primary/20 transition-colors duration-300"></div>
                   <div className="relative">
                     <div className="flex items-start">
@@ -73,7 +73,7 @@ export default function Contact() {
                 </div>
                 
                 {/* Office */}
-                <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-6 mb-6 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
+                <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 mb-6 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
                   <div className="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-bl-3xl group-hover:bg-primary/20 transition-colors duration-300"></div>
                   <div className="relative">
                     <div className="flex items-start">
@@ -96,7 +96,7 @@ export default function Contact() {
                 </div>
                 
                 {/* Social Media */}
-                {/* <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-6 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300">
+                {/* <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300">
                   <div className="relative">
                     <h3 className="text-lg font-semibold text-(--text) mb-4">Connect With Us</h3>
                     <div className="flex gap-3">
@@ -123,7 +123,7 @@ export default function Contact() {
             
             {/* Contact Form */}
             <div className="lg:w-2/3">
-              <div className="bg-white/80 backdrop-blur-md rounded-xl shadow-lg p-8 relative overflow-hidden border border-(--primary)/10">
+              <div className="bg-background/80 backdrop-blur-md rounded-xl shadow-lg p-8 relative overflow-hidden border border-(--primary)/10">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-[var(--primary-light)]/5 rounded-full blur-3xl"></div>
                 
@@ -137,7 +137,7 @@ export default function Contact() {
                         <input
                           type="text"
                           id="first_name"
-                          className="w-full px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-white/50 backdrop-blur-sm transition-all duration-300"
+                          className="w-full px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300"
                           placeholder="John"
                         />
                       </div>
@@ -148,7 +148,7 @@ export default function Contact() {
                         <input
                           type="text"
                           id="last_name"
-                          className="w-full px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-white/50 backdrop-blur-sm transition-all duration-300"
+                          className="w-full px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300"
                           placeholder="Doe"
                         />
                       </div>
@@ -160,7 +160,7 @@ export default function Contact() {
                       <input
                         type="email"
                         id="email"
-                        className="w-full px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-white/50 backdrop-blur-sm transition-all duration-300"
+                        className="w-full px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300"
                         placeholder="john.doe@example.com"
                       />
                     </div>
@@ -171,7 +171,7 @@ export default function Contact() {
                       <input
                         type="text"
                         id="subject"
-                        className="w-full px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-white/50 backdrop-blur-sm transition-all duration-300"
+                        className="w-full px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300"
                         placeholder="How can we help you?"
                       />
                     </div>
@@ -182,7 +182,7 @@ export default function Contact() {
                       <textarea
                         id="message"
                         rows={5}
-                        className="w-full px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-white/50 backdrop-blur-sm transition-all duration-300 resize-none"
+                        className="w-full px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300 resize-none"
                         placeholder="Tell us what you need help with..."
                       ></textarea>
                     </div>
@@ -224,7 +224,7 @@ export default function Contact() {
           </div>
           
           <div className="space-y-6">
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-lg border border-(--primary)/10">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-lg border border-(--primary)/10">
               <h3 className="text-lg font-semibold text-(--text) mb-3 flex items-center">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary text-sm mr-3">Q</span>
                 What is MetroSync?
@@ -238,7 +238,7 @@ export default function Contact() {
               </div>
             </div>
             
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-lg border border-(--primary)/10">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-lg border border-(--primary)/10">
               <h3 className="text-lg font-semibold text-(--text) mb-3 flex items-center">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary text-sm mr-3">Q</span>
                 How can I get started with MetroSync?
@@ -251,7 +251,7 @@ export default function Contact() {
               </div>
             </div>
             
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-lg border border-(--primary)/10">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-lg border border-(--primary)/10">
               <h3 className="text-lg font-semibold text-(--text) mb-3 flex items-center">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary text-sm mr-3">Q</span>
                 Is MetroSync suitable for my institution?
@@ -265,7 +265,7 @@ export default function Contact() {
               </div>
             </div>
             
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-lg border border-(--primary)/10">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-lg border border-(--primary)/10">
               <h3 className="text-lg font-semibold text-(--text) mb-3 flex items-center">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary text-sm mr-3">Q</span>
                 Do you offer technical support?
@@ -285,7 +285,7 @@ export default function Contact() {
       {/* Map Section */}
       {/* <section className="py-16 relative">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="bg-white/80 backdrop-blur-md rounded-xl shadow-lg overflow-hidden border border-(--primary)/10">
+          <div className="bg-background/80 backdrop-blur-md rounded-xl shadow-lg overflow-hidden border border-(--primary)/10">
             <div className="aspect-[16/9] bg-[var(--background-light)]/50 flex items-center justify-center">
               <div className="text-center p-8">
                 <div className="inline-block p-4 rounded-full bg-primary/10 mb-4">

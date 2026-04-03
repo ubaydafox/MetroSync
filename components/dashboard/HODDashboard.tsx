@@ -63,22 +63,22 @@ export default function HODDashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+          <h1 className="text-3xl font-bold text-(--text) mb-2">
             HOD Dashboard
           </h1>
-          <p className="text-gray-600">Manage your department efficiently</p>
+          <p className="text-(--text)/70">Manage your department efficiently</p>
         </div>
 
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {/* Total Courses Card */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-blue-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="bg-background rounded-2xl shadow-lg p-6 border-l-4 border-blue-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 text-sm font-medium">
+                <p className="text-(--text)/60 text-sm font-medium">
                   Total Courses
                 </p>
-                <h3 className="text-3xl font-bold text-gray-800 mt-1">
+                <h3 className="text-3xl font-bold text-(--text) mt-1">
                   {hodDashboardData.stats.totalCourses}
                 </h3>
               </div>
@@ -89,13 +89,13 @@ export default function HODDashboard() {
           </div>
 
           {/* Total Teachers Card */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-green-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="bg-background rounded-2xl shadow-lg p-6 border-l-4 border-green-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 text-sm font-medium">
+                <p className="text-(--text)/60 text-sm font-medium">
                   Total Teachers
                 </p>
-                <h3 className="text-3xl font-bold text-gray-800 mt-1">
+                <h3 className="text-3xl font-bold text-(--text) mt-1">
                   {hodDashboardData.stats.totalTeachers}
                 </h3>
               </div>
@@ -106,13 +106,13 @@ export default function HODDashboard() {
           </div>
 
           {/* Total Students Card */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-purple-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="bg-background rounded-2xl shadow-lg p-6 border-l-4 border-purple-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 text-sm font-medium">
+                <p className="text-(--text)/60 text-sm font-medium">
                   Total Students
                 </p>
-                <h3 className="text-3xl font-bold text-gray-800 mt-1">
+                <h3 className="text-3xl font-bold text-(--text) mt-1">
                   {hodDashboardData.stats.totalStudents}
                 </h3>
               </div>
@@ -123,13 +123,13 @@ export default function HODDashboard() {
           </div>
 
           {/* Active Semesters Card */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-orange-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="bg-background rounded-2xl shadow-lg p-6 border-l-4 border-orange-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-500 text-sm font-medium">
+                <p className="text-(--text)/60 text-sm font-medium">
                   Active Semesters
                 </p>
-                <h3 className="text-3xl font-bold text-gray-800 mt-1">
+                <h3 className="text-3xl font-bold text-(--text) mt-1">
                   {hodDashboardData.stats.activeSemesters}
                 </h3>
               </div>
@@ -142,49 +142,49 @@ export default function HODDashboard() {
 
         {/* Quick Actions */}
         <div className="mb-8">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">
+          <h2 className="text-xl font-bold text-(--text) mb-4">
             Quick Actions
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <button className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group">
+            <button className="bg-background rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group">
               <div className="flex flex-col items-center text-center">
                 <div className="p-3 rounded-full bg-blue-100 group-hover:bg-blue-200 transition-colors mb-3">
                   <FaPlus className="text-blue-600 text-lg" />
                 </div>
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-(--text)/80">
                   Add Course
                 </span>
               </div>
             </button>
 
-            <button className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group">
+            <button className="bg-background rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group">
               <div className="flex flex-col items-center text-center">
                 <div className="p-3 rounded-full bg-green-100 group-hover:bg-green-200 transition-colors mb-3">
                   <FaUserTie className="text-green-600 text-lg" />
                 </div>
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-(--text)/80">
                   Add Teacher
                 </span>
               </div>
             </button>
 
-            <button className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group">
+            <button className="bg-background rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group">
               <div className="flex flex-col items-center text-center">
                 <div className="p-3 rounded-full bg-purple-100 group-hover:bg-purple-200 transition-colors mb-3">
                   <FaUserCheck className="text-purple-600 text-lg" />
                 </div>
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-(--text)/80">
                   Add CR
                 </span>
               </div>
             </button>
 
-            <button className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group">
+            <button className="bg-background rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group">
               <div className="flex flex-col items-center text-center">
                 <div className="p-3 rounded-full bg-orange-100 group-hover:bg-orange-200 transition-colors mb-3">
                   <FaCalendarAlt className="text-orange-600 text-lg" />
                 </div>
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-(--text)/80">
                   Manage Schedule
                 </span>
               </div>
@@ -195,9 +195,9 @@ export default function HODDashboard() {
         {/* Main Content - Full Width Layout */}
         <div className="space-y-6">
           {/* Recent Courses */}
-          <div className="bg-white rounded-2xl shadow-lg p-6">
+          <div className="bg-background rounded-2xl shadow-lg p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-gray-800 flex items-center gap-3">
+              <h2 className="text-xl font-bold text-(--text) flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-blue-100">
                   <FaBook className="text-blue-600" />
                 </div>
@@ -216,17 +216,17 @@ export default function HODDashboard() {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <h3 className="font-semibold text-gray-800 text-lg">
+                      <h3 className="font-semibold text-(--text) text-lg">
                         {course.name}
                       </h3>
-                      <p className="text-gray-600 text-sm mt-1">
+                      <p className="text-(--text)/70 text-sm mt-1">
                         Code: {course.code} | Teacher: {course.teacher}
                       </p>
-                      <div className="mt-2 flex flex-wrap gap-4 text-sm text-gray-600">
-                        <span className="bg-white px-3 py-1 rounded-full">
+                      <div className="mt-2 flex flex-wrap gap-4 text-sm text-(--text)/70">
+                        <span className="bg-background px-3 py-1 rounded-full">
                           {course.students} Students
                         </span>
-                        <span className="bg-white px-3 py-1 rounded-full">
+                        <span className="bg-background px-3 py-1 rounded-full">
                           {course.semester}
                         </span>
                       </div>
@@ -246,9 +246,9 @@ export default function HODDashboard() {
           </div>
 
           {/* Teachers Management */}
-          <div className="bg-white rounded-2xl shadow-lg p-6">
+          <div className="bg-background rounded-2xl shadow-lg p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-gray-800 flex items-center gap-3">
+              <h2 className="text-xl font-bold text-(--text) flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-green-100">
                   <FaChalkboardTeacher className="text-green-600" />
                 </div>
@@ -267,14 +267,14 @@ export default function HODDashboard() {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <h3 className="font-semibold text-gray-800 text-lg">
+                      <h3 className="font-semibold text-(--text) text-lg">
                         {teacher.name}
                       </h3>
-                      <p className="text-gray-600 text-sm mt-1">
+                      <p className="text-(--text)/70 text-sm mt-1">
                         {teacher.department}
                       </p>
-                      <div className="mt-2 flex flex-wrap gap-4 text-sm text-gray-600">
-                        <span className="bg-white px-3 py-1 rounded-full">
+                      <div className="mt-2 flex flex-wrap gap-4 text-sm text-(--text)/70">
+                        <span className="bg-background px-3 py-1 rounded-full">
                           {teacher.courses} Courses
                         </span>
                         <span className="bg-green-200 text-green-800 px-3 py-1 rounded-full">

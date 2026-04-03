@@ -29,7 +29,7 @@ export default function About() {
           
           {/* Metrics */}
           {/* <div className="grid md:grid-cols-3 gap-8 mt-12">
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-lg p-8 relative overflow-hidden group hover:shadow-xl transition-all duration-300">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-lg p-8 relative overflow-hidden group hover:shadow-xl transition-all duration-300">
               <div className="absolute -right-4 -top-4 w-24 h-24 bg-primary/10 rounded-full blur-xl group-hover:bg-primary/20 transition-colors"></div>
               <div className="relative">
                 <h3 className="text-5xl font-bold text-(--text) mb-2 flex items-end">
@@ -40,7 +40,7 @@ export default function About() {
               </div>
             </div>
             
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-lg p-8 relative overflow-hidden group hover:shadow-xl transition-all duration-300">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-lg p-8 relative overflow-hidden group hover:shadow-xl transition-all duration-300">
               <div className="absolute -right-4 -top-4 w-24 h-24 bg-primary/10 rounded-full blur-xl group-hover:bg-primary/20 transition-colors"></div>
               <div className="relative">
                 <h3 className="text-5xl font-bold text-(--text) mb-2 flex items-end">
@@ -51,7 +51,7 @@ export default function About() {
               </div>
             </div>
             
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-lg p-8 relative overflow-hidden group hover:shadow-xl transition-all duration-300">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-lg p-8 relative overflow-hidden group hover:shadow-xl transition-all duration-300">
               <div className="absolute -right-4 -top-4 w-24 h-24 bg-primary/10 rounded-full blur-xl group-hover:bg-primary/20 transition-colors"></div>
               <div className="relative">
                 <h3 className="text-5xl font-bold text-(--text) mb-2 flex items-end">
@@ -75,19 +75,19 @@ export default function About() {
                 <div className="absolute -top-8 -left-8 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
                 
                 {/* Image frame */}
-                <div className="relative z-10 p-2 bg-white rounded-xl shadow-xl border border-(--primary)/10">
+                <div className="relative z-10 p-2 bg-background rounded-xl shadow-xl border border-(--primary)/10">
 
                   <Image src="/images/neub.png" width={600} height={400} alt="NEUB Campus" className="rounded-lg" />
 
                   
                   {/* Floating elements */}
-                  <div className="absolute -bottom-6 -right-6 w-20 h-20 bg-white rounded-lg shadow-lg border border-(--primary)/10 transform rotate-12 flex items-center justify-center">
+                  <div className="absolute -bottom-6 -right-6 w-20 h-20 bg-background rounded-lg shadow-lg border border-(--primary)/10 transform rotate-12 flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-primary" viewBox="0 0 20 20" fill="currentColor">
                       <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
                     </svg>
                   </div>
                   
-                  <div className="absolute -top-4 -right-4 w-16 h-16 bg-white rounded-full shadow-lg border border-(--primary)/10 transform -rotate-6 flex items-center justify-center">
+                  <div className="absolute -top-4 -right-4 w-16 h-16 bg-background rounded-full shadow-lg border border-(--primary)/10 transform -rotate-6 flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-primary" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
                     </svg>
@@ -138,7 +138,7 @@ export default function About() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-16">
             {/* Mission */}
-            <div className="bg-white/80 backdrop-blur-md rounded-xl shadow-lg p-8 relative overflow-hidden hover:shadow-xl transition-all duration-300 border border-(--primary)/10">
+            <div className="bg-background/80 backdrop-blur-md rounded-xl shadow-lg p-8 relative overflow-hidden hover:shadow-xl transition-all duration-300 border border-(--primary)/10">
               <div className="absolute -right-12 -top-12 w-32 h-32 bg-primary/5 rounded-full blur-3xl"></div>
               <div className="relative">
                 <div className="inline-block p-3 rounded-full bg-primary/10 mb-6">
@@ -157,7 +157,7 @@ export default function About() {
             </div>
             
             {/* Vision */}
-            <div className="bg-white/80 backdrop-blur-md rounded-xl shadow-lg p-8 relative overflow-hidden hover:shadow-xl transition-all duration-300 border border-(--primary)/10">
+            <div className="bg-background/80 backdrop-blur-md rounded-xl shadow-lg p-8 relative overflow-hidden hover:shadow-xl transition-all duration-300 border border-(--primary)/10">
               <div className="absolute -right-12 -top-12 w-32 h-32 bg-primary/5 rounded-full blur-3xl"></div>
               <div className="relative">
                 <div className="inline-block p-3 rounded-full bg-primary/10 mb-6">
@@ -196,7 +196,7 @@ export default function About() {
           
           <div className="grid md:grid-cols-3 gap-8">
             {/* Innovation */}
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-8 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-8 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
               <div className="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-bl-3xl group-hover:bg-primary/20 transition-colors duration-300"></div>
               <div className="relative">
                 <div className="mb-6 p-3 inline-block rounded-xl bg-primary/10">
@@ -212,7 +212,7 @@ export default function About() {
             </div>
             
             {/* Collaboration */}
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-8 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-8 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
               <div className="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-bl-3xl group-hover:bg-primary/20 transition-colors duration-300"></div>
               <div className="relative">
                 <div className="mb-6 p-3 inline-block rounded-xl bg-primary/10">
@@ -228,7 +228,7 @@ export default function About() {
             </div>
             
             {/* Excellence */}
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-8 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-8 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
               <div className="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-bl-3xl group-hover:bg-primary/20 transition-colors duration-300"></div>
               <div className="relative">
                 <div className="mb-6 p-3 inline-block rounded-xl bg-primary/10">
@@ -246,7 +246,7 @@ export default function About() {
           
           <div className="grid md:grid-cols-2 gap-8 mt-8">
             {/* User-Centric */}
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-8 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-8 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
               <div className="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-bl-3xl group-hover:bg-primary/20 transition-colors duration-300"></div>
               <div className="relative">
                 <div className="mb-6 p-3 inline-block rounded-xl bg-primary/10">
@@ -262,7 +262,7 @@ export default function About() {
             </div>
             
             {/* Integrity */}
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-8 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-8 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
               <div className="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-bl-3xl group-hover:bg-primary/20 transition-colors duration-300"></div>
               <div className="relative">
                 <div className="mb-6 p-3 inline-block rounded-xl bg-primary/10">

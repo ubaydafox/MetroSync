@@ -97,8 +97,8 @@ export default function NotificationsPage() {
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">Batch Notices</h1>
-            <p className="text-gray-600 mt-1">
+            <h1 className="text-3xl font-bold text-(--text)">Batch Notices</h1>
+            <p className="text-(--text)/70 mt-1">
               {canPost
                 ? "View and post batch notices"
                 : "Stay updated with important announcements"}
@@ -116,14 +116,14 @@ export default function NotificationsPage() {
         </div>
 
         {/* Filter Tabs */}
-        <div className="bg-white rounded-2xl shadow-lg p-4 mb-6">
+        <div className="bg-background rounded-2xl shadow-lg p-4 mb-6">
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setFilter("all")}
               className={`px-4 py-2 rounded-lg transition-colors ${
                 filter === "all"
                   ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  : "bg-background-light text-(--text)/80 hover:bg-background-light/50"
               }`}
             >
               All
@@ -133,7 +133,7 @@ export default function NotificationsPage() {
               className={`px-4 py-2 rounded-lg transition-colors ${
                 filter === "important"
                   ? "bg-red-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  : "bg-background-light text-(--text)/80 hover:bg-background-light/50"
               }`}
             >
               Important
@@ -143,7 +143,7 @@ export default function NotificationsPage() {
               className={`px-4 py-2 rounded-lg transition-colors ${
                 filter === "warning"
                   ? "bg-yellow-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  : "bg-background-light text-(--text)/80 hover:bg-background-light/50"
               }`}
             >
               Warnings
@@ -153,7 +153,7 @@ export default function NotificationsPage() {
               className={`px-4 py-2 rounded-lg transition-colors ${
                 filter === "info"
                   ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  : "bg-background-light text-(--text)/80 hover:bg-background-light/50"
               }`}
             >
               Info
@@ -166,29 +166,29 @@ export default function NotificationsPage() {
           {filteredNotifications.map((notification) => (
             <div
               key={notification.id}
-              className={`bg-white rounded-2xl shadow-lg p-6 border-l-4 ${getTypeBg(
+              className={`bg-background rounded-2xl shadow-lg p-6 border-l-4 ${getTypeBg(
                 notification.type
               )} hover:shadow-xl transition-all`}
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-4 flex-1">
-                  <div className="p-3 rounded-xl bg-white shadow-sm">
+                  <div className="p-3 rounded-xl bg-background shadow-sm">
                     {getTypeIcon(notification.type)}
                   </div>
 
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <h3 className="text-lg font-bold text-gray-800">
+                      <h3 className="text-lg font-bold text-(--text)">
                         {notification.title}
                       </h3>
-                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-700">
+                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-background-light/50 text-(--text)/80">
                         {notification.course}
                       </span>
                     </div>
 
-                    <p className="text-gray-600 mb-3">{notification.message}</p>
+                    <p className="text-(--text)/70 mb-3">{notification.message}</p>
 
-                    <div className="flex items-center gap-4 text-sm text-gray-500">
+                    <div className="flex items-center gap-4 text-sm text-(--text)/60">
                       <span>By {notification.author}</span>
                       <span>•</span>
                       <span>{notification.date}</span>
@@ -207,12 +207,12 @@ export default function NotificationsPage() {
         </div>
 
         {filteredNotifications.length === 0 && (
-          <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
-            <FaBell className="text-6xl text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+          <div className="bg-background rounded-2xl shadow-lg p-12 text-center">
+            <FaBell className="text-6xl text-(--text)/40 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-(--text) mb-2">
               No notifications
             </h3>
-            <p className="text-gray-600">You&apos;re all caught up!</p>
+            <p className="text-(--text)/70">You&apos;re all caught up!</p>
           </div>
         )}
       </div>
@@ -220,17 +220,17 @@ export default function NotificationsPage() {
       {/* Add Notice Modal */}
       {showAddModal && canPost && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          <div className="bg-background rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <h2 className="text-2xl font-bold text-(--text) mb-6">
               Post Notice
             </h2>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">
                   Notice Type
                 </label>
-                <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <select className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500">
                   <option value="info">Info</option>
                   <option value="warning">Warning</option>
                   <option value="important">Important</option>
@@ -238,10 +238,10 @@ export default function NotificationsPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">
                   Course (Optional)
                 </label>
-                <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <select className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500">
                   <option value="">General (All Batch)</option>
                   <option>CSE101 - Introduction to Programming</option>
                   <option>CSE201 - Data Structures</option>
@@ -250,24 +250,24 @@ export default function NotificationsPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">
                   Title
                 </label>
                 <input
                   type="text"
                   placeholder="e.g., Class Rescheduled"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-(--text)/80 mb-2">
                   Message
                 </label>
                 <textarea
                   rows={4}
                   placeholder="Enter notice details..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
                 ></textarea>
               </div>
             </div>
@@ -275,7 +275,7 @@ export default function NotificationsPage() {
             <div className="flex gap-3 mt-6">
               <button
                 onClick={() => setShowAddModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                className="flex-1 px-4 py-2 border border-(--primary)/30 rounded-lg hover:bg-background-light"
               >
                 Cancel
               </button>

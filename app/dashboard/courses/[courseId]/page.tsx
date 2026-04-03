@@ -535,28 +535,28 @@ export default function CourseDetailsPage() {
       <div className="max-w-7xl mx-auto">
         {/* Course Header */}
         {courseLoading ? (
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
+          <div className="bg-background rounded-2xl shadow-lg p-6 mb-6">
             <div className="animate-pulse">
-              <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+              <div className="h-8 bg-background-light/50 rounded w-1/3 mb-4"></div>
+              <div className="h-4 bg-background-light/50 rounded w-1/4"></div>
             </div>
           </div>
         ) : courseError ? (
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
+          <div className="bg-background rounded-2xl shadow-lg p-6 mb-6">
             <div className="text-red-600">{courseError}</div>
           </div>
         ) : course ? (
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
+          <div className="bg-background rounded-2xl shadow-lg p-6 mb-6">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-4">
                 <div className="p-4 rounded-xl bg-blue-100">
                   <FaBook className="text-blue-600 text-3xl" />
                 </div>
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-800">
+                  <h1 className="text-3xl font-bold text-(--text)">
                     {course.name}
                   </h1>
-                  <p className="text-gray-600 mt-1">
+                  <p className="text-(--text)/70 mt-1">
                     {course.code} • {course.credits} Credits
                   </p>
                 </div>
@@ -564,15 +564,15 @@ export default function CourseDetailsPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="flex items-center gap-2 text-gray-600">
+              <div className="flex items-center gap-2 text-(--text)/70">
                 <FaChalkboardTeacher className="text-blue-500" />
                 <span>{course.teacher_name}</span>
               </div>
-              <div className="flex items-center gap-2 text-gray-600">
+              <div className="flex items-center gap-2 text-(--text)/70">
                 <FaUsers className="text-purple-500" />
                 <span>{course.student_count} Students</span>
               </div>
-              <div className="flex items-center gap-2 text-gray-600">
+              <div className="flex items-center gap-2 text-(--text)/70">
                 <FaTasks className="text-orange-500" />
                 <span>{course.task_count} Tasks</span>
               </div>
@@ -581,7 +581,7 @@ export default function CourseDetailsPage() {
         ) : null}
 
         {/* Navigation Tabs */}
-        <div className="bg-white rounded-2xl shadow-lg p-4 mb-6">
+        <div className="bg-background rounded-2xl shadow-lg p-4 mb-6">
           <div className="flex flex-wrap gap-2">
             {tabs.map((tab) => (
               <button
@@ -590,7 +590,7 @@ export default function CourseDetailsPage() {
                 className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all ${
                   activeTab === tab.id
                     ? "bg-blue-600 text-white shadow-lg"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    : "bg-background-light text-(--text)/80 hover:bg-background-light/50"
                 }`}
               >
                 {tab.icon}
@@ -606,26 +606,26 @@ export default function CourseDetailsPage() {
           {activeTab === "overview" && (
             <div className="space-y-6">
               {courseLoading ? (
-                <div className="bg-white rounded-2xl shadow-lg p-6">
+                <div className="bg-background rounded-2xl shadow-lg p-6">
                   <div className="animate-pulse">
-                    <div className="h-6 bg-gray-200 rounded w-1/4 mb-4"></div>
-                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-6"></div>
+                    <div className="h-6 bg-background-light/50 rounded w-1/4 mb-4"></div>
+                    <div className="h-4 bg-background-light/50 rounded w-3/4 mb-6"></div>
                   </div>
                 </div>
               ) : course ? (
                 <>
-                  <div className="bg-white rounded-2xl shadow-lg p-6">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                  <div className="bg-background rounded-2xl shadow-lg p-6">
+                    <h2 className="text-2xl font-bold text-(--text) mb-4">
                       Course Overview
                     </h2>
-                    <p className="text-gray-600 mb-6">{course.description}</p>
+                    <p className="text-(--text)/70 mb-6">{course.description}</p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
-                        <h3 className="font-semibold text-gray-800 mb-2">
+                        <h3 className="font-semibold text-(--text) mb-2">
                           Course Information
                         </h3>
-                        <div className="space-y-2 text-sm text-gray-600">
+                        <div className="space-y-2 text-sm text-(--text)/70">
                           <p>
                             <strong>Code:</strong> {course.code}
                           </p>
@@ -636,10 +636,10 @@ export default function CourseDetailsPage() {
                       </div>
 
                       <div className="bg-green-50 rounded-xl p-4 border border-green-100">
-                        <h3 className="font-semibold text-gray-800 mb-2">
+                        <h3 className="font-semibold text-(--text) mb-2">
                           Quick Stats
                         </h3>
-                        <div className="space-y-2 text-sm text-gray-600">
+                        <div className="space-y-2 text-sm text-(--text)/70">
                           <p>
                             <strong>Enrolled Students:</strong>{" "}
                             {course.student_count}
@@ -663,8 +663,8 @@ export default function CourseDetailsPage() {
 
                   {/* Recent Activity */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-white rounded-2xl shadow-lg p-6">
-                      <h3 className="text-xl font-bold text-gray-800 mb-4">
+                    <div className="bg-background rounded-2xl shadow-lg p-6">
+                      <h3 className="text-xl font-bold text-(--text) mb-4">
                         Recent Materials
                       </h3>
                       <div className="space-y-3">
@@ -673,19 +673,19 @@ export default function CourseDetailsPage() {
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
                           </div>
                         ) : materials.length === 0 ? (
-                          <p className="text-gray-500 text-sm">
+                          <p className="text-(--text)/60 text-sm">
                             No materials yet
                           </p>
                         ) : (
                           materials.slice(0, 3).map((material) => (
                             <div
                               key={material.id}
-                              className="bg-gray-50 rounded-lg p-3"
+                              className="bg-background-light rounded-lg p-3"
                             >
-                              <p className="font-medium text-gray-800 text-sm">
+                              <p className="font-medium text-(--text) text-sm">
                                 {material.title}
                               </p>
-                              <p className="text-xs text-gray-500">
+                              <p className="text-xs text-(--text)/60">
                                 {new Date(material.date).toLocaleDateString()}
                               </p>
                             </div>
@@ -694,8 +694,8 @@ export default function CourseDetailsPage() {
                       </div>
                     </div>
 
-                    <div className="bg-white rounded-2xl shadow-lg p-6">
-                      <h3 className="text-xl font-bold text-gray-800 mb-4">
+                    <div className="bg-background rounded-2xl shadow-lg p-6">
+                      <h3 className="text-xl font-bold text-(--text) mb-4">
                         Upcoming Tasks
                       </h3>
                       <div className="space-y-3">
@@ -704,17 +704,17 @@ export default function CourseDetailsPage() {
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600 mx-auto"></div>
                           </div>
                         ) : tasks.length === 0 ? (
-                          <p className="text-gray-500 text-sm">No tasks yet</p>
+                          <p className="text-(--text)/60 text-sm">No tasks yet</p>
                         ) : (
                           tasks.slice(0, 3).map((task) => (
                             <div
                               key={task.id}
-                              className="bg-gray-50 rounded-lg p-3"
+                              className="bg-background-light rounded-lg p-3"
                             >
-                              <p className="font-medium text-gray-800 text-sm">
+                              <p className="font-medium text-(--text) text-sm">
                                 {task.title}
                               </p>
-                              <p className="text-xs text-gray-500">
+                              <p className="text-xs text-(--text)/60">
                                 Due:{" "}
                                 {new Date(task.due_date).toLocaleDateString()}
                               </p>
@@ -731,9 +731,9 @@ export default function CourseDetailsPage() {
 
           {/* Materials Tab */}
           {activeTab === "materials" && (
-            <div className="bg-white rounded-2xl shadow-lg p-6">
+            <div className="bg-background rounded-2xl shadow-lg p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-800">
+                <h2 className="text-2xl font-bold text-(--text)">
                   Course Materials
                 </h2>
                 {canManage && (
@@ -750,19 +750,19 @@ export default function CourseDetailsPage() {
                 {loading ? (
                   <div className="text-center py-8">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                    <p className="text-gray-600 mt-4">Loading materials...</p>
+                    <p className="text-(--text)/70 mt-4">Loading materials...</p>
                   </div>
                 ) : error ? (
                   <div className="text-center py-8 text-red-600">{error}</div>
                 ) : materials.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500">
+                  <div className="text-center py-8 text-(--text)/60">
                     No materials available
                   </div>
                 ) : (
                   materials.map((material) => (
                     <div
                       key={material.id}
-                      className="bg-gray-50 rounded-xl p-5 hover:shadow-md transition-all"
+                      className="bg-background-light rounded-xl p-5 hover:shadow-md transition-all"
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex items-start gap-4 flex-1">
@@ -770,10 +770,10 @@ export default function CourseDetailsPage() {
                             <FaFileUpload className="text-blue-600 text-xl" />
                           </div>
                           <div className="flex-1">
-                            <h3 className="font-semibold text-gray-800 text-lg">
+                            <h3 className="font-semibold text-(--text) text-lg">
                               {material.title}
                             </h3>
-                            <div className="flex items-center gap-4 text-sm text-gray-600 mt-2">
+                            <div className="flex items-center gap-4 text-sm text-(--text)/70 mt-2">
                               <span>{material.type}</span>
                               <span>•</span>
                               <span>Uploaded by {material.uploaded_by}</span>
@@ -822,9 +822,9 @@ export default function CourseDetailsPage() {
 
           {/* Tasks Tab */}
           {activeTab === "tasks" && (
-            <div className="bg-white rounded-2xl shadow-lg p-6">
+            <div className="bg-background rounded-2xl shadow-lg p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-800">
+                <h2 className="text-2xl font-bold text-(--text)">
                   Course Tasks
                 </h2>
                 {canManage && (
@@ -841,21 +841,21 @@ export default function CourseDetailsPage() {
                 {tasksLoading ? (
                   <div className="text-center py-8">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
-                    <p className="text-gray-600 mt-4">Loading tasks...</p>
+                    <p className="text-(--text)/70 mt-4">Loading tasks...</p>
                   </div>
                 ) : tasksError ? (
                   <div className="text-center py-8 text-red-600">
                     {tasksError}
                   </div>
                 ) : tasks.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500">
+                  <div className="text-center py-8 text-(--text)/60">
                     No tasks available
                   </div>
                 ) : (
                   tasks.map((task) => (
                     <div
                       key={task.id}
-                      className="bg-gray-50 rounded-xl p-5 hover:shadow-md transition-all"
+                      className="bg-background-light rounded-xl p-5 hover:shadow-md transition-all"
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex items-start gap-4 flex-1">
@@ -880,14 +880,14 @@ export default function CourseDetailsPage() {
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
-                              <h3 className="font-semibold text-gray-800 text-lg">
+                              <h3 className="font-semibold text-(--text) text-lg">
                                 {task.title}
                               </h3>
                               <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 capitalize">
                                 {task.type}
                               </span>
                             </div>
-                            <div className="flex items-center gap-4 text-sm text-gray-600 mt-2">
+                            <div className="flex items-center gap-4 text-sm text-(--text)/70 mt-2">
                               <span>
                                 Due:{" "}
                                 {new Date(task.due_date).toLocaleDateString()}
@@ -925,9 +925,9 @@ export default function CourseDetailsPage() {
 
           {/* Notices Tab */}
           {activeTab === "notices" && (
-            <div className="bg-white rounded-2xl shadow-lg p-6">
+            <div className="bg-background rounded-2xl shadow-lg p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-800">
+                <h2 className="text-2xl font-bold text-(--text)">
                   Course Notices
                 </h2>
                 {canManage && (
@@ -944,14 +944,14 @@ export default function CourseDetailsPage() {
                 {noticesLoading ? (
                   <div className="text-center py-8">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-600 mx-auto"></div>
-                    <p className="text-gray-600 mt-4">Loading notices...</p>
+                    <p className="text-(--text)/70 mt-4">Loading notices...</p>
                   </div>
                 ) : noticesError ? (
                   <div className="text-center py-8 text-red-600">
                     {noticesError}
                   </div>
                 ) : notices.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500">
+                  <div className="text-center py-8 text-(--text)/60">
                     No notices available
                   </div>
                 ) : (
@@ -962,11 +962,11 @@ export default function CourseDetailsPage() {
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <h3 className="font-semibold text-gray-800 text-lg mb-2">
+                          <h3 className="font-semibold text-(--text) text-lg mb-2">
                             {notice.title}
                           </h3>
-                          <p className="text-gray-600 mb-3">{notice.message}</p>
-                          <div className="flex items-center gap-4 text-sm text-gray-500">
+                          <p className="text-(--text)/70 mb-3">{notice.message}</p>
+                          <div className="flex items-center gap-4 text-sm text-(--text)/60">
                             <span>By {notice.author}</span>
                             <span>•</span>
                             <span>
@@ -1000,9 +1000,9 @@ export default function CourseDetailsPage() {
 
           {/* Students Tab */}
           {activeTab === "students" && (
-            <div className="bg-white rounded-2xl shadow-lg p-6">
+            <div className="bg-background rounded-2xl shadow-lg p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-800">
+                <h2 className="text-2xl font-bold text-(--text)">
                   Enrolled Students
                 </h2>
                 {canManage && (
@@ -1019,14 +1019,14 @@ export default function CourseDetailsPage() {
                 {studentsLoading ? (
                   <div className="col-span-2 text-center py-8">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-                    <p className="text-gray-600 mt-4">Loading students...</p>
+                    <p className="text-(--text)/70 mt-4">Loading students...</p>
                   </div>
                 ) : studentsError ? (
                   <div className="col-span-2 text-center py-8 text-red-600">
                     {studentsError}
                   </div>
                 ) : students.length === 0 ? (
-                  <div className="col-span-2 text-center py-8 text-gray-500">
+                  <div className="col-span-2 text-center py-8 text-(--text)/60">
                     No students enrolled
                   </div>
                 ) : (
@@ -1041,13 +1041,13 @@ export default function CourseDetailsPage() {
                             {student.name.charAt(0)}
                           </div>
                           <div className="flex-1">
-                            <h3 className="font-semibold text-gray-800">
+                            <h3 className="font-semibold text-(--text)">
                               {student.name}
                             </h3>
-                            <p className="text-sm text-gray-600">
+                            <p className="text-sm text-(--text)/70">
                               {student.roll}
                             </p>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-(--text)/60">
                               {student.email}
                             </p>
                           </div>
@@ -1073,8 +1073,8 @@ export default function CourseDetailsPage() {
       {/* Add Student Modal */}
       {showAddStudent && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          <div className="bg-background rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <h2 className="text-2xl font-bold text-(--text) mb-6">
               Add Student
             </h2>
             <div className="space-y-4">
@@ -1083,7 +1083,7 @@ export default function CourseDetailsPage() {
                 placeholder="Student Roll Number"
                 value={studentForm.roll}
                 onChange={(e) => setStudentForm({ roll: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-purple-500"
               />
               <div className="flex gap-3">
                 <button
@@ -1091,7 +1091,7 @@ export default function CourseDetailsPage() {
                     setShowAddStudent(false);
                     setStudentForm({ roll: "" });
                   }}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                  className="flex-1 px-4 py-2 border border-(--primary)/30 rounded-lg hover:bg-background-light"
                 >
                   Cancel
                 </button>
@@ -1110,8 +1110,8 @@ export default function CourseDetailsPage() {
       {/* Add Material Modal */}
       {showAddMaterial && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          <div className="bg-background rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <h2 className="text-2xl font-bold text-(--text) mb-6">
               Add Material
             </h2>
             <div className="space-y-4">
@@ -1122,14 +1122,14 @@ export default function CourseDetailsPage() {
                 onChange={(e) =>
                   setMaterialForm({ ...materialForm, title: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
               />
               <select
                 value={materialForm.type}
                 onChange={(e) =>
                   setMaterialForm({ ...materialForm, type: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Select Type</option>
                 <option value="PDF">PDF</option>
@@ -1145,7 +1145,7 @@ export default function CourseDetailsPage() {
                 onChange={(e) =>
                   setMaterialForm({ ...materialForm, link: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
               />
               <div className="flex gap-3">
                 <button
@@ -1153,7 +1153,7 @@ export default function CourseDetailsPage() {
                     setShowAddMaterial(false);
                     setMaterialForm({ title: "", type: "", link: "" });
                   }}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                  className="flex-1 px-4 py-2 border border-(--primary)/30 rounded-lg hover:bg-background-light"
                 >
                   Cancel
                 </button>
@@ -1172,8 +1172,8 @@ export default function CourseDetailsPage() {
       {/* Edit Material Modal */}
       {editingMaterial && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          <div className="bg-background rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <h2 className="text-2xl font-bold text-(--text) mb-6">
               Edit Material
             </h2>
             <div className="space-y-4">
@@ -1184,14 +1184,14 @@ export default function CourseDetailsPage() {
                 onChange={(e) =>
                   setMaterialForm({ ...materialForm, title: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
               />
               <select
                 value={materialForm.type}
                 onChange={(e) =>
                   setMaterialForm({ ...materialForm, type: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Select Type</option>
                 <option value="PDF">PDF</option>
@@ -1207,7 +1207,7 @@ export default function CourseDetailsPage() {
                 onChange={(e) =>
                   setMaterialForm({ ...materialForm, link: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
               />
               <div className="flex gap-3">
                 <button
@@ -1215,7 +1215,7 @@ export default function CourseDetailsPage() {
                     setEditingMaterial(null);
                     setMaterialForm({ title: "", type: "", link: "" });
                   }}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                  className="flex-1 px-4 py-2 border border-(--primary)/30 rounded-lg hover:bg-background-light"
                 >
                   Cancel
                 </button>
@@ -1234,8 +1234,8 @@ export default function CourseDetailsPage() {
       {/* Add Notice Modal */}
       {showAddNotice && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          <div className="bg-background rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <h2 className="text-2xl font-bold text-(--text) mb-6">
               Post Notice
             </h2>
             <div className="space-y-4">
@@ -1246,7 +1246,7 @@ export default function CourseDetailsPage() {
                 onChange={(e) =>
                   setNoticeForm({ ...noticeForm, title: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-yellow-500"
               />
               <textarea
                 placeholder="Notice Content"
@@ -1255,7 +1255,7 @@ export default function CourseDetailsPage() {
                 onChange={(e) =>
                   setNoticeForm({ ...noticeForm, message: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-yellow-500"
               ></textarea>
               <div className="flex gap-3">
                 <button
@@ -1263,7 +1263,7 @@ export default function CourseDetailsPage() {
                     setShowAddNotice(false);
                     setNoticeForm({ title: "", message: "" });
                   }}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                  className="flex-1 px-4 py-2 border border-(--primary)/30 rounded-lg hover:bg-background-light"
                 >
                   Cancel
                 </button>
@@ -1282,8 +1282,8 @@ export default function CourseDetailsPage() {
       {/* Edit Notice Modal */}
       {editingNotice && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          <div className="bg-background rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <h2 className="text-2xl font-bold text-(--text) mb-6">
               Edit Notice
             </h2>
             <div className="space-y-4">
@@ -1294,7 +1294,7 @@ export default function CourseDetailsPage() {
                 onChange={(e) =>
                   setNoticeForm({ ...noticeForm, title: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-yellow-500"
               />
               <textarea
                 placeholder="Notice Content"
@@ -1303,7 +1303,7 @@ export default function CourseDetailsPage() {
                 onChange={(e) =>
                   setNoticeForm({ ...noticeForm, message: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-yellow-500"
               ></textarea>
               <div className="flex gap-3">
                 <button
@@ -1311,7 +1311,7 @@ export default function CourseDetailsPage() {
                     setEditingNotice(null);
                     setNoticeForm({ title: "", message: "" });
                   }}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                  className="flex-1 px-4 py-2 border border-(--primary)/30 rounded-lg hover:bg-background-light"
                 >
                   Cancel
                 </button>
@@ -1330,8 +1330,8 @@ export default function CourseDetailsPage() {
       {/* Add Task Modal */}
       {showAddTask && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          <div className="bg-background rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <h2 className="text-2xl font-bold text-(--text) mb-6">
               Create Task
             </h2>
             <div className="space-y-4">
@@ -1342,14 +1342,14 @@ export default function CourseDetailsPage() {
                 onChange={(e) =>
                   setTaskForm({ ...taskForm, title: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-orange-500"
               />
               <select
                 value={taskForm.type}
                 onChange={(e) =>
                   setTaskForm({ ...taskForm, type: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-orange-500"
               >
                 <option value="">Select Type</option>
                 <option value="assignment">Assignment</option>
@@ -1363,7 +1363,7 @@ export default function CourseDetailsPage() {
                 onChange={(e) =>
                   setTaskForm({ ...taskForm, due_date: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-orange-500"
               />
               <input
                 type="number"
@@ -1372,7 +1372,7 @@ export default function CourseDetailsPage() {
                 onChange={(e) =>
                   setTaskForm({ ...taskForm, points: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-orange-500"
               />
               <textarea
                 placeholder="Task Description"
@@ -1381,7 +1381,7 @@ export default function CourseDetailsPage() {
                 onChange={(e) =>
                   setTaskForm({ ...taskForm, description: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-orange-500"
               ></textarea>
               <div className="flex gap-3">
                 <button
@@ -1395,7 +1395,7 @@ export default function CourseDetailsPage() {
                       description: "",
                     });
                   }}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                  className="flex-1 px-4 py-2 border border-(--primary)/30 rounded-lg hover:bg-background-light"
                 >
                   Cancel
                 </button>
@@ -1414,8 +1414,8 @@ export default function CourseDetailsPage() {
       {/* Edit Task Modal */}
       {editingTask && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Edit Task</h2>
+          <div className="bg-background rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <h2 className="text-2xl font-bold text-(--text) mb-6">Edit Task</h2>
             <div className="space-y-4">
               <input
                 type="text"
@@ -1424,14 +1424,14 @@ export default function CourseDetailsPage() {
                 onChange={(e) =>
                   setTaskForm({ ...taskForm, title: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-orange-500"
               />
               <select
                 value={taskForm.type}
                 onChange={(e) =>
                   setTaskForm({ ...taskForm, type: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-orange-500"
               >
                 <option value="">Select Type</option>
                 <option value="assignment">Assignment</option>
@@ -1445,7 +1445,7 @@ export default function CourseDetailsPage() {
                 onChange={(e) =>
                   setTaskForm({ ...taskForm, due_date: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-orange-500"
               />
               <input
                 type="number"
@@ -1454,7 +1454,7 @@ export default function CourseDetailsPage() {
                 onChange={(e) =>
                   setTaskForm({ ...taskForm, points: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-orange-500"
               />
               <textarea
                 placeholder="Task Description"
@@ -1463,7 +1463,7 @@ export default function CourseDetailsPage() {
                 onChange={(e) =>
                   setTaskForm({ ...taskForm, description: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-orange-500"
               ></textarea>
               <div className="flex gap-3">
                 <button
@@ -1477,7 +1477,7 @@ export default function CourseDetailsPage() {
                       description: "",
                     });
                   }}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                  className="flex-1 px-4 py-2 border border-(--primary)/30 rounded-lg hover:bg-background-light"
                 >
                   Cancel
                 </button>

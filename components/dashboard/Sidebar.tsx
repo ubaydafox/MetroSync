@@ -138,7 +138,7 @@ export default function Sidebar({ userRole = "student" }: SidebarProps) {
 
       {/* Sidebar - Desktop */}
       <aside
-        className={`hidden lg:block h-screen bg-white shadow-lg transition-all duration-300 ${
+        className={`hidden lg:block h-screen bg-background shadow-lg transition-all duration-300 ${
           isCollapsed ? "w-17.5" : "w-64"
         } z-40`}
       >
@@ -227,7 +227,7 @@ export default function Sidebar({ userRole = "student" }: SidebarProps) {
 
       {/* Mobile Sidebar */}
       <aside
-        className={`lg:hidden fixed left-0 top-0 h-full bg-white shadow-lg transition-all duration-300 w-64 z-40 transform ${
+        className={`lg:hidden fixed left-0 top-0 h-full bg-background shadow-lg transition-all duration-300 w-64 z-40 transform ${
           isMobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >

@@ -52,7 +52,7 @@ export default function Credits() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-10">
             {/* Team Member 1 */}
-            <div className="bg-white/80 backdrop-blur-md rounded-xl shadow-lg p-8 relative overflow-hidden border border-(--primary)/10 hover:shadow-xl transition-all duration-300 group">
+            <div className="bg-background/80 backdrop-blur-md rounded-xl shadow-lg p-8 relative overflow-hidden border border-(--primary)/10 hover:shadow-xl transition-all duration-300 group">
               <div className="absolute -right-12 -top-12 w-32 h-32 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors duration-300"></div>
 
               <div className="relative">
@@ -100,7 +100,7 @@ export default function Credits() {
             </div>
 
             {/* Team Member 2 */}
-            <div className="bg-white/80 backdrop-blur-md rounded-xl shadow-lg p-8 relative overflow-hidden border border-(--primary)/10 hover:shadow-xl transition-all duration-300 group">
+            <div className="bg-background/80 backdrop-blur-md rounded-xl shadow-lg p-8 relative overflow-hidden border border-(--primary)/10 hover:shadow-xl transition-all duration-300 group">
               <div className="absolute -right-12 -top-12 w-32 h-32 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors duration-300"></div>
 
               <div className="relative">
@@ -148,7 +148,7 @@ export default function Credits() {
             </div>
 
             {/* Team Member 3 */}
-            <div className="bg-white/80 backdrop-blur-md rounded-xl shadow-lg p-8 relative overflow-hidden border border-(--primary)/10 hover:shadow-xl transition-all duration-300 group">
+            <div className="bg-background/80 backdrop-blur-md rounded-xl shadow-lg p-8 relative overflow-hidden border border-(--primary)/10 hover:shadow-xl transition-all duration-300 group">
               <div className="absolute -right-12 -top-12 w-32 h-32 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors duration-300"></div>
 
               <div className="relative">
@@ -218,7 +218,7 @@ export default function Credits() {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {/* Tech 1 */}
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-6 text-center relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 text-center relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
               <div className="absolute -right-6 -top-6 w-16 h-16 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors duration-300"></div>
               <div className="relative flex flex-col items-center">
                 <SiNextdotjs className="text-4xl text-(--text) mb-3" />
@@ -228,7 +228,7 @@ export default function Credits() {
             </div>
 
             {/* Tech 2 */}
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-6 text-center relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 text-center relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
               <div className="absolute -right-6 -top-6 w-16 h-16 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors duration-300"></div>
               <div className="relative flex flex-col items-center">
                 <SiTypescript className="text-4xl text-[#3178c6] mb-3" />
@@ -240,7 +240,7 @@ export default function Credits() {
             </div>
 
             {/* Tech 3 */}
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-6 text-center relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 text-center relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
               <div className="absolute -right-6 -top-6 w-16 h-16 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors duration-300"></div>
               <div className="relative flex flex-col items-center">
                 <SiTailwindcss className="text-4xl text-[#06b6d4] mb-3" />
@@ -252,7 +252,7 @@ export default function Credits() {
             </div>
 
             {/* Tech 4 */}
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-6 text-center relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 text-center relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
               <div className="absolute -right-6 -top-6 w-16 h-16 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors duration-300"></div>
               <div className="relative flex flex-col items-center">
                 <SiReact className="text-4xl text-[#61dafb] mb-3" />
@@ -262,7 +262,7 @@ export default function Credits() {
             </div>
 
             {/* Tech 5 */}
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-6 text-center relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 text-center relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
               <div className="absolute -right-6 -top-6 w-16 h-16 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors duration-300"></div>
               <div className="relative flex flex-col items-center">
                 <SiPostgresql className="text-4xl text-[#336791] mb-3" />
@@ -274,7 +274,7 @@ export default function Credits() {
             </div>
 
             {/* Tech 6 */}
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-6 text-center relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 text-center relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
               <div className="absolute -right-6 -top-6 w-16 h-16 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors duration-300"></div>
               <div className="relative flex flex-col items-center">
                 <FaDatabase className="text-4xl text-[#00758f] mb-3" />
@@ -305,7 +305,7 @@ export default function Credits() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Feature 1 */}
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-6 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
               <div className="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-bl-3xl group-hover:bg-primary/20 transition-colors duration-300"></div>
               <div className="relative">
                 <div className="mb-6 p-3 inline-block rounded-xl bg-primary/10">
@@ -322,7 +322,7 @@ export default function Credits() {
             </div>
 
             {/* Feature 2 */}
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-6 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
               <div className="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-bl-3xl group-hover:bg-primary/20 transition-colors duration-300"></div>
               <div className="relative">
                 <div className="mb-6 p-3 inline-block rounded-xl bg-primary/10">
@@ -339,7 +339,7 @@ export default function Credits() {
             </div>
 
             {/* Feature 3 */}
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-6 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
               <div className="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-bl-3xl group-hover:bg-primary/20 transition-colors duration-300"></div>
               <div className="relative">
                 <div className="mb-6 p-3 inline-block rounded-xl bg-primary/10">
@@ -356,7 +356,7 @@ export default function Credits() {
             </div>
 
             {/* Feature 4 */}
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-6 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
               <div className="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-bl-3xl group-hover:bg-primary/20 transition-colors duration-300"></div>
               <div className="relative">
                 <div className="mb-6 p-3 inline-block rounded-xl bg-primary/10">
@@ -373,7 +373,7 @@ export default function Credits() {
             </div>
 
             {/* Feature 5 */}
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-6 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
               <div className="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-bl-3xl group-hover:bg-primary/20 transition-colors duration-300"></div>
               <div className="relative">
                 <div className="mb-6 p-3 inline-block rounded-xl bg-primary/10">
@@ -390,7 +390,7 @@ export default function Credits() {
             </div>
 
             {/* Feature 6 */}
-            <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-md p-6 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
+            <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
               <div className="absolute top-0 right-0 w-16 h-16 bg-primary/10 rounded-bl-3xl group-hover:bg-primary/20 transition-colors duration-300"></div>
               <div className="relative">
                 <div className="mb-6 p-3 inline-block rounded-xl bg-primary/10">
@@ -421,7 +421,7 @@ export default function Credits() {
             </h2>
           </div>
 
-          <div className="bg-white/80 backdrop-blur-md rounded-xl shadow-md p-8 relative overflow-hidden border border-(--primary)/10">
+          <div className="bg-background/80 backdrop-blur-md rounded-xl shadow-md p-8 relative overflow-hidden border border-(--primary)/10">
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
 
             <div className="relative">
