@@ -221,7 +221,7 @@ export default function CourseDetailsPage() {
 
   const canManage = user?.role === "teacher" || user?.role === "hod";
 
-  const handleDeleteStudent = async (id: number) => {
+  const handleDeleteStudent = async (id: string) => {
     if (!confirm("Remove this student from the course?")) return;
 
     try {

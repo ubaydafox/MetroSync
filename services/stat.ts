@@ -308,32 +308,54 @@ export const getHODDashboardData = async (_token: string) => {
   const profile = await getCurrentUserProfile();
   const deptId = profile?.department ? Number(profile.department) : null;
 
-  let dept = null;
-  let teachers: unknown[] = [];
-  let courses: unknown[] = [];
+  let teacherDocs: import("firebase/firestore").DocumentData[] = [];
+  let courseDocs: import("firebase/firestore").DocumentData[] = [];
+  let studentCount = 0;
 
   if (deptId) {
-    const deptSnap = await getDoc(doc(db, "departments", `dept_${deptId}`));
-    dept = deptSnap.exists() ? deptSnap.data() : null;
-
-    const [teacherSnap, courseSnap] = await Promise.all([
+    const [teacherSnap, courseSnap, batchSnap] = await Promise.all([
       getDocs(query(collection(db, "teachers"), where("department_id", "==", deptId))),
       getDocs(query(collection(db, "courses"), where("department_id", "==", deptId))),
+      getDocs(collection(db, "batches")),
     ]);
-    teachers = teacherSnap.docs.map((d) => d.data());
-    courses = courseSnap.docs.map((d) => d.data());
+    teacherDocs = teacherSnap.docs.map((d) => d.data());
+    courseDocs = courseSnap.docs.map((d) => d.data());
+    // Estimate student count from batches linked to this department
+    studentCount = batchSnap.docs
+      .map((d) => d.data())
+      .filter((b) => b.department_id === deptId)
+      .reduce((sum, b) => sum + (Number(b.students) || 0), 0);
   }
 
+  const recentCourses = courseDocs.slice(0, 5).map((c) => ({
+    id: (c.id as number) || 0,
+    name: (c.name as string) || "",
+    code: (c.code as string) || "",
+    teacher: (c.teacher_name as string) || "Not assigned",
+    students: (c.student_count as number) || 0,
+    semester: "Active",
+  }));
+
+  const teachers = teacherDocs.slice(0, 10).map((t) => ({
+    id: (t.id as number) || 0,
+    name: (t.name as string) || "",
+    department: (t.department as string) || "",
+    courses: (t.course_count as number) || 0,
+    status: "Active",
+  }));
+
   return {
-    department: dept,
     stats: {
-      teachers: teachers.length,
-      courses: courses.length,
+      totalCourses: courseDocs.length,
+      totalTeachers: teacherDocs.length,
+      totalStudents: studentCount,
+      activeSemesters: 1,
     },
+    recentCourses,
     teachers,
-    courses,
   };
 };
+
 
 // ─── Admin Dashboard ──────────────────────────────────────────────────────────
 

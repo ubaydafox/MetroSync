@@ -26,8 +26,10 @@ export interface CreateCourseData {
   name: string;
   credits?: number;
   teacher_id?: number;
+  teacher?: number;
   batch_id?: number;
   department_id?: number;
+  description?: string;
 }
 
 export interface UpdateCourseData {
@@ -35,7 +37,9 @@ export interface UpdateCourseData {
   name?: string;
   credits?: number;
   teacher_id?: number;
+  teacher?: number;
   batch_id?: number;
+  description?: string;
 }
 
 // Get all courses
@@ -108,3 +112,9 @@ export async function deleteCourse(_token: string, courseId: string | number): P
   const snap = await getDocs(query(collection(db, "courses"), where("id", "==", Number(courseId))));
   if (!snap.empty) await deleteDoc(snap.docs[0].ref);
 }
+
+// Alias for CourseDetails (same shape as Course)
+export type CourseDetails = Course;
+
+// Alias for getCourse — used by the course details page
+export const getCourseById = getCourse;

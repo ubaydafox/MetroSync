@@ -53,6 +53,6 @@ export const addStudentToCourse = async (_token: string, _data: CreateStudentDat
 };
 
 // Remove student — no-op in self-enroll architecture
-export const removeStudentFromCourse = async (_token: string, _courseId: string, _studentId: number): Promise<void> => {
+export const removeStudentFromCourse = async (_token: string, _courseId: string, _studentId: string): Promise<void> => {
   toast.info("Students manage their own enrollment.");
 };

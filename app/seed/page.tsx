@@ -131,7 +131,7 @@ const COURSES = [
   { id: 16, code: "ENG201", name: "British Literature",                 credits: 3, teacher_id: 8, teacher_name: "Prof. Tahmina Parvin",batch_id: 13, department_id: 5, department: "ENG", room: "ENG-201", description: "Survey of British literature from the Renaissance to the modern era.", student_count: 32, material_count: 5, task_count: 3, notice_count: 2, active_task_count: 1 },
 ];
 
-const DAYS = ["sunday", "monday", "tuesday", "wednesday", "thursday"];
+
 const SCHEDULES = [
   { id: 1,  course_id: 1,  course_name: "Introduction to Programming",        course_code: "CSE101", teacher_id: 2, teacher_name: "Prof. Farhana Begum",  batch_id: 1,  batch_name: "CSE 52", department_id: 1, department_name: "CSE", room: "CSE-201", day: "sunday",    start_time: "08:00", end_time: "09:30" },
   { id: 2,  course_id: 2,  course_name: "Data Structures & Algorithms",       course_code: "CSE201", teacher_id: 2, teacher_name: "Prof. Farhana Begum",  batch_id: 2,  batch_name: "CSE 51", department_id: 1, department_name: "CSE", room: "CSE-301", day: "sunday",    start_time: "10:00", end_time: "11:30" },

@@ -7,8 +7,24 @@ export default function Home() {
   // Animation states for staggered reveal
   const [loaded, setLoaded] = useState(false);
 
+  // Pre-compute stable particle positions (Math.random can't be called in render)
+  const [particles, setParticles] = useState<Array<{width: number; height: number; top: number; left: number; animationDuration: number; animationDelay: number}>>([]);
+
   useEffect(() => {
-    setLoaded(true);
+    const timer = setTimeout(() => {
+      setLoaded(true);
+      setParticles(
+        [...Array(20)].map(() => ({
+          width: Math.random() * 6 + 2,
+          height: Math.random() * 6 + 2,
+          top: Math.random() * 100,
+          left: Math.random() * 100,
+          animationDuration: Math.random() * 8 + 2,
+          animationDelay: Math.random() * 5,
+        }))
+      );
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -33,17 +49,17 @@ export default function Home() {
 
         {/* Particle effect (simulated with fixed dots) */}
         <div className="absolute inset-0 overflow-hidden">
-          {[...Array(20)].map((_, i) => (
+          {particles.map((p, i) => (
             <div
               key={i}
               className="absolute bg-primary rounded-full opacity-30 animate-pulse"
               style={{
-                width: Math.random() * 6 + 2 + "px",
-                height: Math.random() * 6 + 2 + "px",
-                top: Math.random() * 100 + "%",
-                left: Math.random() * 100 + "%",
-                animationDuration: Math.random() * 8 + 2 + "s",
-                animationDelay: Math.random() * 5 + "s",
+                width: p.width + "px",
+                height: p.height + "px",
+                top: p.top + "%",
+                left: p.left + "%",
+                animationDuration: p.animationDuration + "s",
+                animationDelay: p.animationDelay + "s",
               }}
             ></div>
           ))}
