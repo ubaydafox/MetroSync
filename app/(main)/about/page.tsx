@@ -20,10 +20,8 @@ export const metadata: Metadata = {
     siteName: "MetroSync",
     images: [
       {
-        url: "meta.png",
-        width: 177,
-        height: 112,
-        alt: "Meta Image",
+        url: "favicon.jpg",
+        alt: "MetroSync Logo",
       },
     ],
     locale: "en_US",
