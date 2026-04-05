@@ -49,8 +49,8 @@ export default function Credits() {
 
       {/* Team Section */}
       <section className="py-16 relative">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-10">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-10">
             {/* Team Member 1 */}
             <div className="bg-background/80 backdrop-blur-md rounded-xl shadow-lg p-8 relative overflow-hidden border border-(--primary)/10 hover:shadow-xl transition-all duration-300 group">
               <div className="absolute -right-12 -top-12 w-32 h-32 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors duration-300"></div>
@@ -147,53 +147,7 @@ export default function Credits() {
               </div>
             </div>
 
-            {/* Team Member 3 */}
-            <div className="bg-background/80 backdrop-blur-md rounded-xl shadow-lg p-8 relative overflow-hidden border border-(--primary)/10 hover:shadow-xl transition-all duration-300 group">
-              <div className="absolute -right-12 -top-12 w-32 h-32 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors duration-300"></div>
 
-              <div className="relative">
-                <div className="w-24 h-24 rounded-full bg-linear-to-br from-[var(--primary)]/20 to-[var(--primary-light)]/20 mb-6 flex items-center justify-center text-primary text-3xl font-bold">
-                  A
-                </div>
-
-                <h3 className="text-xl font-bold text-(--text)">
-                  Md. Abdullah Al Noman
-                </h3>
-                <p className="text-primary font-medium mb-3">
-                  Backend Developer
-                </p>
-                <p className="text-(--text)/70 mb-4">
-                  ID: 0562310005101042
-                </p>
-
-                <div className="border-t border-(--primary)/10 pt-4 mt-4">
-                  <div className="flex gap-3">
-                    <a
-                      href="#"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
-                    >
-                      <FaGithub className="text-lg" />
-                    </a>
-                    <a
-                      href="#"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
-                    >
-                      <FaLinkedin className="text-lg" />
-                    </a>
-                    <a
-                      href="mailto:lalchan@example.com"
-                      className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
-                    >
-                      <FaEnvelope className="text-lg" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
