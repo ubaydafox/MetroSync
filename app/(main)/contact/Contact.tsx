@@ -102,7 +102,7 @@ export default function Contact() {
                       <div>
                         <h3 className="text-lg font-semibold text-(--text) mb-1">Call Us</h3>
                         <p className="text-(--text)/70 mb-2">Mon-Fri from 8am to 5pm</p>
-                        <a href="tel:+8801849430627" className="text-primary hover:underline font-medium">+880 1849 430 627</a>
+                        <a href="tel:+8801849430627" className="text-primary hover:underline font-medium">+880 1849 430 626</a>
                       </div>
                     </div>
                   </div>

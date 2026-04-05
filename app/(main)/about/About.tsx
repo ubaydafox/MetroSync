@@ -77,7 +77,7 @@ export default function About() {
                 {/* Image frame */}
                 <div className="relative z-10 p-2 bg-background rounded-xl shadow-xl border border-(--primary)/10">
 
-                  <Image src="/images/mu.png" width={600} height={400} alt="MU Campus" className="rounded-lg" />
+                  <Image src="/images/mu.jpg" width={600} height={400} alt="MU Campus" className="rounded-lg" />
 
                   
                   {/* Floating elements */}
@@ -295,7 +295,7 @@ export default function About() {
           
           <div className="flex flex-wrap gap-4 justify-center">
             <Link 
-              href="/contact" 
+              href="/login" 
               className="group relative px-8 py-4 bg-primary text-white font-medium rounded-md hover:shadow-lg hover:shadow-[var(--primary)]/20 transition-all duration-300 overflow-hidden inline-flex items-center gap-2"
             >
               <span className="relative z-10">Get Started</span>
@@ -303,16 +303,6 @@ export default function About() {
                 <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
               </svg>
               <span className="absolute inset-0 w-0 bg-linear-to-r from-[var(--primary)] to-[var(--primary-light)] group-hover:w-full transition-all duration-300"></span>
-            </Link>
-            
-            <Link 
-              href="/dashboard" 
-              className="px-8 py-4 border border-[var(--primary)] text-(--text) rounded-md hover:bg-primary/5 transition-all duration-300 inline-flex items-center gap-2 group"
-            >
-              <span>Learn More</span>
-                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 relative z-10 group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
             </Link>
           </div>
         </div>
