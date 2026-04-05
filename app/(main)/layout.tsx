@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "MetroSync",
   description: "MetroSync - Smart Scheduling",
-  authors: [{ name: "AHNayef", url: "https://github.com/ahnayef" }],
+  authors: [{ name: "Ubayda & Rony", url: "https://github.com/ahnayef" }],
   keywords: [
     "education",
     "school",

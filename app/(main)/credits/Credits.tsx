@@ -40,8 +40,8 @@ export default function Credits() {
             </h1>
             <p className="text-lg md:text-xl text-(--text)/70 max-w-3xl mx-auto">
               Meet the talented team of developers and designers who brought
-              MetroSync to life. A project for North East University Bangladesh,
-              Department of CSE.
+              MetroSync to life. A project for Metropolitan University
+              Bangladesh, Department of Computer Science and Engineering.
             </p>
           </div>
         </div>
@@ -61,19 +61,19 @@ export default function Credits() {
                 </div>
 
                 <h3 className="text-xl font-bold text-(--text)">
-                  Ahsan Habib Nayef
+                  Nahidul Islam Rony
                 </h3>
                 <p className="text-primary font-medium mb-3">
-                  Lead Developer
+                  Backend Developer
                 </p>
                 <p className="text-(--text)/70 mb-4">
-                  ID: 0562310005101027
+                  ID: 231-115-069
                 </p>
 
                 <div className="border-t border-(--primary)/10 pt-4 mt-4">
                   <div className="flex gap-3">
                     <a
-                      href="https://github.com/ahnayef"
+                      href="https://github.com/nahidul-rony"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
@@ -109,13 +109,13 @@ export default function Credits() {
                 </div>
 
                 <h3 className="text-xl font-bold text-(--text)">
-                  Shorifur Rashid
+                  Abu Ubayda
                 </h3>
                 <p className="text-primary font-medium mb-3">
                   Frontend Developer
                 </p>
                 <p className="text-(--text)/70 mb-4">
-                  ID: 0562310005101030
+                  ID: 231-115-080
                 </p>
 
                 <div className="border-t border-(--primary)/10 pt-4 mt-4">
@@ -427,7 +427,7 @@ export default function Credits() {
             <div className="relative">
               <p className="text-(--text)/80 mb-6">
                 We would like to express our sincere gratitude to the faculty
-                and staff of North East University Bangladesh, especially the
+                and staff of Metropolitan University Bangladesh, especially the
                 Department of Computer Science and Engineering, for their
                 guidance and support throughout the development of this project.
               </p>

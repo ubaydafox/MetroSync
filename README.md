@@ -1,6 +1,6 @@
 # MetroSync — Project Work II (CSE - 06133230)
 
-North East University Bangladesh
+Metropolitan University Bangladesh
 Department of Computer Science and Engineering — Spring 2025
 
 ## Group & Contact

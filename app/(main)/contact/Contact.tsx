@@ -87,7 +87,7 @@ export default function Contact() {
                         <h3 className="text-lg font-semibold text-(--text) mb-1">Visit Us</h3>
                         <p className="text-(--text)/70 mb-2">Come say hello at our office</p>
                         <p className="text-(--text)">
-                          North East University Bangladesh<br/>
+                          Metropolitan University Bangladesh<br/>
                           Telihaor, Sheikhghat, Sylhet, Bangladesh
                         </p>
                       </div>

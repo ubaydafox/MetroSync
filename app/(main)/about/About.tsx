@@ -105,7 +105,7 @@ export default function About() {
                 <span className="text-primary">Revolutionary Platform</span>
               </h2>
               <p className="text-(--text)/70 mb-6">
-                MetroSync began as an academic project at North East University Bangladesh (NEUB), 
+                MetroSync began as an academic project at Metropolitan University Bangladesh (NEUB), 
                 driven by a vision to solve the challenges faced by students and educators in 
                 managing academic workflows. What started as a solution for a single department 
                 has evolved into a comprehensive platform serving the entire university ecosystem.
