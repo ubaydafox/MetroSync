@@ -380,15 +380,14 @@ export default function Credits() {
 
             <div className="relative">
               <p className="text-(--text)/80 mb-6">
-                We would like to express our sincere gratitude to the faculty
-                and staff of Metropolitan University Bangladesh, especially the
-                Department of Computer Science and Engineering, for their
-                guidance and support throughout the development of this project.
+                We would like to express our sincere gratitude to our teacher,{" "}
+                <span className="font-semibold text-primary">Abdul Wadud Shakib</span>,{" "}
+                for his continuous guidance, mentorship, and support throughout the development of this project.
               </p>
 
               <div className="py-4 px-6 bg-primary/5 rounded-xl inline-block">
                 <h3 className="text-lg font-semibold text-(--text) mb-1">
-                  Project Work II (CSE - 06133230)
+                  PROJECT 300
                 </h3>
                 <p className="text-primary">Spring 2025</p>
               </div>
