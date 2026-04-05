@@ -389,7 +389,7 @@ export default function Credits() {
                 <h3 className="text-lg font-semibold text-(--text) mb-1">
                   PROJECT 300
                 </h3>
-                <p className="text-primary">Spring 2025</p>
+                <p className="text-primary">Spring 2026</p>
               </div>
             </div>
           </div>

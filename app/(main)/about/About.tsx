@@ -77,7 +77,7 @@ export default function About() {
                 {/* Image frame */}
                 <div className="relative z-10 p-2 bg-background rounded-xl shadow-xl border border-(--primary)/10">
 
-                  <Image src="/images/neub.png" width={600} height={400} alt="NEUB Campus" className="rounded-lg" />
+                  <Image src="/images/mu.png" width={600} height={400} alt="MU Campus" className="rounded-lg" />
 
                   
                   {/* Floating elements */}
@@ -105,7 +105,7 @@ export default function About() {
                 <span className="text-primary">Revolutionary Platform</span>
               </h2>
               <p className="text-(--text)/70 mb-6">
-                MetroSync began as an academic project at Metropolitan University Bangladesh (NEUB), 
+                MetroSync began as an academic project at Metropolitan University Bangladesh, 
                 driven by a vision to solve the challenges faced by students and educators in 
                 managing academic workflows. What started as a solution for a single department 
                 has evolved into a comprehensive platform serving the entire university ecosystem.
