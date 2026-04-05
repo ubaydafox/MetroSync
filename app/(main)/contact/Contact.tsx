@@ -1,6 +1,42 @@
-import React from 'react'
+"use client";
+import React, { useState } from 'react';
+import { db } from '../../../utils/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 export default function Contact() {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{type: 'success'|'error', message: string} | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+    try {
+      await addDoc(collection(db, "contactMessages"), {
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+        subject: formData.subject,
+        message: formData.message,
+        createdAt: serverTimestamp()
+      });
+      setSubmitStatus({ type: 'success', message: 'Message sent successfully! We will get back to you soon.' });
+      setFormData({ firstName: '', lastName: '', email: '', subject: '', message: '' });
+    } catch (error) {
+      console.error("Error sending message:", error);
+      setSubmitStatus({ type: 'error', message: 'Failed to send message. Please try again later.' });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[var(--background)]">
       {/* Hero Section */}
@@ -47,7 +83,7 @@ export default function Contact() {
                       <div>
                         <h3 className="text-lg font-semibold text-(--text) mb-1">Email Us</h3>
                         <p className="text-(--text)/70 mb-2">Our friendly team is here to help.</p>
-                        <a href="mailto:ubaydaazad@gmail.com" className="text-primary hover:underline font-medium">nayef@quadiz.com</a>
+                        <a href="mailto:ubaydaazad@gmail.com" className="text-primary hover:underline font-medium">ubaydaazad@gmail.com</a>
                       </div>
                     </div>
                   </div>
@@ -66,7 +102,7 @@ export default function Contact() {
                       <div>
                         <h3 className="text-lg font-semibold text-(--text) mb-1">Call Us</h3>
                         <p className="text-(--text)/70 mb-2">Mon-Fri from 8am to 5pm</p>
-                        <a href="tel:+8801849430627" className="text-primary hover:underline font-medium">+880 1858 290 153</a>
+                        <a href="tel:+8801849430627" className="text-primary hover:underline font-medium">+880 1849 430 627</a>
                       </div>
                     </div>
                   </div>
@@ -129,7 +165,12 @@ export default function Contact() {
                 
                 <div className="relative">
                   <h2 className="text-2xl font-bold mb-6 text-(--text)">Send Us a Message</h2>
-                  <form className="space-y-6">
+                  <form className="space-y-6" onSubmit={handleSubmit}>
+                    {submitStatus && (
+                      <div className={`p-4 rounded-lg mb-6 flex items-center gap-3 ${submitStatus.type === 'success' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
+                        {submitStatus.message}
+                      </div>
+                    )}
                     <div className="grid md:grid-cols-2 gap-6">
                       {/* First Name */}
                       <div>
@@ -137,6 +178,9 @@ export default function Contact() {
                         <input
                           type="text"
                           id="first_name"
+                          value={formData.firstName}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, firstName: e.target.value})}
+                          required
                           className="w-full px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300"
                           placeholder="First Name"
                         />
@@ -148,6 +192,9 @@ export default function Contact() {
                         <input
                           type="text"
                           id="last_name"
+                          value={formData.lastName}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, lastName: e.target.value})}
+                          required
                           className="w-full px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300"
                           placeholder="Last Name"
                         />
@@ -160,8 +207,11 @@ export default function Contact() {
                       <input
                         type="email"
                         id="email"
+                        value={formData.email}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, email: e.target.value})}
+                        required
                         className="w-full px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300"
-                        placeholder="[EMAIL_ADDRESS]"
+                        placeholder="yourmail@gmail.com"
                       />
                     </div>
                     
@@ -171,6 +221,9 @@ export default function Contact() {
                       <input
                         type="text"
                         id="subject"
+                        value={formData.subject}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, subject: e.target.value})}
+                        required
                         className="w-full px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300"
                         placeholder="How can we help you?"
                       />
@@ -182,6 +235,9 @@ export default function Contact() {
                       <textarea
                         id="message"
                         rows={5}
+                        value={formData.message}
+                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, message: e.target.value})}
+                        required
                         className="w-full px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300 resize-none"
                         placeholder="Tell us what you need help with..."
                       ></textarea>
@@ -190,12 +246,15 @@ export default function Contact() {
                     {/* Submit Button */}
                     <button
                       type="submit"
-                      className="group relative px-6 py-3 bg-primary text-white font-medium rounded-md hover:shadow-lg hover:shadow-[var(--primary)]/20 transition-all duration-300 overflow-hidden inline-flex items-center gap-2 w-full justify-center"
+                      disabled={isSubmitting}
+                      className="group relative px-6 py-3 bg-primary text-white font-medium rounded-md hover:shadow-lg hover:shadow-[var(--primary)]/20 transition-all duration-300 overflow-hidden inline-flex items-center gap-2 w-full justify-center disabled:opacity-70 disabled:cursor-not-allowed"
                     >
-                      <span className="relative z-10">Send Message</span>
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 relative z-10 group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                      </svg>
+                      <span className="relative z-10">{isSubmitting ? 'Sending...' : 'Send Message'}</span>
+                      {!isSubmitting && (
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 relative z-10 group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                        </svg>
+                      )}
                       <span className="absolute inset-0 w-0 bg-linear-to-r from-[var(--primary)] to-[var(--primary-light)] group-hover:w-full transition-all duration-300"></span>
                     </button>
                   </form>
