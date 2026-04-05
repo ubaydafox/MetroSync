@@ -26,7 +26,7 @@ const Navbar = () => {
   const isAuthenticated = typeof window !== 'undefined' && localStorage.getItem('isLoggedIn') === 'true';
 
   return (
-    <nav className="relative z-20 h-fit py-4">
+    <nav className="sticky top-0 z-50 h-fit py-4 bg-background/80 backdrop-blur-md border-b border-[var(--primary)]/10 transition-all duration-300">
       <div className="mx-auto px-4 sm:px-6 lg:px-28">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
