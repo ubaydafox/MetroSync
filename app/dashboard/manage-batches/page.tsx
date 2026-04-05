@@ -31,14 +31,14 @@ export default function ManageBatchesPage() {
 
   // Check user role
   useEffect(() => {
-    if (user?.role !== "admin") {
+    if (user?.role !== "admin" && user?.role !== "hod") {
       router.push("/dashboard");
     }
   }, [user, router]);
 
   // Fetch batches and departments from backend
   useEffect(() => {
-    if (user?.role !== "admin") return;
+    if (user?.role !== "admin" && user?.role !== "hod") return;
 
     const fetchData = async () => {
       try {
