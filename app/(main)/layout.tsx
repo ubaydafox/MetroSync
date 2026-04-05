@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "MetroSync",
   description: "MetroSync - Smart Scheduling",
-  authors: [{ name: "Ubayda & Rony", url: "https://github.com/ahnayef" }],
+  authors: [{ name: "Abu Ubayda", url: "https://github.com/ubaydafox" }],
   keywords: [
     "education",
     "school",
@@ -14,9 +14,9 @@ export const metadata: Metadata = {
     "scheduling",
     "management",
   ],
-  metadataBase: new URL("https://neub-timely.vercel.app"),
+  metadataBase: new URL("https://metrosync-eta.vercel.app/"),
   openGraph: {
-    url: "https://neub-timely.vercel.app",
+    url: "https://metrosync-eta.vercel.app/",
     siteName: "MetroSync",
     images: [
       {
