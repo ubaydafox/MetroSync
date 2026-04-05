@@ -118,7 +118,7 @@ export default function About() {
               
               <div className="flex gap-4">
                 <Link 
-                  href="/team" 
+                  href="/credits#our-team" 
                   className="group relative px-6 py-3 bg-primary text-white font-medium rounded-md hover:shadow-lg hover:shadow-[var(--primary)]/20 transition-all duration-300 overflow-hidden inline-flex items-center gap-2"
                 >
                   <span className="relative z-10">Meet Our Team</span>
