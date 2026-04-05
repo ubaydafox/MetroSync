@@ -239,7 +239,7 @@ export default function ManageBatchesPage() {
                 <div className="space-y-2 text-sm mb-4">
                   <div className="flex items-center gap-2 text-(--text)/70">
                     <FaBuilding className="text-(--text)/50" />
-                    <span>{batch.department}</span>
+                    <span>{departments.find(d => d.id === batch.department_id)?.name || batch.department}</span>
                   </div>
                   <div className="flex items-center gap-2 text-(--text)/70">
                     <FaCalendar className="text-(--text)/50" />

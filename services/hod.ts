@@ -38,11 +38,29 @@ export async function createHOD(_token: string, data: CreateHODData): Promise<HO
   try {
     const snap = await getDocs(collection(db, "hods"));
     const nextId = snap.size + 1;
+
+    // Fetch the target teacher to grab name and email.
+    let teacherName = "";
+    let teacherEmail = "";
+    const teacherSnap = await getDocs(query(collection(db, "teachers"), where("id", "==", data.teacher_id)));
+    if (!teacherSnap.empty) {
+      const td = teacherSnap.docs[0].data();
+      teacherName = td.name || "";
+      teacherEmail = td.email || "";
+    }
+
+    // Fetch the target department to grab name
+    let departmentName = "";
+    const deptSnap = await getDocs(query(collection(db, "departments"), where("id", "==", data.department_id)));
+    if (!deptSnap.empty) {
+      departmentName = deptSnap.docs[0].data().name || "";
+    }
+
     const newHOD: HOD = {
       id: nextId,
-      name: "",
-      email: "",
-      department: "",
+      name: teacherName,
+      email: teacherEmail,
+      department: departmentName,
       department_id: data.department_id,
     };
     await setDoc(doc(db, "hods", `hod_${nextId}`), newHOD);
