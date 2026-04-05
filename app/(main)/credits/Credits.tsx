@@ -73,7 +73,7 @@ export default function Credits() {
                 <div className="border-t border-(--primary)/10 pt-4 mt-4">
                   <div className="flex gap-3">
                     <a
-                      href="https://github.com/nahidul-rony"
+                      href="https://github.com/niRony02"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
@@ -81,7 +81,7 @@ export default function Credits() {
                       <FaGithub className="text-lg" />
                     </a>
                     <a
-                      href="https://www.linkedin.com/in/ahnayef"
+                      href="https://bd.linkedin.com/in/nahidul-islam-rony-363792266"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
@@ -89,7 +89,7 @@ export default function Credits() {
                       <FaLinkedin className="text-lg" />
                     </a>
                     <a
-                      href="mailto:nayef@quadiz.com"
+                      href="mailto:nirony2002@gmail.com"
                       className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
                     >
                       <FaEnvelope className="text-lg" />
@@ -105,7 +105,7 @@ export default function Credits() {
 
               <div className="relative">
                 <div className="w-24 h-24 rounded-full bg-linear-to-br from-[var(--primary)]/20 to-[var(--primary-light)]/20 mb-6 flex items-center justify-center text-primary text-3xl font-bold">
-                  S
+                  A
                 </div>
 
                 <h3 className="text-xl font-bold text-(--text)">
@@ -121,7 +121,7 @@ export default function Credits() {
                 <div className="border-t border-(--primary)/10 pt-4 mt-4">
                   <div className="flex gap-3">
                     <a
-                      href="#"
+                      href="https://github.com/ubaydafox"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
@@ -129,7 +129,7 @@ export default function Credits() {
                       <FaGithub className="text-lg" />
                     </a>
                     <a
-                      href="#"
+                      href="https://www.linkedin.com/in/abu-ubayda-131bb3190"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
@@ -137,7 +137,7 @@ export default function Credits() {
                       <FaLinkedin className="text-lg" />
                     </a>
                     <a
-                      href="mailto:shorifur@example.com"
+                      href="ubaydaazad@gmail.com"
                       className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
                     >
                       <FaEnvelope className="text-lg" />
