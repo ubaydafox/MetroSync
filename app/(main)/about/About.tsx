@@ -286,7 +286,7 @@ export default function About() {
         
         <div className="max-w-4xl mx-auto px-4 relative z-10 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6 text-(--text)">
-            Ready to Experience the <span className="text-primary">Future of Metrocation</span>?
+            Ready to Experience the <span className="text-primary">Future of Education</span>?
           </h2>
           <p className="text-lg text-(--text)/70 mb-8 max-w-2xl mx-auto">
             Join the MetroSync community and transform how you manage academic activities.
