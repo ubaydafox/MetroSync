@@ -47,7 +47,7 @@ export default function Contact() {
                       <div>
                         <h3 className="text-lg font-semibold text-(--text) mb-1">Email Us</h3>
                         <p className="text-(--text)/70 mb-2">Our friendly team is here to help.</p>
-                        <a href="mailto:nayef@quadiz.com" className="text-primary hover:underline font-medium">nayef@quadiz.com</a>
+                        <a href="mailto:ubaydaazad@gmail.com" className="text-primary hover:underline font-medium">nayef@quadiz.com</a>
                       </div>
                     </div>
                   </div>
@@ -66,7 +66,7 @@ export default function Contact() {
                       <div>
                         <h3 className="text-lg font-semibold text-(--text) mb-1">Call Us</h3>
                         <p className="text-(--text)/70 mb-2">Mon-Fri from 8am to 5pm</p>
-                        <a href="tel:+8801858290153" className="text-primary hover:underline font-medium">+880 1858 290 153</a>
+                        <a href="tel:+8801849430627" className="text-primary hover:underline font-medium">+880 1858 290 153</a>
                       </div>
                     </div>
                   </div>
@@ -88,7 +88,7 @@ export default function Contact() {
                         <p className="text-(--text)/70 mb-2">Come say hello at our office</p>
                         <p className="text-(--text)">
                           Metropolitan University Bangladesh<br/>
-                          Telihaor, Sheikhghat, Sylhet, Bangladesh
+                          Bateshwar, Sylhet-3104, Bangladesh
                         </p>
                       </div>
                     </div>
@@ -138,7 +138,7 @@ export default function Contact() {
                           type="text"
                           id="first_name"
                           className="w-full px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300"
-                          placeholder="John"
+                          placeholder="First Name"
                         />
                       </div>
                       
@@ -149,7 +149,7 @@ export default function Contact() {
                           type="text"
                           id="last_name"
                           className="w-full px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300"
-                          placeholder="Doe"
+                          placeholder="Last Name"
                         />
                       </div>
                     </div>
@@ -161,7 +161,7 @@ export default function Contact() {
                         type="email"
                         id="email"
                         className="w-full px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300"
-                        placeholder="john.doe@example.com"
+                        placeholder="[EMAIL_ADDRESS]"
                       />
                     </div>
                     
