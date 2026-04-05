@@ -75,25 +75,25 @@ const DEMO_USERS = [
 const DEPARTMENTS = [
   { id: 1, name: "Computer Science & Engineering", short_name: "CSE", description: "Algorithms, software engineering, AI, and computing systems." },
   { id: 2, name: "Electrical & Electronic Engineering", short_name: "EEE", description: "Circuits, power systems, signal processing, and embedded systems." },
-  { id: 3, name: "Civil Engineering", short_name: "CE", description: "Design and construction of infrastructure and structures." },
+  { id: 3, name: "Software Engineering", short_name: "SWE", description: "Software engineering is a branch of computer science that deals with the design, development, testing, and maintenance of software." },
   { id: 4, name: "Business Administration", short_name: "BBA", description: "Management, marketing, finance, and entrepreneurship." },
   { id: 5, name: "English", short_name: "ENG", description: "Language, literature, linguistics, and communication." },
 ];
 
 const BATCHES = [
-  { id: 1, name: "CSE 52", year: 2024, department: "CSE", department_id: 1, students: 60, created_at: "2024-01-10" },
-  { id: 2, name: "CSE 51", year: 2023, department: "CSE", department_id: 1, students: 58, created_at: "2023-01-10" },
-  { id: 3, name: "CSE 50", year: 2022, department: "CSE", department_id: 1, students: 62, created_at: "2022-01-10" },
-  { id: 4, name: "CSE 49", year: 2021, department: "CSE", department_id: 1, students: 55, created_at: "2021-01-10" },
-  { id: 5, name: "EEE 52", year: 2024, department: "EEE", department_id: 2, students: 50, created_at: "2024-01-10" },
-  { id: 6, name: "EEE 51", year: 2023, department: "EEE", department_id: 2, students: 48, created_at: "2023-01-10" },
-  { id: 7, name: "EEE 50", year: 2022, department: "EEE", department_id: 2, students: 44, created_at: "2022-01-10" },
-  { id: 8, name: "CE 52",  year: 2024, department: "CE",  department_id: 3, students: 45, created_at: "2024-01-10" },
-  { id: 9, name: "CE 51",  year: 2023, department: "CE",  department_id: 3, students: 42, created_at: "2023-01-10" },
-  { id: 10, name: "BBA 52", year: 2024, department: "BBA", department_id: 4, students: 70, created_at: "2024-01-10" },
-  { id: 11, name: "BBA 51", year: 2023, department: "BBA", department_id: 4, students: 68, created_at: "2023-01-10" },
-  { id: 12, name: "ENG 52", year: 2024, department: "ENG", department_id: 5, students: 35, created_at: "2024-01-10" },
-  { id: 13, name: "ENG 51", year: 2023, department: "ENG", department_id: 5, students: 32, created_at: "2023-01-10" },
+  { id: 1, name: "CSE 58", year: 2024, department: "CSE", department_id: 1, students: 60, created_at: "2024-01-10" },
+  { id: 2, name: "CSE 59", year: 2023, department: "CSE", department_id: 1, students: 58, created_at: "2023-01-10" },
+  { id: 3, name: "CSE 60", year: 2022, department: "CSE", department_id: 1, students: 62, created_at: "2022-01-10" },
+  { id: 4, name: "CSE 61", year: 2021, department: "CSE", department_id: 1, students: 55, created_at: "2021-01-10" },
+  { id: 5, name: "EEE 58", year: 2024, department: "EEE", department_id: 2, students: 50, created_at: "2024-01-10" },
+  { id: 6, name: "EEE 59", year: 2023, department: "EEE", department_id: 2, students: 48, created_at: "2023-01-10" },
+  { id: 7, name: "EEE 60", year: 2022, department: "EEE", department_id: 2, students: 44, created_at: "2022-01-10" },
+  { id: 8, name: "SWE 21",  year: 2024, department: "CE",  department_id: 3, students: 45, created_at: "2024-01-10" },
+  { id: 9, name: "SWE 22",  year: 2023, department: "CE",  department_id: 3, students: 42, created_at: "2023-01-10" },
+  { id: 10, name: "BBA 57", year: 2024, department: "BBA", department_id: 4, students: 70, created_at: "2024-01-10" },
+  { id: 11, name: "BBA 58", year: 2023, department: "BBA", department_id: 4, students: 68, created_at: "2023-01-10" },
+  { id: 12, name: "ENG 17", year: 2024, department: "ENG", department_id: 5, students: 35, created_at: "2024-01-10" },
+  { id: 13, name: "ENG 18", year: 2023, department: "ENG", department_id: 5, students: 32, created_at: "2023-01-10" },
 ];
 
 const TEACHERS = [
