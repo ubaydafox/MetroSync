@@ -73,18 +73,22 @@ The project is deployed and can be accessed live at:
 ├── lib/              # Firebase configuration
 └── types/            # TypeScript interfaces
 
-✅ Quality Assurance & Acceptance:
+## ✅ Quality Assurance & Acceptance
 
-[x] Security: Auth middleware protection for all private routes.
+* **<img src="https://img.shields.io/badge/-Security-2ea44f?style=flat&logo=github-actions&logoColor=white" height="20"> Security:** Auth middleware protection for all private routes.
+* **<img src="https://img.shields.io/badge/-Integrity-2ea44f?style=flat&logo=checkmarx&logoColor=white" height="20"> Integrity:** Role-based data leakage prevention.
+* **<img src="https://img.shields.io/badge/-UX-2ea44f?style=flat&logo=google-chrome&logoColor=white" height="20"> UX:** Fully responsive design for mobile and desktop.
+* **<img src="https://img.shields.io/badge/-Performance-2ea44f?style=flat&logo=lighthouse&logoColor=white" height="20"> Performance:** Optimized image loading and server-side rendering.
 
-[x] Integrity: Role-based data leakage prevention.
+## 📄 License
 
-[x] UX: Fully responsive design for mobile and desktop.
+* **<img src="https://img.shields.io/badge/-Academic_Project-4B0082?style=flat&logo=university&logoColor=white" height="20"> Coursework:** This project is part of the **CSE-300** academic curriculum.
+* **<img src="https://img.shields.io/badge/-Institutional_Rights-D32F2F?style=flat&logo=google-cloud&logoColor=white" height="20"> Policy:** Please consult with the **Department of CSE, Metropolitan University** regarding licensing, redistribution, or commercial use.
 
-[x] Performance: Optimized image loading and server-side rendering.
+---
 
-📄 License
+### 🛠 Maintained By
 
-This project is part of an academic course. Please consult with the Department of CSE, Metropolitan University regarding licensing and redistribution.
-
-Maintained by Abu Ubayda & Nahidul Islam Rony
+| <img src="https://img.shields.io/badge/-Abu_Ubayda-3178C6?style=flat&logo=github&logoColor=white" height="25"> | <img src="https://img.shields.io/badge/-Nahidul_Islam_Rony-24292e?style=flat&logo=github&logoColor=white" height="25"> |
+| :--- | :--- |
+| [@ubaydafox](https://github.com/ubaydafox) | [@Rony](https://github.com/niRony02) |
