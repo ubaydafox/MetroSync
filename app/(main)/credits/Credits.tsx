@@ -64,9 +64,9 @@ export default function Credits() {
                 <h3 className="text-xl font-bold text-(--text)">
                   Nahidul Islam Rony
                 </h3>
-                <p className="text-primary font-medium mb-3">
+                {/* <p className="text-primary font-medium mb-3">
                   Backend Developer
-                </p>
+                </p> */}
                 <p className="text-(--text)/70 mb-4">
                   ID: 231-115-069
                 </p>
@@ -112,9 +112,9 @@ export default function Credits() {
                 <h3 className="text-xl font-bold text-(--text)">
                   Abu Ubayda
                 </h3>
-                <p className="text-primary font-medium mb-3">
+                {/* <p className="text-primary font-medium mb-3">
                   Frontend Developer
-                </p>
+                </p> */}
                 <p className="text-(--text)/70 mb-4">
                   ID: 231-115-080
                 </p>
