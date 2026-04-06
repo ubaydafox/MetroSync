@@ -34,11 +34,11 @@ MetroSync simplifies university life through specific tools for every user level
 
 ## 🛠 Tech Stack
 
-* **<img src="https://simpleicons.org/icons/nextjs.svg" width="16" height="16"> Framework:** [Next.js 15](https://nextjs.org/) (App Router)
-* **<img src="https://simpleicons.org/icons/typescript.svg" width="16" height="16"> Language:** [TypeScript](https://www.typescriptlang.org/)
-* **<img src="https://simpleicons.org/icons/tailwindcss.svg" width="16" height="16"> Styling:** [Tailwind CSS](https://tailwindcss.com/)
-* **<img src="https://simpleicons.org/icons/firebase.svg" width="16" height="16"> Backend/Database:** [Firebase](https://firebase.google.com/) (Auth, Firestore, Storage)
-* **<img src="https://simpleicons.org/icons/vercel.svg" width="16" height="16"> Deployment:** [Vercel](https://vercel.com/)
+* **<img src="https://img.shields.io/badge/-Next.js-000000?style=flat&logo=nextdotjs&logoColor=white" height="20"> Framework:** [Next.js 15](https://nextjs.org/) (App Router)
+* **<img src="https://img.shields.io/badge/-TypeScript-3178C6?style=flat&logo=typescript&logoColor=white" height="20"> Language:** [TypeScript](https://www.typescriptlang.org/)
+* **<img src="https://img.shields.io/badge/-Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white" height="20"> Styling:** [Tailwind CSS](https://tailwindcss.com/)
+* **<img src="https://img.shields.io/badge/-Firebase-FFCA28?style=flat&logo=firebase&logoColor=black" height="20"> Backend/Database:** [Firebase](https://firebase.google.com/) (Auth, Firestore, Storage)
+* **<img src="https://img.shields.io/badge/-Vercel-000000?style=flat&logo=vercel&logoColor=white" height="20"> Deployment:** [Vercel](https://vercel.com/)
 
 ---
 
