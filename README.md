@@ -73,6 +73,7 @@ The project is deployed and can be accessed live at:
 ├── lib/              # Firebase configuration
 └── types/            # TypeScript interfaces
 
+``` 
 ## ✅ Quality Assurance & Acceptance
 
 * **<img src="https://img.shields.io/badge/-Security-2ea44f?style=flat&logo=github-actions&logoColor=white" height="20"> Security:** Auth middleware protection for all private routes.
