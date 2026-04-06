@@ -15,7 +15,8 @@ import {
   SiTypescript,
   SiTailwindcss,
   SiReact,
-  SiPostgresql,
+  SiFirebase,
+  SiVercel,
 } from "react-icons/si";
 
 export default function Credits() {
@@ -219,10 +220,10 @@ export default function Credits() {
             <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 text-center relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
               <div className="absolute -right-6 -top-6 w-16 h-16 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors duration-300"></div>
               <div className="relative flex flex-col items-center">
-                <SiPostgresql className="text-4xl text-[#336791] mb-3" />
-                <h3 className="font-medium text-(--text)">Django</h3>
+                <SiFirebase className="text-4xl text-[#FFCA28] mb-3" />
+                <h3 className="font-medium text-(--text)">Firebase</h3>
                 <p className="text-xs text-(--text)/60 mt-1">
-                  Backend Framework
+                  Backend & Database
                 </p>
               </div>
             </div>
@@ -231,9 +232,9 @@ export default function Credits() {
             <div className="bg-background/70 backdrop-blur-md rounded-xl shadow-md p-6 text-center relative overflow-hidden border border-(--primary)/10 hover:shadow-lg transition-all duration-300 group">
               <div className="absolute -right-6 -top-6 w-16 h-16 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors duration-300"></div>
               <div className="relative flex flex-col items-center">
-                <FaDatabase className="text-4xl text-[#00758f] mb-3" />
-                <h3 className="font-medium text-(--text)">MySQL</h3>
-                <p className="text-xs text-(--text)/60 mt-1">Database</p>
+                <SiVercel className="text-4xl text-(--text) mb-3" />
+                <h3 className="font-medium text-(--text)">Vercel</h3>
+                <p className="text-xs text-(--text)/60 mt-1">Hosting</p>
               </div>
             </div>
           </div>
