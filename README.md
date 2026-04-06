@@ -56,33 +56,11 @@ MetroSync simplifies university life through specific tools for every user level
 
 ## 🚀 Getting Started
 
-### Prerequisites
-* Node.js (v18.x or higher)
-* npm or pnpm
+### 🔗 Live Access
+The project is deployed and can be accessed live at:  
+**[https://metrosync-eta.vercel.app](https://metrosync-eta.vercel.app)**
 
-### Installation
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/ubaydafox/MetroSync.git](https://github.com/ubaydafox/MetroSync.git)
-   cd MetroSync
-
-Install dependencies:
-
-npm install
-# or
-pnpm install
-
-Environment Setup:
-
-Create a .env.local file in the root directory and add your Firebase/API credentials:
-NEXT_PUBLIC_FIREBASE_API_KEY=your_key
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_domain
-
-Run development server:
-
-npm run dev
-
-Open http://localhost:3000 to see the result.
+---
 
 📂 Project Structure:
 
