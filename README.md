@@ -1,15 +1,14 @@
-# MetroSync — Project Work II (CSE - 06133230)
+# MetroSync — PROJECT 300
 
 Metropolitan University Bangladesh
-Department of Computer Science and Engineering — Spring 2025
+Department of Computer Science and Engineering — Spring 2026
 
 ## Group & Contact
 
 - Project Title: MetroSync
 - Group Members:
-  - 0562310005101027 — Ahsan Habib Nayef
-  - 0562310005101030 — Shorifur Rashid
-  - 0562310005101042 — Md. Lal Chan
+  - 231-115-069 — Nahidul Islam Rony
+  - 231-115-080 — Abu Ubayda
 
 ## Project Summary
 
@@ -25,8 +24,10 @@ Key goals:
 
 - Next.js (App Router)
 - TypeScript
-- Tailwind / PostCSS (project contains `postcss.config.mjs`)
-- pnpm / npm for package management
+- Tailwind CSS
+- Firebase (Backend & Database)
+- Vercel (Hosting)
+- npm for package management
 
 ## User Roles (brief)
 
@@ -41,24 +42,24 @@ Key goals:
 
 Each entry is listed with owner and deadline.
 
-- N-1: Authentication (registration, login, password reset) — Nayef — 31/08/2025
-- A-1: Student dashboard (schedules, tasks, notices) — Abdullah — 31/08/2025
-- S-1: Public pages (landing, about, contact) — Shahriya — 31/08/2025
-- N-2: Teacher dashboard — Nayef — 07/09/2025
-- A-2: Profile page with update — Abdullah — 07/09/2025
-- S-2: FAQ / Terms / Privacy — Shahriya — 07/09/2025
-- N-3: HOD dashboard — Nayef — 05/10/2025
-- A-3: Notice board types — Abdullah — 05/10/2025
-- S-3: Password change (logged-in users) — Shahriya — 05/10/2025
-- N-4: Admin dashboard — Nayef — 26/10/2025
-- A-4: Student task timeline — Abdullah — 26/10/2025
-- S-4: Logout/session invalidation — Shahriya — 26/10/2025
-- N-5: CSV export for schedules/reports — Nayef — 02/11/2025
-- A-5: Student dashboard (continued) — Abdullah — 02/11/2025
-- S-5: Basic notification system — Shahriya — 02/11/2025
-- N-6: Auth middleware & role-based protection — Nayef — 09/11/2025
-- A-6: Schedule viewer (list/calendar) — Abdullah — 09/11/2025
-- S-6: Basic search (courses/teachers/notices) — Shahriya — 09/11/2025
+- N-1: Authentication (registration, login, password reset) — Rony — 31/08/2026
+- A-1: Student dashboard (schedules, tasks, notices) — Ubayda — 31/08/2026
+- S-1: Public pages (landing, about, contact) — Ubayda — 31/08/2026
+- N-2: Teacher dashboard — Rony — 07/09/2026
+- A-2: Profile page with update — Ubayda — 07/09/2026
+- S-2: FAQ / Terms / Privacy — Ubayda — 07/09/2026
+- N-3: HOD dashboard — Rony — 05/10/2026
+- A-3: Notice board types — Ubayda — 05/10/2026
+- S-3: Password change (logged-in users) — Ubayda — 05/10/2026
+- N-4: Admin dashboard — Rony — 26/10/2026
+- A-4: Student task timeline — Ubayda — 26/10/2026
+- S-4: Logout/session invalidation — Ubayda — 26/10/2026
+- N-5: Data export for schedules/reports — Rony — 02/11/2026
+- A-5: Student dashboard (continued) — Ubayda — 02/11/2026
+- S-5: Basic notification system — Ubayda — 02/11/2026
+- N-6: Auth middleware & role-based protection — Rony — 09/11/2026
+- A-6: Schedule viewer (list/calendar) — Ubayda — 09/11/2026
+- S-6: Basic search (courses/teachers/notices) — Ubayda — 09/11/2026
 
 ## Product Backlog & Acceptance Criteria (summary)
 
@@ -114,7 +115,6 @@ Notes:
 - `components/` — reusable UI components (Button, Navbar, Logo)
 - `utils/` — small helpers (e.g., `cn.ts`)
 - `public/` — static assets
-- `sql/` — database schema and migration artifacts
 
 ## Contribution & Workflow
 
@@ -148,8 +148,3 @@ This repository contains course project material. Add a license file or consult 
 - Summarize user story planning with owners and deadlines — Done
 - Summarize product backlog with acceptance tests — Done
 - Provide setup/run instructions for local development — Done
-
-If you'd like, I can also:
-
-- Add a CONTRIBUTING.md, PR template, or a minimal `.env.example`
-- Generate a simple checklist issue template for each user story
