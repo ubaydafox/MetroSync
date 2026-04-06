@@ -33,11 +33,12 @@ MetroSync simplifies university life through specific tools for every user level
 ---
 
 ## 🛠 Tech Stack
-* **Framework:** Next.js 15 (App Router)
-* **Language:** TypeScript
-* **Styling:** Tailwind CSS
-* **Backend/Database:** Firebase (Auth, Firestore, Storage)
-* **Deployment:** Vercel
+
+* **<img src="https://simpleicons.org/icons/nextjs.svg" width="16" height="16"> Framework:** [Next.js 15](https://nextjs.org/) (App Router)
+* **<img src="https://simpleicons.org/icons/typescript.svg" width="16" height="16"> Language:** [TypeScript](https://www.typescriptlang.org/)
+* **<img src="https://simpleicons.org/icons/tailwindcss.svg" width="16" height="16"> Styling:** [Tailwind CSS](https://tailwindcss.com/)
+* **<img src="https://simpleicons.org/icons/firebase.svg" width="16" height="16"> Backend/Database:** [Firebase](https://firebase.google.com/) (Auth, Firestore, Storage)
+* **<img src="https://simpleicons.org/icons/vercel.svg" width="16" height="16"> Deployment:** [Vercel](https://vercel.com/)
 
 ---
 
@@ -62,8 +63,9 @@ The project is deployed and can be accessed live at:
 
 ---
 
-📂 Project Structure:
+## 📂 Project Structure
 
+```text
 ├── app/              # Next.js App Router (Pages & Layouts)
 ├── components/       # Reusable UI Components
 ├── utils/            # Helper functions & Middleware
