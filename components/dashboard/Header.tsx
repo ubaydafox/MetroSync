@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Header() {
   const { user } = useGlobal();
@@ -22,7 +23,7 @@ export default function Header() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link href="/dashboard" className="sm:hidden flex items-center shrink-0">
-            <img src="/favicon.ico" alt="Logo" className="w-8 h-8 rounded-md" />
+            <Image src="/favicon.ico" alt="Logo" width={32} height={32} className="rounded-md" />
           </Link>
           <h2 className="text-xl font-semibold text-(--text) hidden sm:block">
             Dashboard
@@ -38,13 +39,13 @@ export default function Header() {
             placeholder="Search..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full border border-(--primary)/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 focus:border-[var(--primary)] text-sm"
+            className="pl-10 pr-4 py-2 w-full border border-(--primary)/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm"
           />
         </form>
 
         <div className="flex items-center gap-4">
-          <Link href="/dashboard" className="hidden sm:flex items-center justify-center shrink-0 w-8 h-8 mr-2">
-            <img src="/favicon.ico" alt="Logo" className="w-full h-full rounded-md object-contain" />
+          <Link href="/dashboard" className="hidden sm:flex items-center justify-center shrink-0 mr-2">
+            <Image src="/favicon.ico" alt="Logo" width={32} height={32} className="rounded-md object-contain" />
           </Link>
           <div className="flex items-center gap-2">
             <div className="relative w-8 h-8 overflow-hidden rounded-full bg-primary/20 flex items-center justify-center">

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   FaHome,
@@ -149,7 +150,7 @@ export default function Sidebar({ userRole = "student" }: SidebarProps) {
           }`}
         >
           <Link href="/dashboard" className="flex items-center gap-3 cursor-pointer">
-            <img src="/favicon.ico" alt="Logo" className="w-8 h-8 object-contain rounded-md" />
+            <Image src="/favicon.ico" alt="Logo" width={32} height={32} className="object-contain rounded-md" />
             {!isCollapsed && (
               <span className="font-bold text-(--text)">MetroSync</span>
             )}
@@ -232,7 +233,7 @@ export default function Sidebar({ userRole = "student" }: SidebarProps) {
         {/* Logo */}
         <div className="flex items-center justify-between p-4 border-b border-(--primary)/10">
           <Link href="/dashboard" className="flex items-center gap-3 cursor-pointer">
-            <img src="/favicon.ico" alt="Logo" className="w-8 h-8 object-contain rounded-md" />
+            <Image src="/favicon.ico" alt="Logo" width={32} height={32} className="object-contain rounded-md" />
             <span className="font-bold text-(--text)">MetroSync</span>
           </Link>
 
