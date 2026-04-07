@@ -129,7 +129,7 @@ export default function ManageCRPage() {
   // Show loading state
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100">
+      <div className="min-h-screen flex items-center justify-center bg-transparent">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-600 mx-auto mb-4"></div>
           <p className="text-(--text)/70 font-medium">Loading CRs...</p>
@@ -141,7 +141,7 @@ export default function ManageCRPage() {
   // Show error state
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 p-6">
+      <div className="min-h-screen flex items-center justify-center bg-transparent p-6">
         <div className="bg-background rounded-2xl shadow-lg p-8 text-center max-w-md">
           <div className="text-red-600 text-5xl mb-4">⚠️</div>
           <h2 className="text-2xl font-bold text-(--text) mb-2">Error Loading CRs</h2>
@@ -158,7 +158,7 @@ export default function ManageCRPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 p-6">
+    <div className="min-h-screen bg-transparent p-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>

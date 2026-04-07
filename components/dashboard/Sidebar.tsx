@@ -148,14 +148,12 @@ export default function Sidebar({ userRole = "student" }: SidebarProps) {
             isCollapsed ? "justify-center" : "justify-between"
           }`}
         >
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-md bg-primary text-white flex items-center justify-center font-bold">
-              E
-            </div>
+          <Link href="/dashboard" className="flex items-center gap-3 cursor-pointer">
+            <img src="/favicon.ico" alt="Logo" className="w-8 h-8 object-contain rounded-md" />
             {!isCollapsed && (
               <span className="font-bold text-(--text)">MetroSync</span>
             )}
-          </div>
+          </Link>
 
           {!isCollapsed && (
             <button
@@ -233,12 +231,10 @@ export default function Sidebar({ userRole = "student" }: SidebarProps) {
       >
         {/* Logo */}
         <div className="flex items-center justify-between p-4 border-b border-(--primary)/10">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-md bg-primary text-white flex items-center justify-center font-bold">
-              E
-            </div>
+          <Link href="/dashboard" className="flex items-center gap-3 cursor-pointer">
+            <img src="/favicon.ico" alt="Logo" className="w-8 h-8 object-contain rounded-md" />
             <span className="font-bold text-(--text)">MetroSync</span>
-          </div>
+          </Link>
 
           <button
             onClick={handleMobileToggle}

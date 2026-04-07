@@ -1,8 +1,10 @@
 import {
-  collection, getDocs, doc, setDoc, updateDoc, deleteDoc, query, where, getCountFromServer,
+  collection, getDocs, doc, setDoc, updateDoc, deleteDoc, query, where, getCountFromServer, serverTimestamp
 } from "firebase/firestore";
-import { db } from "@/utils/firebase";
+import { db, firebaseConfig } from "@/utils/firebase";
 import { toast } from "react-toastify";
+import { getAuth, createUserWithEmailAndPassword, updateProfile, signOut } from "firebase/auth";
+import { initializeApp, getApps } from "firebase/app";
 
 export interface Teacher {
   id: number;
@@ -44,6 +46,32 @@ export async function createTeacher(_token: string, data: CreateTeacherData): Pr
   try {
     const snap = await getDocs(collection(db, "teachers"));
     const nextId = snap.size + 1;
+    
+    // 1. Generate random password
+    const tempPassword = Math.random().toString(36).slice(-8);
+
+    // 2. Create Firebase Auth user using secondary app (to avoid logging out admin)
+    const apps = getApps();
+    let secondaryApp = apps.find(app => app.name === "SecondaryApp");
+    if (!secondaryApp) {
+      secondaryApp = initializeApp(firebaseConfig, "SecondaryApp");
+    }
+    const secondaryAuth = getAuth(secondaryApp);
+    const userCredential = await createUserWithEmailAndPassword(secondaryAuth, data.email, tempPassword);
+    const firebaseUser = userCredential.user;
+    await updateProfile(firebaseUser, { displayName: data.name });
+
+    // 3. Save to global 'users' collection with role 'teacher'
+    await setDoc(doc(db, "users", firebaseUser.uid), {
+      uid: firebaseUser.uid,
+      name: data.name,
+      email: data.email,
+      role: "teacher",
+      department: data.department_id ? data.department_id.toString() : "",
+      createdAt: serverTimestamp(),
+    });
+
+    // 4. Save to 'teachers' collection
     const newTeacher: Teacher = {
       id: nextId,
       name: data.name,
@@ -53,6 +81,17 @@ export async function createTeacher(_token: string, data: CreateTeacherData): Pr
       department_id: data.department_id,
     };
     await setDoc(doc(db, "teachers", `teacher_${nextId}`), newTeacher);
+
+    // 5. Trigger email sending
+    await fetch('/api/send-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: data.email, password: tempPassword, name: data.name })
+    });
+    
+    // 6. Sign out secondary app
+    await signOut(secondaryAuth);
+
     return newTeacher;
   } catch (e) {
     toast.error("Failed to create teacher");

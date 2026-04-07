@@ -2,7 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyDL18HIx3cs2m91zGPW850DeBHg7L9A9X8",
   authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN || "metrosync-bac14.firebaseapp.com",
   projectId: process.env.NEXT_PUBLIC_PROJECT_ID || "metrosync-bac14",

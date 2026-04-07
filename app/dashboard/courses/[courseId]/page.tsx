@@ -531,7 +531,7 @@ export default function CourseDetailsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 p-6">
+    <div className="min-h-screen bg-transparent p-6">
       <div className="max-w-7xl mx-auto">
         {/* Course Header */}
         {courseLoading ? (

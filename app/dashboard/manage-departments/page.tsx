@@ -19,6 +19,7 @@ import {
   deleteDepartment,
   Department,
 } from "@/services/department";
+import { getHODs, HOD } from "@/services/hod";
 import { toast } from "react-toastify";
 
 export default function ManageDepartmentsPage() {
@@ -49,6 +50,7 @@ export default function ManageDepartmentsPage() {
   }, [user, router]);
 
   const [departments, setDepartments] = useState<Department[]>([]);
+  const [hods, setHODs] = useState<HOD[]>([]);
 
   // Fetch departments from backend
   useEffect(() => {
@@ -62,8 +64,12 @@ export default function ManageDepartmentsPage() {
         if (!token) {
           throw new Error("No authentication token found");
         }
-        const data = await getDepartments(token);
-        setDepartments(data);
+        const [deptData, hodData] = await Promise.all([
+          getDepartments(token),
+          getHODs(token)
+        ]);
+        setDepartments(deptData);
+        setHODs(hodData);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Failed to fetch departments"
@@ -176,7 +182,7 @@ export default function ManageDepartmentsPage() {
   // Show loading state
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100">
+      <div className="min-h-screen flex items-center justify-center bg-transparent">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
           <p className="text-(--text)/70 font-medium">Loading departments...</p>
@@ -188,7 +194,7 @@ export default function ManageDepartmentsPage() {
   // Show error state
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 p-6">
+      <div className="min-h-screen flex items-center justify-center bg-transparent p-6">
         <div className="bg-background rounded-2xl shadow-lg p-8 text-center max-w-md">
           <div className="text-red-600 text-5xl mb-4">⚠️</div>
           <h2 className="text-2xl font-bold text-(--text) mb-2">
@@ -207,7 +213,7 @@ export default function ManageDepartmentsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 p-6">
+    <div className="min-h-screen bg-transparent p-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -263,7 +269,7 @@ export default function ManageDepartmentsPage() {
               <div className="space-y-3 mb-4">
                 <div className="flex items-center gap-2 text-sm text-(--text)/70">
                   <FaUserTie className="text-(--text)/50" />
-                  <span>HOD: {dept.hod}</span>
+                  <span>HOD: {hods.find(h => h.department_id === dept.id || h.department === dept.name)?.name || dept.hod || "Not Assigned"}</span>
                 </div>
               </div>
 
