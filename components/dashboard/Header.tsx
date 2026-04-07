@@ -21,14 +21,9 @@ export default function Header() {
   return (
     <header className="bg-background shadow-sm py-4 px-6">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Link href="/dashboard" className="sm:hidden flex items-center shrink-0">
-            <Image src="/favicon.ico" alt="Logo" width={32} height={32} className="rounded-md" />
-          </Link>
-          <h2 className="text-xl font-semibold text-(--text) hidden sm:block">
-            Dashboard
-          </h2>
-        </div>
+        <h2 className="text-xl font-semibold text-(--text) hidden sm:block">
+          Dashboard
+        </h2>
 
         <form onSubmit={handleSearch} className="relative hidden md:block w-64">
           <button type="submit" className="absolute inset-y-0 left-0 flex items-center pl-3 hover:text-primary transition-colors cursor-pointer">
@@ -44,21 +39,16 @@ export default function Header() {
         </form>
 
         <div className="flex items-center gap-4">
-          <Link href="/dashboard" className="hidden sm:flex items-center justify-center shrink-0 mr-2">
-            <Image src="/favicon.ico" alt="Logo" width={32} height={32} className="rounded-md object-contain" />
-          </Link>
-          <div className="flex items-center gap-2">
+          <Link href="/dashboard/profile" className="flex items-center gap-2 hover:bg-background-light p-2 rounded-lg transition-colors cursor-pointer">
             <div className="relative w-8 h-8 overflow-hidden rounded-full bg-primary/20 flex items-center justify-center">
-              {
-                <span className="font-medium text-primary">
-                  {user?.name.charAt(0).toUpperCase()}
-                </span>
-              }
+              <span className="font-medium text-primary">
+                {user?.name.charAt(0).toUpperCase()}
+              </span>
             </div>
             <span className="hidden md:inline text-sm font-medium text-(--text)">
               {user?.name}
             </span>
-          </div>
+          </Link>
         </div>
       </div>
     </header>

@@ -168,13 +168,13 @@ export default function NoticesPage() {
   const getTypeBg = (type: string) => {
     switch (type) {
       case "important":
-        return "bg-red-50 border-red-200";
+        return "bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-900/50";
       case "warning":
-        return "bg-yellow-50 border-yellow-200";
+        return "bg-yellow-50 dark:bg-yellow-950/30 border-yellow-200 dark:border-yellow-900/50";
       case "info":
-        return "bg-blue-50 border-blue-200";
+        return "bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-900/50";
       default:
-        return "bg-green-50 border-green-200";
+        return "bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-900/50";
     }
   };
 
