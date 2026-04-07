@@ -250,7 +250,7 @@ export default function Signup() {
                   value={formData.email}
                   onChange={handleChange}
                   className="w-full pl-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300"
-                  placeholder="[EMAIL_ADDRESS]"
+                  placeholder="Your Email"
                 />
               </div>
             </div>
@@ -344,7 +344,7 @@ export default function Signup() {
                   value={formData.roll}
                   onChange={handleChange}
                   className="w-full pl-10 px-4 py-3 rounded-lg border border-[var(--primary)]/20 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 bg-background/50 backdrop-blur-sm transition-all duration-300"
-                  placeholder="Enter your roll number"
+                  placeholder="000-000-000"
                 />
               </div>
             </div>
