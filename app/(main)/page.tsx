@@ -411,7 +411,7 @@ export default function Home() {
                   <ul className="space-y-3 mt-4 text-(--text)/80">
                     <li className="flex items-start">
                       <span className="text-primary mr-2">◆</span>
-                      Department-wide scheduling
+                      Department-wise scheduling
                     </li>
                     <li className="flex items-start">
                       <span className="text-primary mr-2">◆</span>
