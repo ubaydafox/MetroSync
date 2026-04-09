@@ -27,7 +27,9 @@ type User = {
   email: string;
   role: string;
   department: string;
+  department_name?: string;
   batch?: string;
+  batch_name?: string;
   roll?: string;
 };
 
@@ -78,7 +80,9 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
         email: data.email || firebaseUser.email || "",
         role: data.role || "student",
         department: data.department || "",
+        department_name: data.department_name || "",
         batch: data.batch || "",
+        batch_name: data.batch_name || "",
         roll: data.roll || "",
       };
 
@@ -131,7 +135,9 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
                 email: data.email || firebaseUser.email || "",
                 role: data.role || "student",
                 department: data.department || "",
+                department_name: data.department_name || "",
                 batch: data.batch || "",
+                batch_name: data.batch_name || "",
                 roll: data.roll || "",
               });
             }
