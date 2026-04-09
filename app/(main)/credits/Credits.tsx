@@ -18,6 +18,7 @@ import {
   SiFirebase,
   SiVercel,
 } from "react-icons/si";
+import Image from "next/image";
 
 export default function Credits() {
   return (
@@ -57,8 +58,8 @@ export default function Credits() {
               <div className="absolute -right-12 -top-12 w-32 h-32 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors duration-300"></div>
 
               <div className="relative">
-                <div className="w-24 h-24 rounded-full bg-linear-to-br from-[var(--primary)]/20 to-[var(--primary-light)]/20 mb-6 flex items-center justify-center text-primary text-3xl font-bold">
-                  N
+                <div className="w-24 h-24 rounded-full bg-linear-to-br from-[var(--primary)]/20 to-[var(--primary-light)]/20 mb-6 flex items-center justify-center text-primary text-3xl font-bold overflow-hidden border-2 border-primary/10">
+                  <Image src="/team/rony.jpg" alt="Nahidul Islam Rony" width={96} height={96} className="object-cover w-full h-full" />
                 </div>
 
                 <h3 className="text-xl font-bold text-(--text)">
@@ -105,8 +106,8 @@ export default function Credits() {
               <div className="absolute -right-12 -top-12 w-32 h-32 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors duration-300"></div>
 
               <div className="relative">
-                <div className="w-24 h-24 rounded-full bg-linear-to-br from-[var(--primary)]/20 to-[var(--primary-light)]/20 mb-6 flex items-center justify-center text-primary text-3xl font-bold">
-                  A
+                <div className="w-24 h-24 rounded-full bg-linear-to-br from-[var(--primary)]/20 to-[var(--primary-light)]/20 mb-6 flex items-center justify-center text-primary text-3xl font-bold overflow-hidden border-2 border-primary/10">
+                  <Image src="/team/ubayda.jpg" alt="Abu Ubayda" width={96} height={96} className="object-cover w-full h-full" />
                 </div>
 
                 <h3 className="text-xl font-bold text-(--text)">
