@@ -12,7 +12,7 @@ export default function DashboardPage() {
   // Loading state
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-indigo-100">
+      <div className="min-h-screen flex items-center justify-center bg-transparent">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
           <p className="text-(--text)/70 font-medium">Loading dashboard...</p>
@@ -38,7 +38,7 @@ export default function DashboardPage() {
     
     default:
       return (
-        <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-red-50 to-pink-100">
+        <div className="min-h-screen flex items-center justify-center bg-transparent">
           <div className="text-center bg-background rounded-2xl shadow-lg p-8">
             <div className="text-red-600 text-5xl mb-4">⚠️</div>
             <h2 className="text-2xl font-bold text-(--text) mb-2">Invalid Role</h2>

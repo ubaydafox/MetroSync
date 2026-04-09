@@ -338,7 +338,7 @@ export default function SchedulePage() {
               className={`px-4 py-2 rounded-lg transition-colors ${
                 selectedDay === "all" 
                   ? "bg-blue-600 text-white" 
-                  : "bg-background-light text-(--text)/80 hover:bg-background-light/50"
+                  : "bg-background-light dark:bg-background/20 text-(--text)/80 hover:bg-background-light/50"
               }`}
             >
               All Days
@@ -350,7 +350,7 @@ export default function SchedulePage() {
                 className={`px-4 py-2 rounded-lg transition-colors ${
                   selectedDay === day 
                     ? "bg-blue-600 text-white" 
-                    : "bg-background-light text-(--text)/80 hover:bg-background-light/50"
+                    : "bg-background-light dark:bg-background/20 text-(--text)/80 hover:bg-background-light/50"
                 }`}
               >
                 {day}
@@ -366,20 +366,20 @@ export default function SchedulePage() {
             return (
             <div key={item.id} className="bg-background rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-blue-500">
               <div className="flex items-start justify-between mb-4">
-                <div className="p-3 rounded-xl bg-blue-100">
-                  <FaBook className="text-blue-600 text-xl" />
+                <div className="p-3 rounded-xl bg-blue-100 dark:bg-blue-900/30">
+                  <FaBook className="text-blue-600 dark:text-blue-400 text-xl" />
                 </div>
                 {canManage && rawItem && (
                   <div className="flex gap-2">
                     <button 
                       onClick={() => handleEditSchedule(rawItem)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
                     >
                       <FaEdit />
                     </button>
                     <button 
                       onClick={() => handleDeleteSchedule(item.id)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                     >
                       <FaTrash />
                     </button>
@@ -390,7 +390,7 @@ export default function SchedulePage() {
               <div className="flex items-center gap-2 mb-3">
                 <h3 className="text-lg font-bold text-(--text)">{item.courseName}</h3>
               </div>
-              <p className="text-blue-600 font-semibold mb-4">{item.course !== "none" ? item.course : "Extra Curricular"}</p>
+              <p className="text-blue-600 dark:text-blue-400 font-semibold mb-4">{item.course !== "none" ? item.course : "Extra Curricular"}</p>
 
               <div className="space-y-2 text-sm text-(--text)/70">
                 <div className="flex items-center gap-2">
@@ -443,7 +443,7 @@ export default function SchedulePage() {
                 <select 
                   value={scheduleForm.course}
                   onChange={(e) => setScheduleForm({...scheduleForm, course: e.target.value})}
-                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 bg-background border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 text-(--text)"
                   disabled={loadingCourses}
                 >
                   <option value="">Select Course</option>
@@ -460,7 +460,7 @@ export default function SchedulePage() {
                 <select 
                   value={scheduleForm.batch}
                   onChange={(e) => setScheduleForm({...scheduleForm, batch: e.target.value})}
-                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 bg-background border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 text-(--text)"
                   disabled={loadingBatches}
                 >
                   <option value="">Select Batch</option>
@@ -477,7 +477,7 @@ export default function SchedulePage() {
                 <select 
                   value={scheduleForm.teacher}
                   onChange={(e) => setScheduleForm({...scheduleForm, teacher: e.target.value})}
-                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 bg-background border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 text-(--text)"
                   disabled={loadingTeachers}
                 >
                   <option value="">Select Teacher</option>
@@ -494,7 +494,7 @@ export default function SchedulePage() {
                 <select 
                   value={scheduleForm.day}
                   onChange={(e) => setScheduleForm({...scheduleForm, day: e.target.value})}
-                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 bg-background border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 text-(--text)"
                 >
                   <option value="">Select Day</option>
                   {days.map(day => <option key={day} value={day}>{day}</option>)}
@@ -508,7 +508,7 @@ export default function SchedulePage() {
                     type="time" 
                     value={scheduleForm.start_time}
                     onChange={(e) => setScheduleForm({...scheduleForm, start_time: e.target.value})}
-                    className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500" 
+                    className="w-full px-4 py-2 bg-background border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 text-(--text)" 
                   />
                 </div>
                 <div>
@@ -517,7 +517,7 @@ export default function SchedulePage() {
                     type="time" 
                     value={scheduleForm.end_time}
                     onChange={(e) => setScheduleForm({...scheduleForm, end_time: e.target.value})}
-                    className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500" 
+                    className="w-full px-4 py-2 bg-background border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 text-(--text)" 
                   />
                 </div>
               </div>
@@ -575,7 +575,7 @@ export default function SchedulePage() {
                 <select 
                   value={scheduleForm.course}
                   onChange={(e) => setScheduleForm({...scheduleForm, course: e.target.value})}
-                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 bg-background border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 text-(--text)"
                   disabled={loadingCourses}
                 >
                   <option value="">Keep Current Course</option>
@@ -592,7 +592,7 @@ export default function SchedulePage() {
                 <select 
                   value={scheduleForm.batch}
                   onChange={(e) => setScheduleForm({...scheduleForm, batch: e.target.value})}
-                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 bg-background border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 text-(--text)"
                   disabled={loadingBatches}
                 >
                   <option value="">Keep Current Batch</option>
@@ -609,7 +609,7 @@ export default function SchedulePage() {
                 <select 
                   value={scheduleForm.teacher}
                   onChange={(e) => setScheduleForm({...scheduleForm, teacher: e.target.value})}
-                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 bg-background border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 text-(--text)"
                   disabled={loadingTeachers}
                 >
                   <option value="">Keep Current Teacher</option>
@@ -626,7 +626,7 @@ export default function SchedulePage() {
                 <select 
                   value={scheduleForm.day}
                   onChange={(e) => setScheduleForm({...scheduleForm, day: e.target.value})}
-                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 bg-background border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 text-(--text)"
                 >
                   <option value="">Select Day</option>
                   {days.map(day => <option key={day} value={day}>{day}</option>)}
@@ -640,7 +640,7 @@ export default function SchedulePage() {
                     type="time" 
                     value={scheduleForm.start_time}
                     onChange={(e) => setScheduleForm({...scheduleForm, start_time: e.target.value})}
-                    className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500" 
+                    className="w-full px-4 py-2 bg-background border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 text-(--text)" 
                   />
                 </div>
                 <div>
@@ -649,7 +649,7 @@ export default function SchedulePage() {
                     type="time" 
                     value={scheduleForm.end_time}
                     onChange={(e) => setScheduleForm({...scheduleForm, end_time: e.target.value})}
-                    className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500" 
+                    className="w-full px-4 py-2 bg-background border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 text-(--text)" 
                   />
                 </div>
               </div>

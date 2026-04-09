@@ -240,19 +240,19 @@ export default function ManageDepartmentsPage() {
               className="bg-background rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all border-t-4 border-blue-500"
             >
               <div className="flex items-start justify-between mb-4">
-                <div className="p-3 rounded-xl bg-blue-100">
-                  <FaBuilding className="text-blue-600 text-2xl" />
+                <div className="p-3 rounded-xl bg-blue-100 dark:bg-blue-900/30">
+                  <FaBuilding className="text-blue-600 dark:text-blue-400 text-2xl" />
                 </div>
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleEditClick(dept)}
-                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                    className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
                   >
                     <FaEdit />
                   </button>
                   <button
                     onClick={() => handleDeleteDepartment(dept.id, dept.name)}
-                    className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                   >
                     <FaTrash />
                   </button>
@@ -262,7 +262,7 @@ export default function ManageDepartmentsPage() {
               <h3 className="text-xl font-bold text-(--text) mb-1">
                 {dept.name}
               </h3>
-              <p className="text-sm font-medium text-blue-600 mb-4">
+              <p className="text-sm font-medium text-blue-600 dark:text-blue-400 mb-4">
                 {dept.short_name}
               </p>
 
@@ -274,18 +274,18 @@ export default function ManageDepartmentsPage() {
               </div>
 
               <div className="grid grid-cols-3 gap-2 text-center text-sm">
-                <div className="bg-background-light rounded-lg p-2">
-                  <FaChalkboardTeacher className="text-green-600 mx-auto mb-1" />
+                <div className="bg-background-light dark:bg-background/20 rounded-lg p-2">
+                  <FaChalkboardTeacher className="text-green-600 dark:text-green-400 mx-auto mb-1" />
                   <p className="font-bold text-(--text)">{dept.teachers}</p>
                   <p className="text-xs text-(--text)/70">Teachers</p>
                 </div>
-                <div className="bg-background-light rounded-lg p-2">
-                  <FaUsers className="text-purple-600 mx-auto mb-1" />
+                <div className="bg-background-light dark:bg-background/20 rounded-lg p-2">
+                  <FaUsers className="text-purple-600 dark:text-purple-400 mx-auto mb-1" />
                   <p className="font-bold text-(--text)">{dept.students}</p>
                   <p className="text-xs text-(--text)/70">Students</p>
                 </div>
-                <div className="bg-background-light rounded-lg p-2">
-                  <FaBuilding className="text-orange-600 mx-auto mb-1" />
+                <div className="bg-background-light dark:bg-background/20 rounded-lg p-2">
+                  <FaBuilding className="text-orange-600 dark:text-orange-400 mx-auto mb-1" />
                   <p className="font-bold text-(--text)">{dept.courses}</p>
                   <p className="text-xs text-(--text)/70">Courses</p>
                 </div>
@@ -313,7 +313,7 @@ export default function ManageDepartmentsPage() {
                   onChange={(e) =>
                     setAddForm({ ...addForm, name: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-background border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-(--text)"
                 />
               </div>
               <div>
@@ -327,7 +327,7 @@ export default function ManageDepartmentsPage() {
                   onChange={(e) =>
                     setAddForm({ ...addForm, short_name: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-background border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-(--text)"
                 />
               </div>
               <div>
@@ -351,7 +351,7 @@ export default function ManageDepartmentsPage() {
                     setShowAddModal(false);
                     setAddForm({ name: "", short_name: "", description: "" });
                   }}
-                  className="flex-1 px-4 py-2 border border-(--primary)/30 text-(--text)/80 rounded-lg hover:bg-background-light transition-colors"
+                  className="flex-1 px-4 py-2 bg-background border border-(--primary)/30 text-(--text)/80 rounded-lg hover:bg-background-light transition-colors"
                 >
                   Cancel
                 </button>
@@ -386,7 +386,7 @@ export default function ManageDepartmentsPage() {
                   onChange={(e) =>
                     setEditForm({ ...editForm, name: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-background border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-(--text)"
                 />
               </div>
               <div>
@@ -414,7 +414,7 @@ export default function ManageDepartmentsPage() {
                   onChange={(e) =>
                     setEditForm({ ...editForm, description: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-background border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-(--text)"
                 ></textarea>
               </div>
 
@@ -425,7 +425,7 @@ export default function ManageDepartmentsPage() {
                     setSelectedDepartment(null);
                     setEditForm({ name: "", short_name: "", description: "" });
                   }}
-                  className="flex-1 px-4 py-2 border border-(--primary)/30 text-(--text)/80 rounded-lg hover:bg-background-light transition-colors"
+                  className="flex-1 px-4 py-2 bg-background border border-(--primary)/30 text-(--text)/80 rounded-lg hover:bg-background-light transition-colors"
                 >
                   Cancel
                 </button>

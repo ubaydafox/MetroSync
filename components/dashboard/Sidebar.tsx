@@ -205,7 +205,7 @@ export default function Sidebar({ userRole = "student" }: SidebarProps) {
               </button>
               <Link
                 href="/logout"
-                className="p-2 rounded-md hover:bg-red-50 text-red-500"
+                className="p-2 rounded-md hover:bg-red-50 dark:hover:bg-red-900/30 text-red-500"
               >
                 <FaSignOutAlt />
               </Link>
@@ -213,7 +213,7 @@ export default function Sidebar({ userRole = "student" }: SidebarProps) {
           ) : (
             <Link
               href="/logout"
-              className="flex items-center justify-start py-3 px-4 rounded-md hover:bg-red-50 text-red-500 transition-colors"
+              className="flex items-center justify-start py-3 px-4 rounded-md hover:bg-red-50 dark:hover:bg-red-900/30 text-red-500 transition-colors"
             >
               <span className="mr-3">
                 <FaSignOutAlt />
@@ -273,7 +273,7 @@ export default function Sidebar({ userRole = "student" }: SidebarProps) {
         <div className="py-4 px-2 border-t border-(--primary)/10">
           <Link
             href="/logout"
-            className="flex items-center justify-start py-3 px-4 rounded-md hover:bg-red-50 text-red-500 transition-colors"
+            className="flex items-center justify-start py-3 px-4 rounded-md hover:bg-red-50 dark:hover:bg-red-900/30 text-red-500 transition-colors"
           >
             <span className="mr-3">
               <FaSignOutAlt />

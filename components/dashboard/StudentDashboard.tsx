@@ -36,7 +36,7 @@ export default function StudentDashboard() {
   // Show loading state
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100">
+      <div className="min-h-screen flex items-center justify-center bg-transparent">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
           <p className="text-(--text)/70 font-medium">Loading dashboard...</p>
@@ -48,7 +48,7 @@ export default function StudentDashboard() {
   // Show error state
   if (error || !dashboardData) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 p-6">
+      <div className="min-h-screen flex items-center justify-center bg-transparent p-6">
         <div className="bg-background rounded-2xl shadow-lg p-8 text-center max-w-md">
           <div className="text-red-600 text-5xl mb-4">⚠️</div>
           <h2 className="text-2xl font-bold text-(--text) mb-2">Error Loading Dashboard</h2>
@@ -67,7 +67,7 @@ export default function StudentDashboard() {
   const { stats, today_classes, recent_notices } = dashboardData;
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 p-6">
+    <div className="min-h-screen bg-transparent p-6">
       <div className="max-w-7xl mx-auto">
         {/* Welcome Section */}
         <div className="mb-8">
@@ -92,8 +92,8 @@ export default function StudentDashboard() {
                   {stats.courses}
                 </h3>
               </div>
-              <div className="p-3 rounded-full bg-blue-100">
-                <FaBook className="text-blue-600 text-xl" />
+              <div className="p-3 rounded-full bg-blue-100 dark:bg-blue-900/30">
+                <FaBook className="text-blue-600 dark:text-blue-400 text-xl" />
               </div>
             </div>
           </div>
@@ -109,8 +109,8 @@ export default function StudentDashboard() {
                   {stats.upcoming_classes}
                 </h3>
               </div>
-              <div className="p-3 rounded-full bg-green-100">
-                <FaCalendarAlt className="text-green-600 text-xl" />
+              <div className="p-3 rounded-full bg-green-100 dark:bg-green-900/30">
+                <FaCalendarAlt className="text-green-600 dark:text-green-400 text-xl" />
               </div>
             </div>
           </div>
@@ -126,8 +126,8 @@ export default function StudentDashboard() {
                   {stats.unread_notices}
                 </h3>
               </div>
-              <div className="p-3 rounded-full bg-purple-100">
-                <FaBell className="text-purple-600 text-xl" />
+              <div className="p-3 rounded-full bg-purple-100 dark:bg-purple-900/30">
+                <FaBell className="text-purple-600 dark:text-purple-400 text-xl" />
               </div>
             </div>
           </div>
@@ -142,8 +142,8 @@ export default function StudentDashboard() {
               className="bg-background rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group"
             >
               <div className="flex flex-col items-center text-center">
-                <div className="p-3 rounded-full bg-blue-100 group-hover:bg-blue-200 transition-colors mb-3">
-                  <FaBook className="text-blue-600 text-lg" />
+                 <div className="p-3 rounded-full bg-blue-100 dark:bg-blue-900/30 group-hover:bg-blue-200 dark:group-hover:bg-blue-900/50 transition-colors mb-3">
+                  <FaBook className="text-blue-600 dark:text-blue-400 text-lg" />
                 </div>
                 <span className="text-sm font-medium text-(--text)/80">
                   My Courses
@@ -156,8 +156,8 @@ export default function StudentDashboard() {
               className="bg-background rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group"
             >
               <div className="flex flex-col items-center text-center">
-                <div className="p-3 rounded-full bg-green-100 group-hover:bg-green-200 transition-colors mb-3">
-                  <FaCalendarAlt className="text-green-600 text-lg" />
+                <div className="p-3 rounded-full bg-green-100 dark:bg-green-900/30 group-hover:bg-green-200 dark:group-hover:bg-green-900/50 transition-colors mb-3">
+                  <FaCalendarAlt className="text-green-600 dark:text-green-400 text-lg" />
                 </div>
                 <span className="text-sm font-medium text-(--text)/80">
                   Schedule
@@ -170,8 +170,8 @@ export default function StudentDashboard() {
               className="bg-background rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group"
             >
               <div className="flex flex-col items-center text-center">
-                <div className="p-3 rounded-full bg-purple-100 group-hover:bg-purple-200 transition-colors mb-3">
-                  <FaBell className="text-purple-600 text-lg" />
+                <div className="p-3 rounded-full bg-purple-100 dark:bg-purple-900/30 group-hover:bg-purple-200 dark:group-hover:bg-purple-900/50 transition-colors mb-3">
+                  <FaBell className="text-purple-600 dark:text-purple-400 text-lg" />
                 </div>
                 <span className="text-sm font-medium text-(--text)/80">
                   Notices
@@ -187,8 +187,8 @@ export default function StudentDashboard() {
           <div className="bg-background rounded-2xl shadow-lg p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-(--text) flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-blue-100">
-                  <FaClock className="text-blue-600" />
+                <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30">
+                  <FaClock className="text-blue-600 dark:text-blue-400" />
                 </div>
                 Today&apos;s Schedule
               </h2>
@@ -205,11 +205,11 @@ export default function StudentDashboard() {
                 {today_classes.map((cls) => (
                   <div
                     key={cls.id}
-                    className="bg-linear-to-r from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-100 hover:shadow-md transition-all duration-300"
+                    className="bg-linear-to-r from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10 rounded-xl p-5 border border-blue-100 dark:border-blue-800/30 hover:shadow-md transition-all duration-300"
                   >
                     <div className="flex items-center">
-                      <div className="p-3 rounded-xl bg-blue-100 mr-4">
-                        <FaBook className="text-blue-600 text-lg" />
+                      <div className="p-3 rounded-xl bg-blue-100 dark:bg-blue-900/30 mr-4">
+                        <FaBook className="text-blue-600 dark:text-blue-400 text-lg" />
                       </div>
                       <div className="flex-1">
                         <h3 className="font-semibold text-(--text) text-lg">
@@ -245,8 +245,8 @@ export default function StudentDashboard() {
           <div className="bg-background rounded-2xl shadow-lg p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-(--text) flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-purple-100">
-                  <FaBell className="text-purple-600" />
+                <div className="p-2 rounded-lg bg-purple-100 dark:bg-purple-900/30">
+                  <FaBell className="text-purple-600 dark:text-purple-400" />
                 </div>
                 Recent Notices
               </h2>
@@ -262,11 +262,11 @@ export default function StudentDashboard() {
               {recent_notices.map((notice) => (
                 <div
                   key={notice.id}
-                  className="bg-linear-to-r from-purple-50 to-pink-50 rounded-xl p-5 border border-purple-100 hover:shadow-md transition-all duration-300"
+                  className="bg-linear-to-r from-purple-50 to-pink-50 dark:from-purple-900/10 dark:to-pink-900/10 rounded-xl p-5 border border-purple-100 dark:border-purple-800/30 hover:shadow-md transition-all duration-300"
                 >
                   <div className="flex items-start">
-                    <div className="p-3 rounded-xl bg-purple-100 mr-4">
-                      <FaBell className="text-purple-600 text-lg" />
+                    <div className="p-3 rounded-xl bg-purple-100 dark:bg-purple-900/30 mr-4">
+                      <FaBell className="text-purple-600 dark:text-purple-400 text-lg" />
                     </div>
                     <div className="flex-1">
                       <h3 className="font-semibold text-(--text) text-lg">

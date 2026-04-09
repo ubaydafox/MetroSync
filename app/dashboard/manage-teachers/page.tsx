@@ -167,19 +167,19 @@ export default function ManageTeachersPage() {
           {teachers.map((teacher) => (
             <div key={teacher.id} className="bg-background rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all">
               <div className="flex items-start justify-between mb-4">
-                <div className="p-3 rounded-xl bg-green-100">
-                  <FaUserTie className="text-green-600 text-2xl" />
+                <div className="p-3 rounded-xl bg-green-100 dark:bg-green-900/30">
+                  <FaUserTie className="text-green-600 dark:text-green-400 text-2xl" />
                 </div>
                 <div className="flex gap-2">
                   <button 
                     onClick={() => handleEditClick(teacher)}
-                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                    className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
                   >
                     <FaEdit />
                   </button>
                   <button 
                     onClick={() => handleDeleteTeacher(teacher.id, teacher.name)}
-                    className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                   >
                     <FaTrash />
                   </button>
@@ -211,7 +211,7 @@ export default function ManageTeachersPage() {
                   placeholder="e.g., Dr. Rahman Ahmed" 
                   value={addForm.name}
                   onChange={(e) => setAddForm({...addForm, name: e.target.value})}
-                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-background border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-(--text)"
                 />
               </div>
               <div>
@@ -221,7 +221,7 @@ export default function ManageTeachersPage() {
                   placeholder="e.g., rahman@university.edu" 
                   value={addForm.email}
                   onChange={(e) => setAddForm({...addForm, email: e.target.value})}
-                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-background border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-(--text)"
                 />
               </div>
               <div className="flex gap-3">
@@ -259,7 +259,7 @@ export default function ManageTeachersPage() {
                   placeholder="Teacher Name" 
                   value={editForm.name}
                   onChange={(e) => setEditForm({...editForm, name: e.target.value})}
-                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-background border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-(--text)"
                 />
               </div>
               <div>
@@ -269,7 +269,7 @@ export default function ManageTeachersPage() {
                   placeholder="Email" 
                   value={editForm.email}
                   onChange={(e) => setEditForm({...editForm, email: e.target.value})}
-                  className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-background border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-(--text)"
                 />
               </div>
               <div className="flex gap-3">
