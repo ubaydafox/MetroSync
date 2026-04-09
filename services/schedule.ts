@@ -24,9 +24,14 @@ export interface CreateScheduleData {
   end_time: string;
   day: string;
   course: number;
+  course_name: string;
+  course_code: string;
   teacher: number;
+  teacher_name: string;
   batch: number;
+  batch_name: string;
   department: number;
+  department_name: string;
   room: string;
 }
 
@@ -35,9 +40,14 @@ export interface UpdateScheduleData {
   end_time?: string;
   day?: string;
   course?: number;
+  course_name?: string;
+  course_code?: string;
   teacher?: number;
+  teacher_name?: string;
   batch?: number;
+  batch_name?: string;
   department?: number;
+  department_name?: string;
   room?: string;
 }
 
@@ -53,7 +63,17 @@ export const getSchedules = async (_token: string): Promise<Schedule[]> => {
 
 export const getSchedulesByBatch = async (batchId: number): Promise<Schedule[]> => {
   const snap = await getDocs(query(collection(db, "schedules"), where("batch_id", "==", batchId)));
-  return snap.docs.map((d) => d.data() as Schedule);
+  return snap.docs.map((d) => d.data() as Schedule).sort((a, b) => a.id - b.id);
+};
+
+export const getSchedulesByDepartment = async (deptId: number): Promise<Schedule[]> => {
+  const snap = await getDocs(query(collection(db, "schedules"), where("department_id", "==", deptId)));
+  return snap.docs.map((d) => d.data() as Schedule).sort((a, b) => a.id - b.id);
+};
+
+export const getSchedulesByTeacher = async (teacherId: number): Promise<Schedule[]> => {
+  const snap = await getDocs(query(collection(db, "schedules"), where("teacher_id", "==", teacherId)));
+  return snap.docs.map((d) => d.data() as Schedule).sort((a, b) => a.id - b.id);
 };
 
 export const createSchedule = async (_token: string, data: CreateScheduleData): Promise<Schedule> => {
@@ -66,18 +86,17 @@ export const createSchedule = async (_token: string, data: CreateScheduleData): 
       end_time: data.end_time,
       day: data.day,
       course_id: data.course,
-      course_name: "",
-      course_code: "",
+      course_name: data.course_name,
+      course_code: data.course_code,
       teacher_id: data.teacher,
-      teacher_name: "",
+      teacher_name: data.teacher_name,
       batch_id: data.batch,
-      batch_name: "",
+      batch_name: data.batch_name,
       department_id: data.department,
-      department_name: "",
+      department_name: data.department_name,
       room: data.room,
     };
     await setDoc(doc(db, "schedules", `schedule_${nextId}`), newSchedule);
-    toast.success("Schedule created");
     return newSchedule;
   } catch (e) {
     toast.error("Failed to create schedule");

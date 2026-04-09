@@ -3,7 +3,7 @@
 import { useGlobal } from "@/app/context/GlobalContext";
 import { FaCalendar, FaClock, FaMapMarkerAlt, FaBook, FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import { getSchedules, createSchedule, updateSchedule, deleteSchedule, Schedule } from "@/services/schedule";
+import { getSchedules, createSchedule, updateSchedule, deleteSchedule, Schedule, getSchedulesByBatch, getSchedulesByDepartment, getSchedulesByTeacher } from "@/services/schedule";
 import { getCourses, Course } from "@/services/course";
 import { getBatches, Batch } from "@/services/batch";
 import { getTeachers, Teacher } from "@/services/teacher";
@@ -37,9 +37,11 @@ export default function SchedulePage() {
 
   const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
 
-  // Fetch schedules from backend
+  // Fetch schedules based on role
   useEffect(() => {
     const fetchSchedules = async () => {
+      if (!user) return;
+
       const token = localStorage.getItem('token');
       if (!token) {
         setError('No authentication token found');
@@ -48,7 +50,32 @@ export default function SchedulePage() {
       }
 
       try {
-        const data = await getSchedules(token);
+        setLoading(true);
+        let data: Schedule[] = [];
+
+        if (user.role === "admin") {
+          data = await getSchedules(token);
+        } else if (user.role === "hod") {
+          const deptId = Number(user.department);
+          if (!isNaN(deptId)) {
+            data = await getSchedulesByDepartment(deptId);
+          } else {
+            data = await getSchedules(token); // Fallback
+          }
+        } else if (user.role === "student") {
+          const batchId = Number(user.batch);
+          if (!isNaN(batchId)) {
+            data = await getSchedulesByBatch(batchId);
+          }
+        } else if (user.role === "teacher") {
+          // Find teacher ID by email first
+          const teachersList = await getTeachers(token);
+          const currentTeacher = teachersList.find(t => t.email === user.email);
+          if (currentTeacher) {
+            data = await getSchedulesByTeacher(currentTeacher.id);
+          }
+        }
+
         setRawSchedule(data);
         setError(null);
       } catch (err) {
@@ -60,7 +87,7 @@ export default function SchedulePage() {
     };
 
     fetchSchedules();
-  }, []);
+  }, [user]);
 
   // Fetch courses for HOD
   useEffect(() => {
@@ -148,15 +175,26 @@ export default function SchedulePage() {
       // Get department ID - assuming user.department is the department name
       const departmentId = parseInt(user.department); // Adjust this if department is stored differently
 
+      // Find names for the associated IDs
+      const selectedCourse = courses.find(c => c.id === parseInt(scheduleForm.course));
+      const selectedBatch = batches.find(b => b.id === parseInt(scheduleForm.batch));
+      const selectedTeacher = teachers.find(t => t.id === parseInt(scheduleForm.teacher));
+      const departmentName = user.department_name || user.department; // Try to get name from user object
+
       const newSchedule = await createSchedule(token, {
         course: parseInt(scheduleForm.course),
+        course_name: selectedCourse?.name || "",
+        course_code: selectedCourse?.code || "",
         batch: parseInt(scheduleForm.batch),
+        batch_name: selectedBatch?.name || "",
         teacher: parseInt(scheduleForm.teacher),
+        teacher_name: selectedTeacher?.name || "",
         day: scheduleForm.day.toLowerCase(),
-        start_time: scheduleForm.start_time + ':00', // Add seconds for HH:MM:SS format
-        end_time: scheduleForm.end_time + ':00', // Add seconds for HH:MM:SS format
+        start_time: scheduleForm.start_time + ':00',
+        end_time: scheduleForm.end_time + ':00',
         room: scheduleForm.room,
-        department: departmentId
+        department: departmentId,
+        department_name: departmentName
       });
 
       setRawSchedule([...rawSchedule, newSchedule]);
@@ -204,16 +242,32 @@ export default function SchedulePage() {
       if (!token) return;
 
       const departmentId = parseInt(user.department);
+      
+      const selectedCourse = courses.find(c => c.id === parseInt(scheduleForm.course));
+      const selectedBatch = batches.find(b => b.id === parseInt(scheduleForm.batch));
+      const selectedTeacher = teachers.find(t => t.id === parseInt(scheduleForm.teacher));
+      const departmentName = user.department_name || user.department;
 
       const updated = await updateSchedule(token, editingSchedule.id, {
         day: scheduleForm.day.toLowerCase(),
-        start_time: scheduleForm.start_time + ':00', // Add seconds for HH:MM:SS format
-        end_time: scheduleForm.end_time + ':00', // Add seconds for HH:MM:SS format
+        start_time: scheduleForm.start_time + ':00',
+        end_time: scheduleForm.end_time + ':00',
         room: scheduleForm.room,
-        ...(scheduleForm.course && { course: parseInt(scheduleForm.course) }),
-        ...(scheduleForm.batch && { batch: parseInt(scheduleForm.batch) }),
-        ...(scheduleForm.teacher && { teacher: parseInt(scheduleForm.teacher) }),
-        department: departmentId
+        ...(scheduleForm.course && { 
+          course: parseInt(scheduleForm.course),
+          course_name: selectedCourse?.name,
+          course_code: selectedCourse?.code
+        }),
+        ...(scheduleForm.batch && { 
+          batch: parseInt(scheduleForm.batch),
+          batch_name: selectedBatch?.name
+        }),
+        ...(scheduleForm.teacher && { 
+          teacher: parseInt(scheduleForm.teacher),
+          teacher_name: selectedTeacher?.name
+        }),
+        department: departmentId,
+        department_name: departmentName
       });
 
       setRawSchedule(rawSchedule.map(s => s.id === editingSchedule.id ? updated : s));
