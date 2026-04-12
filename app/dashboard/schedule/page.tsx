@@ -1,7 +1,7 @@
 "use client";
 
 import { useGlobal } from "@/app/context/GlobalContext";
-import { FaCalendar, FaClock, FaMapMarkerAlt, FaBook, FaPlus, FaEdit, FaTrash } from "react-icons/fa";
+import { FaCalendar, FaClock, FaMapMarkerAlt, FaBook, FaPlus, FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import {
@@ -14,6 +14,19 @@ import { getBatches, Batch } from "@/services/batch";
 import { getTeachers, Teacher } from "@/services/teacher";
 import { toast } from "react-toastify";
 
+const DAY_COLORS: Record<string, { border: string; bg: string; icon: string; active: string }> = {
+  Sunday:    { border: "border-rose-500",   bg: "bg-rose-100 dark:bg-rose-900/30",   icon: "text-rose-600 dark:text-rose-400",   active: "bg-rose-600 text-white" },
+  Monday:    { border: "border-blue-500",   bg: "bg-blue-100 dark:bg-blue-900/30",   icon: "text-blue-600 dark:text-blue-400",   active: "bg-blue-600 text-white" },
+  Tuesday:   { border: "border-teal-500",   bg: "bg-teal-100 dark:bg-teal-900/30",   icon: "text-teal-600 dark:text-teal-400",   active: "bg-teal-600 text-white" },
+  Wednesday: { border: "border-violet-500", bg: "bg-violet-100 dark:bg-violet-900/30", icon: "text-violet-600 dark:text-violet-400", active: "bg-violet-600 text-white" },
+  Thursday:  { border: "border-amber-500",  bg: "bg-amber-100 dark:bg-amber-900/30",  icon: "text-amber-600 dark:text-amber-400",  active: "bg-amber-600 text-white" },
+  Friday:    { border: "border-emerald-500", bg: "bg-emerald-100 dark:bg-emerald-900/30", icon: "text-emerald-600 dark:text-emerald-400", active: "bg-emerald-600 text-white" },
+  Saturday:  { border: "border-pink-500",   bg: "bg-pink-100 dark:bg-pink-900/30",   icon: "text-pink-600 dark:text-pink-400",   active: "bg-pink-600 text-white" },
+  default:   { border: "border-slate-400",  bg: "bg-slate-100 dark:bg-slate-800/30", icon: "text-slate-600 dark:text-slate-400", active: "bg-slate-600 text-white" },
+};
+
+const PAGE_SIZE = 8;
+
 function ScheduleContent() {
   const { user } = useGlobal();
   const searchParams = useSearchParams();
@@ -21,6 +34,7 @@ function ScheduleContent() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedDay, setSelectedDay] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const [rawSchedule, setRawSchedule] = useState<Schedule[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -378,6 +392,12 @@ function ScheduleContent() {
     return result;
   })();
 
+  const totalPages = Math.ceil(filteredSchedule.length / PAGE_SIZE);
+  const paginatedSchedule = filteredSchedule.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
+
   const canManage = user?.role === "hod";
 
   // Show loading state
@@ -432,67 +452,91 @@ function ScheduleContent() {
           )}
         </div>
 
-        {/* Day Filter */}
+        {/* Search + Filter row */}
         <div className="bg-background rounded-2xl shadow-lg p-4 mb-6">
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => setSelectedDay("all")}
-              className={`px-4 py-2 rounded-lg transition-colors ${
-                selectedDay === "all" 
-                  ? "bg-blue-600 text-white" 
-                  : "bg-background-light dark:bg-background/20 text-(--text)/80 hover:bg-background-light/50"
-              }`}
-            >
-              All Days
-            </button>
-            {days.map((day) => (
+          <div className="flex flex-col sm:flex-row gap-3">
+            {/* Day filter chips */}
+            <div className="flex flex-wrap gap-2 flex-1">
               <button
-                key={day}
-                onClick={() => setSelectedDay(day)}
-                className={`px-4 py-2 rounded-lg transition-colors ${
-                  selectedDay === day 
-                    ? "bg-blue-600 text-white" 
-                    : "bg-background-light dark:bg-background/20 text-(--text)/80 hover:bg-background-light/50"
+                onClick={() => { setSelectedDay("all"); setCurrentPage(1); }}
+                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  selectedDay === "all"
+                    ? "bg-slate-700 text-white shadow-sm"
+                    : "bg-background-light text-(--text)/70 hover:bg-slate-200 dark:hover:bg-slate-700/40"
                 }`}
               >
-                {day}
+                All Days
               </button>
-            ))}
+              {days.map((day) => (
+                <button
+                  key={day}
+                  onClick={() => { setSelectedDay(day); setCurrentPage(1); }}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+                    selectedDay === day
+                      ? `${DAY_COLORS[day]?.active ?? "bg-blue-600 text-white"} shadow-sm`
+                      : "bg-background-light text-(--text)/70 hover:bg-slate-200 dark:hover:bg-slate-700/40"
+                  }`}
+                >
+                  {day}
+                </button>
+              ))}
+            </div>
+
+            {/* Inline search */}
+            <div className="relative w-full sm:w-56">
+              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-(--text)/40 text-sm" />
+              <input
+                type="text"
+                placeholder="Search class, teacher..."
+                value={searchQuery}
+                onChange={(e) => { setSearchQuery(e.target.value.toLowerCase()); setCurrentPage(1); }}
+                className="w-full pl-9 pr-4 py-2 border border-(--primary)/20 rounded-xl text-sm bg-background-light/60 text-(--text) focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              />
+            </div>
           </div>
         </div>
 
         {/* Schedule Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredSchedule.map((item) => {
+          {paginatedSchedule.map((item) => {
             const rawItem = rawSchedule.find(s => s.id === item.id);
+            const dayColor = DAY_COLORS[item.day] ?? DAY_COLORS.default;
             return (
-            <div key={item.id} className="bg-background rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-blue-500">
+            <div key={item.id} className={`bg-background rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 ${dayColor.border}`}>
               <div className="flex items-start justify-between mb-4">
-                <div className="p-3 rounded-xl bg-blue-100 dark:bg-blue-900/30">
-                  <FaBook className="text-blue-600 dark:text-blue-400 text-xl" />
+                <div className={`p-3 rounded-xl ${dayColor.bg}`}>
+                  <FaBook className={`${dayColor.icon} text-xl`} />
                 </div>
-                {canManage && rawItem && (
-                  <div className="flex gap-2">
-                    <button 
-                      onClick={() => handleEditSchedule(rawItem)}
-                      className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
-                    >
-                      <FaEdit />
-                    </button>
-                    <button 
-                      onClick={() => handleDeleteSchedule(item.id)}
-                      className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
-                    >
-                      <FaTrash />
-                    </button>
-                  </div>
-                )}
+                <div className="flex items-center gap-2">
+                  {/* Batch pill */}
+                  {item.batch && item.batch !== 'TBA' && (
+                    <span className={`text-xs px-2 py-1 rounded-full font-medium ${dayColor.bg} ${dayColor.icon}`}>
+                      {item.batch}
+                    </span>
+                  )}
+                  {canManage && rawItem && (
+                    <div className="flex gap-1">
+                      <button
+                        onClick={() => handleEditSchedule(rawItem)}
+                        className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteSchedule(item.id)}
+                        className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
 
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-2 mb-1">
                 <h3 className="text-lg font-bold text-(--text)">{item.courseName}</h3>
               </div>
-              <p className="text-blue-600 dark:text-blue-400 font-semibold mb-4">{item.course !== "none" ? item.course : "Extra Curricular"}</p>
+              <p className={`${dayColor.icon} font-semibold mb-4 text-sm`}>{item.course !== "none" ? item.course : "Extra Curricular"}</p>
 
               <div className="space-y-2 text-sm text-(--text)/70">
                 <div className="flex items-center gap-2">
@@ -509,12 +553,9 @@ function ScheduleContent() {
                 </div>
               </div>
 
-              <div className="mt-4 pt-4 border-t border-(--primary)/10 space-y-1">
+              <div className="mt-4 pt-4 border-t border-(--primary)/10">
                 <p className="text-sm text-(--text)/70">
                   <span className="font-medium">Teacher:</span> {item.teacher}
-                </p>
-                <p className="text-sm text-(--text)/70">
-                  <span className="font-medium">Batch:</span> {item.batch}
                 </p>
               </div>
             </div>
@@ -522,13 +563,63 @@ function ScheduleContent() {
           })}
         </div>
 
+        {/* Empty state */}
         {filteredSchedule.length === 0 && (
           <div className="bg-background rounded-2xl shadow-lg p-12 text-center">
-            <FaCalendar className="text-6xl text-(--text)/40 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-(--text) mb-2">No classes scheduled</h3>
-            <p className="text-(--text)/70">
-              {selectedDay === "all" ? "No classes found" : `No classes on ${selectedDay}`}
+            <div className="w-20 h-20 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 flex items-center justify-center">
+              <FaCalendar className="text-4xl text-blue-400" />
+            </div>
+            <h3 className="text-xl font-semibold text-(--text) mb-2">No classes found</h3>
+            <p className="text-(--text)/60 mb-4">
+              {searchQuery
+                ? `No results for "${searchQuery}"  — try a different keyword`
+                : selectedDay === "all"
+                ? canManage
+                  ? "Start by adding your first class below"
+                  : "No schedule has been published for your batch yet"
+                : `No classes scheduled on ${selectedDay}`}
             </p>
+            {canManage && !searchQuery && (
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="px-6 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium"
+              >
+                + Add First Class
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2 mt-8">
+            <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="px-4 py-2 rounded-xl bg-background shadow border border-(--primary)/20 text-(--text)/70 disabled:opacity-40 hover:bg-primary/10 transition-colors"
+            >
+              ← Prev
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+              <button
+                key={p}
+                onClick={() => setCurrentPage(p)}
+                className={`w-9 h-9 rounded-xl text-sm font-medium transition-colors ${
+                  p === currentPage
+                    ? "bg-primary text-white shadow-sm"
+                    : "bg-background border border-(--primary)/20 text-(--text)/70 hover:bg-primary/10"
+                }`}
+              >
+                {p}
+              </button>
+            ))}
+            <button
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 rounded-xl bg-background shadow border border-(--primary)/20 text-(--text)/70 disabled:opacity-40 hover:bg-primary/10 transition-colors"
+            >
+              Next →
+            </button>
           </div>
         )}
       </div>

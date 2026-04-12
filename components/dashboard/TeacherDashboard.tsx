@@ -7,10 +7,24 @@ import {
   FaCalendarAlt,
   FaClock,
   FaUserGraduate,
+  FaBell,
+  FaBullhorn,
 } from "react-icons/fa";
 import { getTeacherDashboardData, TeacherDashboardData } from "@/services/stat";
+import { useGlobal } from "@/app/context/GlobalContext";
+
+const EmptyState = ({ icon, title, subtitle }: { icon: React.ReactNode; title: string; subtitle: string }) => (
+  <div className="text-center py-10 px-4">
+    <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center text-primary/50 text-2xl">
+      {icon}
+    </div>
+    <p className="font-semibold text-(--text)/70 mb-1">{title}</p>
+    <p className="text-sm text-(--text)/50">{subtitle}</p>
+  </div>
+);
 
 export default function TeacherDashboard() {
+  const { user } = useGlobal();
   const [dashboardData, setDashboardData] = useState<TeacherDashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -29,11 +43,9 @@ export default function TeacherDashboard() {
         setLoading(false);
       }
     };
-
     fetchDashboardData();
   }, []);
 
-  // Show loading state
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-transparent">
@@ -45,7 +57,6 @@ export default function TeacherDashboard() {
     );
   }
 
-  // Show error state
   if (error || !dashboardData) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-transparent p-6">
@@ -53,7 +64,7 @@ export default function TeacherDashboard() {
           <div className="text-red-600 text-5xl mb-4">⚠️</div>
           <h2 className="text-2xl font-bold text-(--text) mb-2">Error Loading Dashboard</h2>
           <p className="text-(--text)/70 mb-4">{error || "Failed to load dashboard data"}</p>
-          <button 
+          <button
             onClick={() => window.location.reload()}
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
@@ -65,27 +76,27 @@ export default function TeacherDashboard() {
   }
 
   const { stats, my_courses, upcoming_classes } = dashboardData;
+  const isToday = new Date().getDay() >= 0 && new Date().getDay() <= 4;
 
   return (
     <div className="min-h-screen bg-transparent p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-(--text) mb-2">
-            Teacher Dashboard
+
+        {/* Welcome Banner */}
+        <div className="mb-8 bg-gradient-to-r from-teal-600 to-emerald-600 rounded-2xl p-6 text-white shadow-lg">
+          <h1 className="text-2xl font-bold mb-1">
+            Welcome, {user?.name?.split(" ")[0] || "Teacher"}! 📚
           </h1>
-          <p className="text-(--text)/70">Manage your courses and students</p>
+          <p className="text-teal-100 text-sm">Manage your courses and stay connected with your students</p>
         </div>
 
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-background rounded-2xl shadow-lg p-6 border-l-4 border-blue-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-(--text)/60 text-sm font-medium">My Courses</p>
-                <h3 className="text-3xl font-bold text-(--text) mt-1">
-                  {stats.total_courses}
-                </h3>
+                <h3 className="text-3xl font-bold text-(--text) mt-1">{stats.total_courses}</h3>
               </div>
               <div className="p-3 rounded-full bg-blue-100 dark:bg-blue-900/30">
                 <FaBook className="text-blue-600 dark:text-blue-400 text-xl" />
@@ -96,12 +107,8 @@ export default function TeacherDashboard() {
           <div className="bg-background rounded-2xl shadow-lg p-6 border-l-4 border-green-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-(--text)/60 text-sm font-medium">
-                  Total Students
-                </p>
-                <h3 className="text-3xl font-bold text-(--text) mt-1">
-                  {stats.total_students}
-                </h3>
+                <p className="text-(--text)/60 text-sm font-medium">Total Students</p>
+                <h3 className="text-3xl font-bold text-(--text) mt-1">{stats.total_students}</h3>
               </div>
               <div className="p-3 rounded-full bg-green-100 dark:bg-green-900/30">
                 <FaUserGraduate className="text-green-600 dark:text-green-400 text-xl" />
@@ -112,12 +119,8 @@ export default function TeacherDashboard() {
           <div className="bg-background rounded-2xl shadow-lg p-6 border-l-4 border-purple-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-(--text)/60 text-sm font-medium">
-                  Today&apos;s Classes
-                </p>
-                <h3 className="text-3xl font-bold text-(--text) mt-1">
-                  {stats.upcoming_classes}
-                </h3>
+                <p className="text-(--text)/60 text-sm font-medium">Today&apos;s Classes</p>
+                <h3 className="text-3xl font-bold text-(--text) mt-1">{stats.upcoming_classes}</h3>
               </div>
               <div className="p-3 rounded-full bg-purple-100 dark:bg-purple-900/30">
                 <FaCalendarAlt className="text-purple-600 dark:text-purple-400 text-xl" />
@@ -128,35 +131,41 @@ export default function TeacherDashboard() {
 
         {/* Quick Actions */}
         <div className="mb-8">
-          <h2 className="text-xl font-bold text-(--text) mb-4">
-            Quick Actions
-          </h2>
-          <div className="grid grid-cols-2 gap-4">
-            <Link
-              href="/dashboard/courses"
-              className="bg-background rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group"
-            >
+          <h2 className="text-xl font-bold text-(--text) mb-4">Quick Actions</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <Link href="/dashboard/courses" className="bg-background rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group">
               <div className="flex flex-col items-center text-center">
                 <div className="p-3 rounded-full bg-blue-100 dark:bg-blue-900/30 group-hover:bg-blue-200 dark:group-hover:bg-blue-900/50 transition-colors mb-3">
                   <FaBook className="text-blue-600 dark:text-blue-400 text-lg" />
                 </div>
-                <span className="text-sm font-medium text-(--text)/80">
-                  My Courses
-                </span>
+                <span className="text-sm font-medium text-(--text)/80">My Courses</span>
               </div>
             </Link>
 
-            <Link
-              href="/dashboard/schedule"
-              className="bg-background rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group"
-            >
+            <Link href="/dashboard/schedule" className="bg-background rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group">
               <div className="flex flex-col items-center text-center">
                 <div className="p-3 rounded-full bg-purple-100 dark:bg-purple-900/30 group-hover:bg-purple-200 dark:group-hover:bg-purple-900/50 transition-colors mb-3">
                   <FaCalendarAlt className="text-purple-600 dark:text-purple-400 text-lg" />
                 </div>
-                <span className="text-sm font-medium text-(--text)/80">
-                  Schedule
-                </span>
+                <span className="text-sm font-medium text-(--text)/80">My Schedule</span>
+              </div>
+            </Link>
+
+            <Link href="/dashboard/notices" className="bg-background rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group">
+              <div className="flex flex-col items-center text-center">
+                <div className="p-3 rounded-full bg-yellow-100 dark:bg-yellow-900/30 group-hover:bg-yellow-200 dark:group-hover:bg-yellow-900/50 transition-colors mb-3">
+                  <FaBullhorn className="text-yellow-600 dark:text-yellow-400 text-lg" />
+                </div>
+                <span className="text-sm font-medium text-(--text)/80">Post Notice</span>
+              </div>
+            </Link>
+
+            <Link href="/dashboard/profile" className="bg-background rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group">
+              <div className="flex flex-col items-center text-center">
+                <div className="p-3 rounded-full bg-green-100 dark:bg-green-900/30 group-hover:bg-green-200 dark:group-hover:bg-green-900/50 transition-colors mb-3">
+                  <FaUserGraduate className="text-green-600 dark:text-green-400 text-lg" />
+                </div>
+                <span className="text-sm font-medium text-(--text)/80">My Profile</span>
               </div>
             </Link>
           </div>
@@ -173,42 +182,45 @@ export default function TeacherDashboard() {
                 </div>
                 My Courses
               </h2>
-              <Link
-                href="/dashboard/courses"
-                className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
-              >
+              <Link href="/dashboard/courses" className="text-blue-600 hover:text-blue-700 font-medium transition-colors text-sm">
                 View all →
               </Link>
             </div>
 
-            <div className="space-y-4">
-              {my_courses.map((course) => (
-                <div
-                  key={course.id}
-                  className="bg-linear-to-r from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10 rounded-xl p-5 border border-blue-100 dark:border-blue-800/30 hover:shadow-md transition-all duration-300"
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-(--text) text-lg">
-                        {course.name}
-                      </h3>
-                      <p className="text-sm text-(--text)/70 mt-1">
-                        {course.code} - Section {course.section}
-                      </p>
-                      <div className="mt-3 flex flex-wrap gap-2 text-sm">
-                        <span className="bg-background px-3 py-1 rounded-full text-(--text)/70">
-                          <FaUserGraduate className="inline mr-1" />{" "}
-                          {course.students} students
-                        </span>
-                        <span className="bg-background px-3 py-1 rounded-full text-(--text)/70">
-                          <FaClock className="inline mr-1" /> {course.next_class}
-                        </span>
+            {my_courses.length > 0 ? (
+              <div className="space-y-4">
+                {my_courses.map((course) => (
+                  <div
+                    key={course.id}
+                    className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10 rounded-xl p-5 border border-blue-100 dark:border-blue-800/30 hover:shadow-md transition-all duration-300"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-(--text)">{course.name}</h3>
+                        <p className="text-sm text-(--text)/70 mt-1">{course.code}</p>
+                        <div className="mt-3 flex flex-wrap gap-2 text-sm">
+                          <span className="bg-background px-3 py-1 rounded-full text-(--text)/70">
+                            <FaUserGraduate className="inline mr-1 text-xs" />
+                            {course.students} students
+                          </span>
+                          {course.next_class && course.next_class !== "Check schedule" && (
+                            <span className="bg-background px-3 py-1 rounded-full text-(--text)/70">
+                              <FaClock className="inline mr-1 text-xs" /> {course.next_class}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <EmptyState
+                icon={<FaBook />}
+                title="No courses assigned"
+                subtitle="Contact your HOD to get courses assigned"
+              />
+            )}
           </div>
 
           {/* Today's Classes */}
@@ -220,40 +232,44 @@ export default function TeacherDashboard() {
                 </div>
                 Today&apos;s Classes
               </h2>
+              <Link href="/dashboard/schedule" className="text-purple-600 hover:text-purple-700 font-medium transition-colors text-sm">
+                Full schedule →
+              </Link>
             </div>
 
-            <div className="space-y-4">
-              {upcoming_classes.map((cls) => (
-                <div
-                  key={cls.id}
-                  className="bg-linear-to-r from-purple-50 to-pink-50 dark:from-purple-900/10 dark:to-pink-900/10 rounded-xl p-5 border border-purple-100 dark:border-purple-800/30 hover:shadow-md transition-all duration-300"
-                >
-                  <div className="flex items-start">
-                    <div className="p-3 rounded-xl bg-purple-100 dark:bg-purple-900/30 mr-4">
-                      <FaBook className="text-purple-600 dark:text-purple-400 text-lg" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-(--text)">
-                        {cls.course} - Section {cls.section}
-                      </h3>
-                      <p className="text-sm text-(--text)/70 mt-1">
-                        Topic: {cls.topic}
-                      </p>
-                      <div className="mt-2 flex flex-wrap gap-2 text-sm text-(--text)/70">
-                        <span className="bg-background px-3 py-1 rounded-full">
-                          <FaClock className="inline mr-1" /> {cls.time}
-                        </span>
-                        <span className="bg-background px-3 py-1 rounded-full">
-                          {cls.room}
-                        </span>
+            {upcoming_classes.length > 0 ? (
+              <div className="space-y-4">
+                {upcoming_classes.map((cls) => (
+                  <div
+                    key={cls.id}
+                    className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/10 dark:to-pink-900/10 rounded-xl p-5 border border-purple-100 dark:border-purple-800/30 hover:shadow-md transition-all duration-300"
+                  >
+                    <div className="flex items-start">
+                      <div className="p-3 rounded-xl bg-purple-100 dark:bg-purple-900/30 mr-4">
+                        <FaBook className="text-purple-600 dark:text-purple-400 text-lg" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-(--text)">{cls.course}</h3>
+                        <p className="text-sm text-(--text)/70 mt-0.5">Batch: {cls.section}</p>
+                        <div className="mt-2 flex flex-wrap gap-2 text-sm text-(--text)/70">
+                          <span className="bg-background px-3 py-1 rounded-full">
+                            <FaClock className="inline mr-1 text-xs" /> {cls.time}
+                          </span>
+                          <span className="bg-background px-3 py-1 rounded-full">{cls.room}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <EmptyState
+                icon={<FaBell />}
+                title={isToday ? "No classes today" : "No classes on weekends"}
+                subtitle="Check the full schedule for other days"
+              />
+            )}
           </div>
-
         </div>
       </div>
     </div>
