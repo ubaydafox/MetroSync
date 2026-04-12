@@ -101,14 +101,16 @@ export default function SettingsPage() {
                 </div>
                 <button
                   type="button"
+                  role="switch"
+                  aria-checked={notifPrefs[key as keyof typeof notifPrefs]}
                   onClick={() => setNotifPrefs(prev => ({ ...prev, [key]: !prev[key as keyof typeof prev] }))}
-                  className={`relative shrink-0 w-11 h-6 rounded-full transition-colors duration-200 ${
+                  className={`relative inline-flex shrink-0 h-6 w-11 rounded-full transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
                     notifPrefs[key as keyof typeof notifPrefs] ? "bg-primary" : "bg-slate-300 dark:bg-slate-600"
                   }`}
                 >
                   <span
-                    className={`absolute top-[3px] w-[18px] h-[18px] rounded-full bg-white shadow transition-transform duration-200 ${
-                      notifPrefs[key as keyof typeof notifPrefs] ? "translate-x-[21px]" : "translate-x-[3px]"
+                    className={`pointer-events-none absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow transform transition-transform duration-200 ${
+                      notifPrefs[key as keyof typeof notifPrefs] ? "translate-x-5" : "translate-x-0"
                     }`}
                   />
                 </button>
