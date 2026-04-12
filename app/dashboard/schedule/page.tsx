@@ -2,8 +2,13 @@
 
 import { useGlobal } from "@/app/context/GlobalContext";
 import { FaCalendar, FaClock, FaMapMarkerAlt, FaBook, FaPlus, FaEdit, FaTrash } from "react-icons/fa";
-import { useState, useEffect } from "react";
-import { getSchedules, createSchedule, updateSchedule, deleteSchedule, Schedule, getSchedulesByBatch, getSchedulesByDepartment, getSchedulesByTeacher } from "@/services/schedule";
+import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
+import {
+  createSchedule, updateSchedule, deleteSchedule, Schedule,
+  subscribeToSchedules, subscribeToSchedulesByBatch,
+  subscribeToSchedulesByDepartment, subscribeToSchedulesByTeacher
+} from "@/services/schedule";
 import { getCourses, Course } from "@/services/course";
 import { getBatches, Batch } from "@/services/batch";
 import { getTeachers, Teacher } from "@/services/teacher";
@@ -11,9 +16,11 @@ import { toast } from "react-toastify";
 
 export default function SchedulePage() {
   const { user } = useGlobal();
+  const searchParams = useSearchParams();
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedDay, setSelectedDay] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [rawSchedule, setRawSchedule] = useState<Schedule[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -24,6 +31,7 @@ export default function SchedulePage() {
   const [loadingCourses, setLoadingCourses] = useState(false);
   const [loadingBatches, setLoadingBatches] = useState(false);
   const [loadingTeachers, setLoadingTeachers] = useState(false);
+  const unsubscribeRef = useRef<(() => void) | null>(null);
 
   const [scheduleForm, setScheduleForm] = useState({
     course: "",
@@ -37,56 +45,86 @@ export default function SchedulePage() {
 
   const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
 
-  // Fetch schedules based on role
+  // Read URL query params from smart search
   useEffect(() => {
-    const fetchSchedules = async () => {
-      if (!user) return;
+    const dayParam = searchParams.get("day");
+    const qParam = searchParams.get("q");
+    if (dayParam && days.includes(dayParam)) {
+      setSelectedDay(dayParam);
+    }
+    if (qParam) {
+      setSearchQuery(qParam.toLowerCase());
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
-      const token = localStorage.getItem('token');
-      if (!token) {
-        setError('No authentication token found');
-        setLoading(false);
-        return;
-      }
+  // Subscribe to schedules in real-time based on role
+  useEffect(() => {
+    if (!user) return;
 
-      try {
-        setLoading(true);
-        let data: Schedule[] = [];
+    setLoading(true);
+    setError(null);
 
-        if (user.role === "admin") {
-          data = await getSchedules(token);
-        } else if (user.role === "hod") {
-          const deptId = Number(user.department);
-          if (!isNaN(deptId)) {
-            data = await getSchedulesByDepartment(deptId);
-          } else {
-            data = await getSchedules(token); // Fallback
-          }
-        } else if (user.role === "student") {
-          const batchId = Number(user.batch);
-          if (!isNaN(batchId)) {
-            data = await getSchedulesByBatch(batchId);
-          }
-        } else if (user.role === "teacher") {
-          // Find teacher ID by email first
-          const teachersList = await getTeachers(token);
-          const currentTeacher = teachersList.find(t => t.email === user.email);
-          if (currentTeacher) {
-            data = await getSchedulesByTeacher(currentTeacher.id);
-          }
-        }
+    // Unsubscribe any previous listener
+    if (unsubscribeRef.current) {
+      unsubscribeRef.current();
+      unsubscribeRef.current = null;
+    }
 
-        setRawSchedule(data);
-        setError(null);
-      } catch (err) {
-        setError('Failed to load schedules');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
+    const onData = (data: Schedule[]) => {
+      setRawSchedule(data);
+      setLoading(false);
     };
 
-    fetchSchedules();
+    const onErr = (err: unknown) => {
+      console.error(err);
+      setError("Failed to load schedules");
+      setLoading(false);
+    };
+
+    let unsub: (() => void) | null = null;
+
+    if (user.role === "admin") {
+      unsub = subscribeToSchedules(onData);
+    } else if (user.role === "hod") {
+      const deptId = Number(user.department);
+      if (!isNaN(deptId) && deptId > 0) {
+        unsub = subscribeToSchedulesByDepartment(deptId, onData);
+      } else {
+        unsub = subscribeToSchedules(onData);
+      }
+    } else if (user.role === "student" || user.role === "cr") {
+      const batchId = Number(user.batch);
+      if (!isNaN(batchId) && batchId > 0) {
+        unsub = subscribeToSchedulesByBatch(batchId, onData);
+      } else {
+        unsub = subscribeToSchedules(onData);
+      }
+    } else if (user.role === "teacher") {
+      // Resolve teacher ID by email first (one-time), then subscribe
+      const token = localStorage.getItem("token") || "";
+      getTeachers(token).then((list) => {
+        const me = list.find((t) => t.email === user.email);
+        if (me) {
+          const innerUnsub = subscribeToSchedulesByTeacher(me.id, onData);
+          unsubscribeRef.current = innerUnsub;
+        } else {
+          onData([]);
+        }
+      }).catch(onErr);
+      return; // teacher path sets unsubscribeRef inside async block
+    } else {
+      onData([]);
+    }
+
+    if (unsub) unsubscribeRef.current = unsub;
+
+    return () => {
+      if (unsubscribeRef.current) {
+        unsubscribeRef.current();
+        unsubscribeRef.current = null;
+      }
+    };
   }, [user]);
 
   // Fetch courses for HOD
@@ -326,9 +364,19 @@ export default function SchedulePage() {
     batch: item.batch_name || 'TBA'
   }));
 
-  const filteredSchedule = selectedDay === "all" 
-    ? schedule 
-    : schedule.filter(item => item.day === selectedDay);
+  const filteredSchedule = (() => {
+    let result = selectedDay === "all" ? schedule : schedule.filter(item => item.day === selectedDay);
+    if (searchQuery) {
+      result = result.filter(item =>
+        item.courseName.toLowerCase().includes(searchQuery) ||
+        item.course.toLowerCase().includes(searchQuery) ||
+        item.teacher.toLowerCase().includes(searchQuery) ||
+        item.batch.toLowerCase().includes(searchQuery) ||
+        item.room.toLowerCase().includes(searchQuery)
+      );
+    }
+    return result;
+  })();
 
   const canManage = user?.role === "hod";
 

@@ -1,4 +1,4 @@
-import { collection, getDocs, doc, setDoc, updateDoc, deleteDoc, query, where } from "firebase/firestore";
+import { collection, getDocs, doc, setDoc, updateDoc, deleteDoc, query, where, onSnapshot, QuerySnapshot, DocumentData } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { toast } from "react-toastify";
 
@@ -51,10 +51,13 @@ export interface UpdateScheduleData {
   room?: string;
 }
 
+const docToSchedule = (snap: QuerySnapshot<DocumentData>): Schedule[] =>
+  snap.docs.map((d) => d.data() as Schedule).sort((a, b) => a.id - b.id);
+
 export const getSchedules = async (_token: string): Promise<Schedule[]> => {
   try {
     const snap = await getDocs(collection(db, "schedules"));
-    return snap.docs.map((d) => d.data() as Schedule).sort((a, b) => a.id - b.id);
+    return docToSchedule(snap);
   } catch (e) {
     toast.error("Failed to fetch schedules");
     throw e;
@@ -63,18 +66,77 @@ export const getSchedules = async (_token: string): Promise<Schedule[]> => {
 
 export const getSchedulesByBatch = async (batchId: number): Promise<Schedule[]> => {
   const snap = await getDocs(query(collection(db, "schedules"), where("batch_id", "==", batchId)));
-  return snap.docs.map((d) => d.data() as Schedule).sort((a, b) => a.id - b.id);
+  return docToSchedule(snap);
 };
 
 export const getSchedulesByDepartment = async (deptId: number): Promise<Schedule[]> => {
   const snap = await getDocs(query(collection(db, "schedules"), where("department_id", "==", deptId)));
-  return snap.docs.map((d) => d.data() as Schedule).sort((a, b) => a.id - b.id);
+  return docToSchedule(snap);
 };
 
 export const getSchedulesByTeacher = async (teacherId: number): Promise<Schedule[]> => {
   const snap = await getDocs(query(collection(db, "schedules"), where("teacher_id", "==", teacherId)));
-  return snap.docs.map((d) => d.data() as Schedule).sort((a, b) => a.id - b.id);
+  return docToSchedule(snap);
 };
+
+// ─── Real-time listeners ───────────────────────────────────────────────────────
+
+/**
+ * Subscribe to all schedules (admin / HOD fallback).
+ * Returns an unsubscribe function.
+ */
+export const subscribeToSchedules = (
+  callback: (schedules: Schedule[]) => void
+): (() => void) => {
+  return onSnapshot(collection(db, "schedules"), (snap) => {
+    const schedules = snap.docs.map((d) => d.data() as Schedule).sort((a, b) => a.id - b.id);
+    callback(schedules);
+  });
+};
+
+/**
+ * Subscribe to schedules for a specific batch (students / CR).
+ */
+export const subscribeToSchedulesByBatch = (
+  batchId: number,
+  callback: (schedules: Schedule[]) => void
+): (() => void) => {
+  const q = query(collection(db, "schedules"), where("batch_id", "==", batchId));
+  return onSnapshot(q, (snap) => {
+    const schedules = snap.docs.map((d) => d.data() as Schedule).sort((a, b) => a.id - b.id);
+    callback(schedules);
+  });
+};
+
+/**
+ * Subscribe to schedules for a specific department (HOD).
+ */
+export const subscribeToSchedulesByDepartment = (
+  deptId: number,
+  callback: (schedules: Schedule[]) => void
+): (() => void) => {
+  const q = query(collection(db, "schedules"), where("department_id", "==", deptId));
+  return onSnapshot(q, (snap) => {
+    const schedules = snap.docs.map((d) => d.data() as Schedule).sort((a, b) => a.id - b.id);
+    callback(schedules);
+  });
+};
+
+/**
+ * Subscribe to schedules for a specific teacher.
+ */
+export const subscribeToSchedulesByTeacher = (
+  teacherId: number,
+  callback: (schedules: Schedule[]) => void
+): (() => void) => {
+  const q = query(collection(db, "schedules"), where("teacher_id", "==", teacherId));
+  return onSnapshot(q, (snap) => {
+    const schedules = snap.docs.map((d) => d.data() as Schedule).sort((a, b) => a.id - b.id);
+    callback(schedules);
+  });
+};
+
+// ─── Write operations (HOD only) ──────────────────────────────────────────────
 
 export const createSchedule = async (_token: string, data: CreateScheduleData): Promise<Schedule> => {
   try {

@@ -11,6 +11,8 @@ export interface Notice {
   date: string;
   author: string;
   department_id?: number;
+  batch_id?: number;   // NEW: target batch (0 or undefined = all batches)
+  author_role?: string; // NEW: who posted it
 }
 
 export interface CreateNoticeData {
@@ -19,7 +21,9 @@ export interface CreateNoticeData {
   type: "info" | "warning" | "important";
   course?: string;
   department_id?: number;
+  batch_id?: number;
   author?: string;
+  author_role?: string;
 }
 
 export interface UpdateNoticeData {
@@ -27,15 +31,32 @@ export interface UpdateNoticeData {
   message?: string;
   type?: "info" | "warning" | "important";
   course?: string;
+  batch_id?: number;
 }
 
-export async function getNotices(_token: string, departmentId?: number): Promise<Notice[]> {
+/**
+ * Fetch notices.
+ * - If batchId provided: return notices for that batch OR notices with no batch (batch_id=0).
+ * - If departmentId provided: return notices for that department.
+ * - Otherwise: return all notices.
+ */
+export async function getNotices(
+  _token: string,
+  departmentId?: number,
+  batchId?: number
+): Promise<Notice[]> {
   try {
-    const q = departmentId
-      ? query(collection(db, "notices"), where("department_id", "==", departmentId))
-      : collection(db, "notices");
-    const snap = await getDocs(q);
-    return snap.docs.map((d) => d.data() as Notice).sort((a, b) => b.id - a.id);
+    const snap = await getDocs(collection(db, "notices"));
+    let all = snap.docs.map((d) => d.data() as Notice).sort((a, b) => b.id - a.id);
+
+    if (batchId && batchId > 0) {
+      // Students/CR see their batch notices + general notices (batch_id === 0 or undefined)
+      all = all.filter((n) => !n.batch_id || n.batch_id === 0 || n.batch_id === batchId);
+    } else if (departmentId && departmentId > 0) {
+      all = all.filter((n) => !n.department_id || n.department_id === 0 || n.department_id === departmentId);
+    }
+
+    return all;
   } catch (e) {
     toast.error("Failed to fetch notices");
     throw e;
@@ -55,7 +76,9 @@ export async function createNotice(_token: string, data: CreateNoticeData): Prom
       course: data.course || "",
       date: now,
       author: data.author || "Admin",
+      author_role: data.author_role || "",
       department_id: data.department_id || 0,
+      batch_id: data.batch_id || 0,
     };
     await setDoc(doc(db, "notices", `notice_${nextId}`), newNotice);
     toast.success("Notice created");

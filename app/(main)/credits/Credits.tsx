@@ -139,7 +139,7 @@ export default function Credits() {
                       <FaLinkedin className="text-lg" />
                     </a>
                     <a
-                      href="ubaydaazad@gmail.com"
+                      href="mailto:ubaydaazad@gmail.com"
                       className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors"
                     >
                       <FaEnvelope className="text-lg" />

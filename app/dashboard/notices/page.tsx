@@ -18,6 +18,9 @@ import {
   deleteNotice,
   Notice,
 } from "@/services/notice";
+import { getBatches, Batch } from "@/services/batch";
+import { getSchedulesByTeacher } from "@/services/schedule";
+import { getTeachers } from "@/services/teacher";
 import { toast } from "react-toastify";
 
 export default function NoticesPage() {
@@ -28,39 +31,66 @@ export default function NoticesPage() {
   const [selectedNotice, setSelectedNotice] = useState<Notice | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [teacherBatches, setTeacherBatches] = useState<Batch[]>([]);
   const [formData, setFormData] = useState({
     type: "info" as "info" | "warning" | "important",
     course: "",
     title: "",
     message: "",
+    batch_id: 0,
   });
 
   const [notices, setNotices] = useState<Notice[]>([]);
 
-  // Fetch notices from backend
+  // Fetch notices filtered by role
   useEffect(() => {
     const fetchNotices = async () => {
       try {
         setLoading(true);
         setError(null);
-        const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("No authentication token found");
+        const token = localStorage.getItem("token") || "";
+
+        let data: Notice[] = [];
+        if (user?.role === "student" || user?.role === "cr") {
+          const batchId = Number(user.batch);
+          data = await getNotices(token, undefined, batchId > 0 ? batchId : undefined);
+        } else if (user?.role === "hod") {
+          const deptId = Number(user.department);
+          data = await getNotices(token, deptId > 0 ? deptId : undefined);
+        } else {
+          data = await getNotices(token);
         }
-        const data = await getNotices(token);
         setNotices(data);
       } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Failed to fetch notices"
-        );
+        setError(err instanceof Error ? err.message : "Failed to fetch notices");
         console.error("Error fetching notices:", err);
       } finally {
         setLoading(false);
       }
     };
-
     fetchNotices();
-  }, []);
+  }, [user]);
+
+  // For teachers — fetch the batches they teach so they can target notices
+  useEffect(() => {
+    if (user?.role !== "teacher") return;
+    const fetchTeacherBatches = async () => {
+      try {
+        const token = localStorage.getItem("token") || "";
+        const teachers = await getTeachers(token);
+        const me = teachers.find((t) => t.email === user.email);
+        if (!me) return;
+        const schedules = await getSchedulesByTeacher(me.id);
+        const allBatches = await getBatches(token);
+        const myBatchIds = [...new Set(schedules.map((s) => s.batch_id))];
+        const myBatches = allBatches.filter((b) => myBatchIds.includes(b.id));
+        setTeacherBatches(myBatches);
+      } catch (err) {
+        console.error("Failed to fetch teacher batches:", err);
+      }
+    };
+    fetchTeacherBatches();
+  }, [user]);
 
   const canManage =
     user?.role === "cr" || user?.role === "teacher" || user?.role === "hod";
@@ -76,16 +106,22 @@ export default function NoticesPage() {
         return;
       }
 
+      const deptId = user?.department ? Number(user.department) : 0;
+
       const newNotice = await createNotice(token, {
         title: formData.title,
         message: formData.message,
         type: formData.type,
         course: formData.course || "General",
+        author: user?.name || "Teacher",
+        author_role: user?.role || "",
+        department_id: deptId > 0 ? deptId : 0,
+        batch_id: formData.batch_id || 0,
       });
 
       setNotices([newNotice, ...notices]);
       setShowAddModal(false);
-      setFormData({ type: "info", course: "", title: "", message: "" });
+      setFormData({ type: "info", course: "", title: "", message: "", batch_id: 0 });
     } catch (err) {
       console.error("Error creating notice:", err);
       toast.error("Failed to create notice. Please try again.");
@@ -114,7 +150,7 @@ export default function NoticesPage() {
       );
       setShowEditModal(false);
       setSelectedNotice(null);
-      setFormData({ type: "info", course: "", title: "", message: "" });
+      setFormData({ type: "info", course: "", title: "", message: "", batch_id: 0 });
     } catch (err) {
       console.error("Error updating notice:", err);
       toast.error("Failed to update notice. Please try again.");
@@ -148,6 +184,7 @@ export default function NoticesPage() {
       course: notice.course,
       title: notice.title,
       message: notice.message,
+      batch_id: notice.batch_id || 0,
     });
     setShowEditModal(true);
   };
@@ -232,6 +269,7 @@ export default function NoticesPage() {
                   course: "",
                   title: "",
                   message: "",
+                  batch_id: 0,
                 });
                 setShowAddModal(true);
               }}
@@ -399,6 +437,27 @@ export default function NoticesPage() {
                 />
               </div>
 
+              {/* Show batch selector only for teachers */}
+              {user?.role === "teacher" && teacherBatches.length > 0 && (
+                <div>
+                  <label className="block text-sm font-medium text-(--text)/80 mb-2">
+                    Target Batch
+                  </label>
+                  <select
+                    value={formData.batch_id}
+                    onChange={(e) =>
+                      setFormData({ ...formData, batch_id: Number(e.target.value) })
+                    }
+                    className="w-full px-4 py-2 border border-(--primary)/30 rounded-lg focus:ring-2 focus:ring-blue-500 bg-background text-(--text)"
+                  >
+                    <option value={0}>All Batches (General)</option>
+                    {teacherBatches.map((b) => (
+                      <option key={b.id} value={b.id}>{b.name}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
               <div>
                 <label className="block text-sm font-medium text-(--text)/80 mb-2">
                   Title
@@ -439,6 +498,7 @@ export default function NoticesPage() {
                     course: "",
                     title: "",
                     message: "",
+                    batch_id: 0,
                   });
                 }}
                 className="flex-1 px-4 py-2 border border-(--primary)/30 rounded-lg hover:bg-background-light"
@@ -542,6 +602,7 @@ export default function NoticesPage() {
                     course: "",
                     title: "",
                     message: "",
+                    batch_id: 0,
                   });
                 }}
                 className="flex-1 px-4 py-2 border border-(--primary)/30 rounded-lg hover:bg-background-light"
