@@ -168,10 +168,6 @@ export default function Header() {
   return (
     <header className="bg-background shadow-sm py-3 px-4 lg:px-6">
       <div className="flex items-center justify-between gap-4">
-        {/* Left: page label */}
-        <h2 className="text-lg font-semibold text-(--text) hidden sm:block pl-8 lg:pl-0">
-          Dashboard
-        </h2>
 
         {/* Desktop search */}
         <SearchBox {...searchBoxProps} className="hidden md:block w-72" />

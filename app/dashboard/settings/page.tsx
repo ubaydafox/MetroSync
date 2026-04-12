@@ -100,14 +100,15 @@ export default function SettingsPage() {
                   <p className="text-xs text-(--text)/60 mt-0.5">{desc}</p>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setNotifPrefs(prev => ({ ...prev, [key]: !prev[key as keyof typeof prev] }))}
-                  className={`relative w-11 h-6 rounded-full transition-colors duration-200 ${
+                  className={`relative shrink-0 w-11 h-6 rounded-full transition-colors duration-200 ${
                     notifPrefs[key as keyof typeof notifPrefs] ? "bg-primary" : "bg-slate-300 dark:bg-slate-600"
                   }`}
                 >
                   <span
-                    className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 ${
-                      notifPrefs[key as keyof typeof notifPrefs] ? "translate-x-6" : "translate-x-1"
+                    className={`absolute top-[3px] w-[18px] h-[18px] rounded-full bg-white shadow transition-transform duration-200 ${
+                      notifPrefs[key as keyof typeof notifPrefs] ? "translate-x-[21px]" : "translate-x-[3px]"
                     }`}
                   />
                 </button>
