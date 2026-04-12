@@ -2,7 +2,7 @@
 
 import { useGlobal } from "@/app/context/GlobalContext";
 import { FaCalendar, FaClock, FaMapMarkerAlt, FaBook, FaPlus, FaEdit, FaTrash } from "react-icons/fa";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   createSchedule, updateSchedule, deleteSchedule, Schedule,
@@ -14,7 +14,7 @@ import { getBatches, Batch } from "@/services/batch";
 import { getTeachers, Teacher } from "@/services/teacher";
 import { toast } from "react-toastify";
 
-export default function SchedulePage() {
+function ScheduleContent() {
   const { user } = useGlobal();
   const searchParams = useSearchParams();
   const [showAddModal, setShowAddModal] = useState(false);
@@ -798,5 +798,22 @@ export default function SchedulePage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function SchedulePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-transparent">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-(--text)/70 font-medium">Loading schedules...</p>
+          </div>
+        </div>
+      }
+    >
+      <ScheduleContent />
+    </Suspense>
   );
 }
