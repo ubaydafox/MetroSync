@@ -2,7 +2,7 @@
 
 import { useGlobal } from "@/app/context/GlobalContext";
 import { useTheme } from "next-themes";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   FaPalette,
   FaBell,
@@ -16,14 +16,14 @@ import { toast } from "react-toastify";
 export default function SettingsPage() {
   const { user } = useGlobal();
   const { theme, setTheme, resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
   const [notifPrefs, setNotifPrefs] = useState({
     scheduleUpdates: true,
     newNotices: true,
     systemAlerts: false,
   });
 
-  useEffect(() => { setMounted(true); }, []);
+  // resolvedTheme is undefined during SSR; use it to guard client-only UI
+  const isClient = resolvedTheme !== undefined;
 
   const handleSaveNotifications = () => {
     localStorage.setItem("notifPrefs", JSON.stringify(notifPrefs));
@@ -55,7 +55,7 @@ export default function SettingsPage() {
             Appearance
           </h2>
           <div className="grid grid-cols-3 gap-3">
-            {mounted && themeOptions.map(opt => (
+            {isClient && themeOptions.map(opt => (
               <button
                 key={opt.value}
                 onClick={() => setTheme(opt.value)}
@@ -73,7 +73,7 @@ export default function SettingsPage() {
               </button>
             ))}
           </div>
-          {mounted && (
+          {isClient && (
             <p className="text-xs text-(--text)/50 mt-3">
               Currently: <span className="font-medium capitalize">{resolvedTheme}</span> mode
             </p>

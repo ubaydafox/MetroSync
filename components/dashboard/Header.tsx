@@ -46,6 +46,68 @@ function buildSuggestions(value: string) {
   return results.slice(0, 5);
 }
 
+// ── SearchBox is defined OUTSIDE the parent component to satisfy react-hooks/static-components ──
+interface SearchBoxProps {
+  className?: string;
+  searchTerm: string;
+  suggestions: { label: string; path: string }[];
+  showSuggestions: boolean;
+  onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSubmit: (e: React.FormEvent) => void;
+  onFocus: () => void;
+  onBlur: () => void;
+  onSuggestionClick: (path: string) => void;
+}
+
+function SearchBox({
+  className = "",
+  searchTerm,
+  suggestions,
+  showSuggestions,
+  onInputChange,
+  onSubmit,
+  onFocus,
+  onBlur,
+  onSuggestionClick,
+}: SearchBoxProps) {
+  return (
+    <div className={`relative ${className}`}>
+      <form onSubmit={onSubmit}>
+        <button
+          type="submit"
+          className="absolute inset-y-0 left-0 flex items-center pl-3 hover:text-primary transition-colors cursor-pointer"
+        >
+          <FaSearch className="text-(--text)/40 hover:text-primary text-sm" />
+        </button>
+        <input
+          type="text"
+          placeholder="Search schedule, notices, day..."
+          value={searchTerm}
+          onChange={onInputChange}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          className="pl-9 pr-4 py-2 w-full border border-(--primary)/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm bg-background-light/60 text-(--text) placeholder:text-(--text)/40"
+        />
+      </form>
+
+      {showSuggestions && suggestions.length > 0 && (
+        <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-(--primary)/20 rounded-xl shadow-xl z-50 overflow-hidden">
+          {suggestions.map((s, i) => (
+            <button
+              key={i}
+              onMouseDown={() => onSuggestionClick(s.path)}
+              className="w-full text-left px-4 py-2.5 text-sm text-(--text)/80 hover:bg-primary/10 hover:text-primary transition-colors"
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Main Header component ──────────────────────────────────────────────────────
 export default function Header() {
   const { user } = useGlobal();
   const router = useRouter();
@@ -86,50 +148,33 @@ export default function Header() {
   };
 
   const handleSearch = (e: React.FormEvent) => { e.preventDefault(); doSearch(searchTerm); };
+  const handleSuggestionClick = (path: string) => {
+    router.push(path);
+    setShowSuggestions(false);
+    setSearchTerm("");
+  };
 
-  const SearchBox = ({ className = "" }: { className?: string }) => (
-    <div className={`relative ${className}`}>
-      <form onSubmit={handleSearch}>
-        <button type="submit" className="absolute inset-y-0 left-0 flex items-center pl-3 hover:text-primary transition-colors cursor-pointer">
-          <FaSearch className="text-(--text)/40 hover:text-primary text-sm" />
-        </button>
-        <input
-          type="text"
-          placeholder="Search schedule, notices, day..."
-          value={searchTerm}
-          onChange={handleInputChange}
-          onFocus={() => setShowSuggestions(suggestions.length > 0)}
-          onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-          className="pl-9 pr-4 py-2 w-full border border-(--primary)/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm bg-background-light/60 text-(--text) placeholder:text-(--text)/40"
-        />
-      </form>
-
-      {showSuggestions && suggestions.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-(--primary)/20 rounded-xl shadow-xl z-50 overflow-hidden">
-          {suggestions.map((s, i) => (
-            <button
-              key={i}
-              onMouseDown={() => { router.push(s.path); setShowSuggestions(false); setSearchTerm(""); }}
-              className="w-full text-left px-4 py-2.5 text-sm text-(--text)/80 hover:bg-primary/10 hover:text-primary transition-colors"
-            >
-              {s.label}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+  const searchBoxProps = {
+    searchTerm,
+    suggestions,
+    showSuggestions,
+    onInputChange: handleInputChange,
+    onSubmit: handleSearch,
+    onFocus: () => setShowSuggestions(suggestions.length > 0),
+    onBlur: () => setTimeout(() => setShowSuggestions(false), 150),
+    onSuggestionClick: handleSuggestionClick,
+  };
 
   return (
     <header className="bg-background shadow-sm py-3 px-4 lg:px-6">
       <div className="flex items-center justify-between gap-4">
-        {/* Left: page label - hidden on mobile (space for sidebar toggle) */}
-        <h2 className="text-lg font-semibold text-(--text) hidden sm:block ml-0 lg:ml-0 pl-8 lg:pl-0">
+        {/* Left: page label */}
+        <h2 className="text-lg font-semibold text-(--text) hidden sm:block pl-8 lg:pl-0">
           Dashboard
         </h2>
 
         {/* Desktop search */}
-        <SearchBox className="hidden md:block w-72" />
+        <SearchBox {...searchBoxProps} className="hidden md:block w-72" />
 
         {/* Right side */}
         <div className="flex items-center gap-2 ml-auto">
@@ -162,7 +207,7 @@ export default function Header() {
       {/* Mobile expanded search */}
       {mobileSearchOpen && (
         <div className="md:hidden mt-3">
-          <SearchBox className="w-full" />
+          <SearchBox {...searchBoxProps} className="w-full" />
         </div>
       )}
     </header>
