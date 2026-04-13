@@ -95,8 +95,22 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
       router.push("/dashboard");
     } catch (error: unknown) {
       console.error("Login error:", error);
-      const message =
-        error instanceof Error ? error.message : "Login failed";
+      const firebaseErrorMessages: Record<string, string> = {
+        "auth/invalid-credential": "Wrong email or password. Please try again.",
+        "auth/user-not-found": "No account found with this email.",
+        "auth/wrong-password": "Incorrect password. Please try again.",
+        "auth/invalid-email": "Please enter a valid email address.",
+        "auth/user-disabled": "This account has been disabled. Contact support.",
+        "auth/too-many-requests": "Too many failed attempts. Please try again later.",
+        "auth/network-request-failed": "Network error. Check your connection and try again.",
+      };
+      let message = "Login failed. Please try again.";
+      if (error && typeof error === "object" && "code" in error) {
+        const code = (error as { code: string }).code;
+        message = firebaseErrorMessages[code] ?? message;
+      } else if (error instanceof Error && !error.message.startsWith("Firebase:")) {
+        message = error.message;
+      }
       toast.error(message);
       return Promise.reject(error);
     } finally {
