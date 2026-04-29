@@ -7,7 +7,8 @@ import { useSearchParams } from "next/navigation";
 import {
   createSchedule, updateSchedule, deleteSchedule, Schedule,
   subscribeToSchedules, subscribeToSchedulesByBatch,
-  subscribeToSchedulesByDepartment, subscribeToSchedulesByTeacher
+  subscribeToSchedulesByDepartment, subscribeToSchedulesByTeacher,
+  checkScheduleConflicts, ConflictResult
 } from "@/services/schedule";
 import { getCourses, Course } from "@/services/course";
 import { getBatches, Batch } from "@/services/batch";
@@ -27,6 +28,47 @@ const DAY_COLORS: Record<string, { border: string; bg: string; icon: string; act
 
 const PAGE_SIZE = 8;
 
+// ─── Conflict Warning Banner ───────────────────────────────────────────────────
+function ConflictWarning({ conflicts }: { conflicts: ConflictResult[] }) {
+  if (conflicts.length === 0) return null;
+  const icons: Record<ConflictResult["type"], string> = {
+    room: "🏛",
+    teacher: "👨‍🏫",
+    batch: "🎓",
+  };
+  return (
+    <div className="mt-4 rounded-xl border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/20 p-4 space-y-2">
+      <p className="text-sm font-bold text-red-700 dark:text-red-400">⚠️ Scheduling Conflict Detected</p>
+      {conflicts.map((c, i) => (
+        <p key={i} className="text-xs text-red-600 dark:text-red-300 flex gap-2">
+          <span>{icons[c.type]}</span>
+          <span>{c.message}</span>
+        </p>
+      ))}
+    </div>
+  );
+}
+
+// ─── Delete Confirm Modal ──────────────────────────────────────────────────────
+function DeleteScheduleModal({ onConfirm, onCancel, item }: { onConfirm: () => void; onCancel: () => void; item: string }) {
+  return (
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[60] p-4">
+      <div className="bg-background rounded-2xl shadow-2xl max-w-sm w-full p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="p-3 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 text-lg">🗑</div>
+          <h2 className="text-lg font-bold text-(--text)">Delete Schedule</h2>
+        </div>
+        <p className="text-(--text)/70 text-sm mb-2">Are you sure you want to delete this class?</p>
+        <p className="font-medium text-sm bg-background-light/60 rounded-lg px-3 py-2 mb-6 text-(--text)">{item}</p>
+        <div className="flex gap-3">
+          <button onClick={onCancel} className="flex-1 px-4 py-2.5 border border-(--primary)/30 rounded-xl hover:bg-background-light text-(--text)/70 text-sm">Cancel</button>
+          <button onClick={onConfirm} className="flex-1 px-4 py-2.5 bg-red-600 text-white rounded-xl hover:bg-red-700 text-sm font-medium">Delete</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ScheduleContent() {
   const { user } = useGlobal();
   const searchParams = useSearchParams();
@@ -45,6 +87,8 @@ function ScheduleContent() {
   const [loadingCourses, setLoadingCourses] = useState(false);
   const [loadingBatches, setLoadingBatches] = useState(false);
   const [loadingTeachers, setLoadingTeachers] = useState(false);
+  const [conflicts, setConflicts] = useState<ConflictResult[]>([]);
+  const [deleteTarget, setDeleteTarget] = useState<{ id: number; label: string } | null>(null);
   const unsubscribeRef = useRef<(() => void) | null>(null);
 
   const [scheduleForm, setScheduleForm] = useState({
@@ -208,8 +252,8 @@ function ScheduleContent() {
   }, [user]);
 
   const handleAddSchedule = async () => {
-    if (!scheduleForm.course || !scheduleForm.batch || !scheduleForm.teacher || 
-        !scheduleForm.day || !scheduleForm.start_time || !scheduleForm.end_time || 
+    if (!scheduleForm.course || !scheduleForm.batch || !scheduleForm.teacher ||
+        !scheduleForm.day || !scheduleForm.start_time || !scheduleForm.end_time ||
         !scheduleForm.room) {
       toast.error("Please fill in all required fields");
       return;
@@ -224,42 +268,49 @@ function ScheduleContent() {
       const token = localStorage.getItem('token');
       if (!token) return;
 
-      // Get department ID - assuming user.department is the department name
-      const departmentId = parseInt(user.department); // Adjust this if department is stored differently
-
-      // Find names for the associated IDs
+      const departmentId = parseInt(user.department);
       const selectedCourse = courses.find(c => c.id === parseInt(scheduleForm.course));
-      const selectedBatch = batches.find(b => b.id === parseInt(scheduleForm.batch));
+      const selectedBatch  = batches.find(b => b.id === parseInt(scheduleForm.batch));
       const selectedTeacher = teachers.find(t => t.id === parseInt(scheduleForm.teacher));
-      const departmentName = user.department_name || user.department; // Try to get name from user object
+      const departmentName = user.department_name || user.department;
+
+      // ─── Conflict check BEFORE saving ─────────────────────────────────────
+      const found = await checkScheduleConflicts({
+        day:        scheduleForm.day,
+        start_time: scheduleForm.start_time + ":00",
+        end_time:   scheduleForm.end_time + ":00",
+        teacher_id: parseInt(scheduleForm.teacher),
+        batch_id:   parseInt(scheduleForm.batch),
+        room:       scheduleForm.room,
+      });
+
+      if (found.length > 0) {
+        setConflicts(found);
+        return; // Stop — show conflicts in the modal
+      }
+      setConflicts([]);
+      // ──────────────────────────────────────────────────────────────────────
 
       const newSchedule = await createSchedule(token, {
-        course: parseInt(scheduleForm.course),
-        course_name: selectedCourse?.name || "",
-        course_code: selectedCourse?.code || "",
-        batch: parseInt(scheduleForm.batch),
-        batch_name: selectedBatch?.name || "",
-        teacher: parseInt(scheduleForm.teacher),
-        teacher_name: selectedTeacher?.name || "",
-        day: scheduleForm.day.toLowerCase(),
-        start_time: scheduleForm.start_time + ':00',
-        end_time: scheduleForm.end_time + ':00',
-        room: scheduleForm.room,
-        department: departmentId,
+        course:          parseInt(scheduleForm.course),
+        course_name:     selectedCourse?.name || "",
+        course_code:     selectedCourse?.code || "",
+        batch:           parseInt(scheduleForm.batch),
+        batch_name:      selectedBatch?.name || "",
+        teacher:         parseInt(scheduleForm.teacher),
+        teacher_name:    selectedTeacher?.name || "",
+        day:             scheduleForm.day.toLowerCase(),
+        start_time:      scheduleForm.start_time + ":00",
+        end_time:        scheduleForm.end_time + ":00",
+        room:            scheduleForm.room,
+        department:      departmentId,
         department_name: departmentName
       });
 
       setRawSchedule([...rawSchedule, newSchedule]);
       setShowAddModal(false);
-      setScheduleForm({
-        course: "",
-        batch: "",
-        teacher: "",
-        day: "",
-        start_time: "",
-        end_time: "",
-        room: ""
-      });
+      setConflicts([]);
+      setScheduleForm({ course: "", batch: "", teacher: "", day: "", start_time: "", end_time: "", room: "" });
       toast.success("Schedule added successfully!");
     } catch (err) {
       toast.error("Failed to add schedule");
@@ -283,57 +334,73 @@ function ScheduleContent() {
 
   const handleUpdateSchedule = async () => {
     if (!editingSchedule) return;
-
-    if (!user?.department) {
-      toast.error("Department information not found");
-      return;
-    }
+    if (!user?.department) { toast.error("Department information not found"); return; }
 
     try {
       const token = localStorage.getItem('token');
       if (!token) return;
 
-      const departmentId = parseInt(user.department);
-      
+      const departmentId   = parseInt(user.department);
       const selectedCourse = courses.find(c => c.id === parseInt(scheduleForm.course));
-      const selectedBatch = batches.find(b => b.id === parseInt(scheduleForm.batch));
+      const selectedBatch  = batches.find(b => b.id === parseInt(scheduleForm.batch));
       const selectedTeacher = teachers.find(t => t.id === parseInt(scheduleForm.teacher));
-      const departmentName = user.department_name || user.department;
+      const departmentName  = user.department_name || user.department;
+
+      // Resolve final values (fall back to existing if not changed in form)
+      const finalTeacherId = scheduleForm.teacher ? parseInt(scheduleForm.teacher) : editingSchedule.teacher_id;
+      const finalBatchId   = scheduleForm.batch   ? parseInt(scheduleForm.batch)   : editingSchedule.batch_id;
+      const finalDay       = scheduleForm.day   || editingSchedule.day;
+      const finalStart     = scheduleForm.start_time ? scheduleForm.start_time + ":00" : editingSchedule.start_time;
+      const finalEnd       = scheduleForm.end_time   ? scheduleForm.end_time   + ":00" : editingSchedule.end_time;
+      const finalRoom      = scheduleForm.room || editingSchedule.room;
+
+      // ─── Conflict check BEFORE saving (exclude self) ──────────────────────
+      const found = await checkScheduleConflicts(
+        {
+          day:        finalDay,
+          start_time: finalStart,
+          end_time:   finalEnd,
+          teacher_id: finalTeacherId,
+          batch_id:   finalBatchId,
+          room:       finalRoom,
+        },
+        editingSchedule.id  // exclude self so it doesn't flag its own slot
+      );
+
+      if (found.length > 0) {
+        setConflicts(found);
+        return;
+      }
+      setConflicts([]);
+      // ──────────────────────────────────────────────────────────────────────
 
       const updated = await updateSchedule(token, editingSchedule.id, {
-        day: scheduleForm.day.toLowerCase(),
-        start_time: scheduleForm.start_time + ':00',
-        end_time: scheduleForm.end_time + ':00',
-        room: scheduleForm.room,
-        ...(scheduleForm.course && { 
-          course: parseInt(scheduleForm.course),
+        day:        finalDay.toLowerCase(),
+        start_time: finalStart,
+        end_time:   finalEnd,
+        room:       finalRoom,
+        ...(scheduleForm.course && {
+          course:      parseInt(scheduleForm.course),
           course_name: selectedCourse?.name,
           course_code: selectedCourse?.code
         }),
-        ...(scheduleForm.batch && { 
-          batch: parseInt(scheduleForm.batch),
+        ...(scheduleForm.batch && {
+          batch:      parseInt(scheduleForm.batch),
           batch_name: selectedBatch?.name
         }),
-        ...(scheduleForm.teacher && { 
-          teacher: parseInt(scheduleForm.teacher),
+        ...(scheduleForm.teacher && {
+          teacher:      parseInt(scheduleForm.teacher),
           teacher_name: selectedTeacher?.name
         }),
-        department: departmentId,
+        department:      departmentId,
         department_name: departmentName
       });
 
       setRawSchedule(rawSchedule.map(s => s.id === editingSchedule.id ? updated : s));
       setShowEditModal(false);
       setEditingSchedule(null);
-      setScheduleForm({
-        course: "",
-        batch: "",
-        teacher: "",
-        day: "",
-        start_time: "",
-        end_time: "",
-        room: ""
-      });
+      setConflicts([]);
+      setScheduleForm({ course: "", batch: "", teacher: "", day: "", start_time: "", end_time: "", room: "" });
       toast.success("Schedule updated successfully!");
     } catch (err) {
       toast.error("Failed to update schedule");
@@ -341,19 +408,23 @@ function ScheduleContent() {
     }
   };
 
-  const handleDeleteSchedule = async (id: number) => {
-    if (!confirm("Delete this schedule?")) return;
+  const handleDeleteSchedule = async (id: number, label: string) => {
+    setDeleteTarget({ id, label });
+  };
 
+  const confirmDelete = async () => {
+    if (!deleteTarget) return;
     try {
       const token = localStorage.getItem('token');
       if (!token) return;
-
-      await deleteSchedule(token, id);
-      setRawSchedule(rawSchedule.filter(s => s.id !== id));
+      await deleteSchedule(token, deleteTarget.id);
+      setRawSchedule(rawSchedule.filter(s => s.id !== deleteTarget.id));
       toast.success("Schedule deleted successfully!");
     } catch (err) {
       toast.error("Failed to delete schedule");
       console.error(err);
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -523,7 +594,7 @@ function ScheduleContent() {
                         <FaEdit />
                       </button>
                       <button
-                        onClick={() => handleDeleteSchedule(item.id)}
+                        onClick={() => handleDeleteSchedule(item.id, `${item.courseName} — ${item.day} ${item.time}`)}
                         className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                       >
                         <FaTrash />
@@ -727,29 +798,25 @@ function ScheduleContent() {
               </div>
             </div>
 
+            {/* Conflict Warning */}
+            <ConflictWarning conflicts={conflicts} />
+
             <div className="flex gap-3 mt-6">
-              <button 
+              <button
                 onClick={() => {
                   setShowAddModal(false);
-                  setScheduleForm({
-                    course: "",
-                    batch: "",
-                    teacher: "",
-                    day: "",
-                    start_time: "",
-                    end_time: "",
-                    room: ""
-                  });
-                }} 
+                  setConflicts([]);
+                  setScheduleForm({ course: "", batch: "", teacher: "", day: "", start_time: "", end_time: "", room: "" });
+                }}
                 className="flex-1 px-4 py-2 border border-(--primary)/30 rounded-lg hover:bg-background-light"
               >
                 Cancel
               </button>
-              <button 
+              <button
                 onClick={handleAddSchedule}
                 className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
-                Add Schedule
+                {conflicts.length > 0 ? "Check Again" : "Add Schedule"}
               </button>
             </div>
           </div>
@@ -859,34 +926,39 @@ function ScheduleContent() {
               </div>
             </div>
 
+            {/* Conflict Warning */}
+            <ConflictWarning conflicts={conflicts} />
+
             <div className="flex gap-3 mt-6">
-              <button 
+              <button
                 onClick={() => {
                   setShowEditModal(false);
                   setEditingSchedule(null);
-                  setScheduleForm({
-                    course: "",
-                    batch: "",
-                    teacher: "",
-                    day: "",
-                    start_time: "",
-                    end_time: "",
-                    room: ""
-                  });
-                }} 
+                  setConflicts([]);
+                  setScheduleForm({ course: "", batch: "", teacher: "", day: "", start_time: "", end_time: "", room: "" });
+                }}
                 className="flex-1 px-4 py-2 border border-(--primary)/30 rounded-lg hover:bg-background-light"
               >
                 Cancel
               </button>
-              <button 
+              <button
                 onClick={handleUpdateSchedule}
                 className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
-                Update Schedule
+                {conflicts.length > 0 ? "Check Again" : "Update Schedule"}
               </button>
             </div>
           </div>
         </div>
+      )}
+
+      {/* Custom Delete Confirmation Modal */}
+      {deleteTarget && (
+        <DeleteScheduleModal
+          item={deleteTarget.label}
+          onConfirm={confirmDelete}
+          onCancel={() => setDeleteTarget(null)}
+        />
       )}
     </div>
   );
