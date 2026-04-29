@@ -1,5 +1,5 @@
 import {
-  collection, getDocs, doc, setDoc, updateDoc, deleteDoc, query, where, serverTimestamp
+  collection, getDocs, doc, setDoc, updateDoc, deleteDoc, query, where, serverTimestamp, getCountFromServer
 } from "firebase/firestore";
 import { db, firebaseConfig } from "@/utils/firebase";
 import { toast } from "react-toastify";
@@ -44,8 +44,12 @@ export async function getTeachers(_token: string, departmentId?: number): Promis
 // Create a new teacher
 export async function createTeacher(_token: string, data: CreateTeacherData): Promise<Teacher> {
   try {
-    const snap = await getDocs(collection(db, "teachers"));
-    const nextId = snap.size + 1;
+    // Fix: Use getCountFromServer() for an atomic server-side count,
+    // which is safer than getDocs().size (avoids loading all docs into memory).
+    // For true collision safety a transaction or addDoc() should be used,
+    // but this matches the existing ID-naming scheme (teacher_N).
+    const countSnap = await getCountFromServer(collection(db, "teachers"));
+    const nextId = countSnap.data().count + 1;
     
     // 1. Generate random password
     const tempPassword = Math.random().toString(36).slice(-8);

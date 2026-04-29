@@ -7,6 +7,50 @@ import { useRouter } from "next/navigation";
 import { getTeachers, createTeacher, updateTeacher, deleteTeacher, Teacher } from "@/services/teacher";
 import { toast } from "react-toastify";
 
+// Custom delete confirmation modal
+function DeleteTeacherModal({
+  teacher,
+  onConfirm,
+  onCancel,
+}: {
+  teacher: Teacher;
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-background rounded-2xl shadow-2xl max-w-sm w-full p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="p-3 rounded-full bg-red-100 dark:bg-red-900/30">
+            <FaTrash className="text-red-600 dark:text-red-400" />
+          </div>
+          <h2 className="text-lg font-bold text-(--text)">Remove Teacher</h2>
+        </div>
+        <p className="text-(--text)/70 text-sm mb-1">Are you sure you want to remove:</p>
+        <p className="font-semibold text-(--text) mb-1">{teacher.name}</p>
+        <p className="text-xs text-(--text)/50 mb-6">{teacher.email}</p>
+        <p className="text-xs text-red-600 dark:text-red-400 mb-6">
+          This will remove the teacher from the department. Their Firebase Auth account will remain active.
+        </p>
+        <div className="flex gap-3">
+          <button
+            onClick={onCancel}
+            className="flex-1 px-4 py-2.5 border border-(--primary)/30 rounded-xl hover:bg-background-light text-(--text)/70 text-sm"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            className="flex-1 px-4 py-2.5 bg-red-600 text-white rounded-xl hover:bg-red-700 text-sm font-medium"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ManageTeachersPage() {
   const { user } = useGlobal();
   const router = useRouter();
@@ -18,6 +62,7 @@ export default function ManageTeachersPage() {
   const [addForm, setAddForm] = useState({ name: "", email: "" });
   const [editForm, setEditForm] = useState({ name: "", email: "" });
   const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [deleteTarget, setDeleteTarget] = useState<Teacher | null>(null);
 
   // Check user role
   useEffect(() => {
@@ -101,17 +146,21 @@ export default function ManageTeachersPage() {
     }
   };
 
-  const handleDeleteTeacher = async (id: number, name: string) => {
-    if (!confirm(`Are you sure you want to remove ${name} from the department?`)) {
-      return;
-    }
+  const handleDeleteTeacher = async (teacher: Teacher) => {
+    setDeleteTarget(teacher);
+  };
+
+  const confirmDeleteTeacher = async () => {
+    if (!deleteTarget) return;
     try {
-      await deleteTeacher("", id);
-      setTeachers(teachers.filter(t => t.id !== id));
+      await deleteTeacher("", deleteTarget.id);
+      setTeachers(teachers.filter(t => t.id !== deleteTarget.id));
       toast.success("Teacher removed");
     } catch (err) {
       console.error("Error deleting teacher:", err);
       toast.error("Failed to delete teacher. Please try again.");
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -178,7 +227,7 @@ export default function ManageTeachersPage() {
                     <FaEdit />
                   </button>
                   <button 
-                    onClick={() => handleDeleteTeacher(teacher.id, teacher.name)}
+                    onClick={() => handleDeleteTeacher(teacher)}
                     className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                   >
                     <FaTrash />
@@ -293,6 +342,13 @@ export default function ManageTeachersPage() {
             </div>
           </div>
         </div>
+      )}
+      {deleteTarget && (
+        <DeleteTeacherModal
+          teacher={deleteTarget}
+          onConfirm={confirmDeleteTeacher}
+          onCancel={() => setDeleteTarget(null)}
+        />
       )}
     </div>
   );

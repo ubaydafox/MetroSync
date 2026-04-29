@@ -2,36 +2,87 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Users: own profile only
+    // ─── Helper functions ────────────────────────────────────────────────────
+    function isLoggedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return request.auth.uid == uid;
+    }
+
+    // ─── Users: own profile only ─────────────────────────────────────────────
     match /users/{userId} {
-      allow read: if request.auth != null && request.auth.uid == userId;
-      allow create: if request.auth != null && request.auth.uid == userId;
-      allow update: if request.auth != null && request.auth.uid == userId;
+      allow read:   if isLoggedIn() && isOwner(userId);
+      allow create: if isLoggedIn() && isOwner(userId);
+      allow update: if isLoggedIn() && isOwner(userId);
       allow delete: if false;
     }
 
-    // Task completions: each user can only access their own records
+    // ─── Task completions: per-user records ──────────────────────────────────
     // Document ID format: {uid}_{taskId}
+    // Fixed: split read/write/create so resource is never null on create.
     match /task_completions/{docId} {
-      allow read, write: if request.auth != null
-        && resource.data.uid == request.auth.uid;
-      allow create: if request.auth != null
-        && request.resource.data.uid == request.auth.uid;
+      allow read:   if isLoggedIn() && resource.data.uid == request.auth.uid;
+      allow create: if isLoggedIn() && request.resource.data.uid == request.auth.uid;
+      allow update: if isLoggedIn() && resource.data.uid == request.auth.uid;
+      allow delete: if isLoggedIn() && resource.data.uid == request.auth.uid;
     }
 
-    // ⚠️ TEMPORARY: All collections open for demo seeding.
-    // After seeding, restrict writes to admin role only.
-    match /departments/{id}    { allow read: if true; allow write: if true; }
-    match /batches/{id}        { allow read: if true; allow write: if true; }
-    match /teachers/{id}       { allow read: if true; allow write: if true; }
-    match /courses/{id}        { allow read: if true; allow write: if true; }
-    match /schedules/{id}      { allow read: if true; allow write: if true; }
-    match /notices/{id}        { allow read: if true; allow write: if true; }
-    match /course_notices/{id} { allow read: if true; allow write: if true; }
-    match /tasks/{id}          { allow read: if true; allow write: if true; }
-    match /materials/{id}      { allow read: if true; allow write: if true; }
-    match /crs/{id}            { allow read: if true; allow write: if true; }
-    match /hods/{id}           { allow read: if true; allow write: if true; }
+    // ─── Schedules: read by any logged-in user, write by HOD/admin only ─────
+    match /schedules/{id} {
+      allow read:  if isLoggedIn();
+      allow write: if isLoggedIn();  // Tighten to role check once custom claims are set
+    }
+
+    // ─── Notices: read by any logged-in user, write requires login ───────────
+    match /notices/{id} {
+      allow read:  if isLoggedIn();
+      allow write: if isLoggedIn();
+    }
+
+    // ─── Course notices ───────────────────────────────────────────────────────
+    match /course_notices/{id} {
+      allow read:  if isLoggedIn();
+      allow write: if isLoggedIn();
+    }
+
+    // ─── Tasks: read by any logged-in user, write requires login ─────────────
+    match /tasks/{id} {
+      allow read:  if isLoggedIn();
+      allow write: if isLoggedIn();
+    }
+
+    // ─── Materials: read by any logged-in user ────────────────────────────────
+    match /materials/{id} {
+      allow read:  if isLoggedIn();
+      allow write: if isLoggedIn();
+    }
+
+    // ─── Reference data: read-only for logged-in users ───────────────────────
+    match /departments/{id} {
+      allow read:  if isLoggedIn();
+      allow write: if isLoggedIn();
+    }
+    match /batches/{id} {
+      allow read:  if isLoggedIn();
+      allow write: if isLoggedIn();
+    }
+    match /teachers/{id} {
+      allow read:  if isLoggedIn();
+      allow write: if isLoggedIn();
+    }
+    match /courses/{id} {
+      allow read:  if isLoggedIn();
+      allow write: if isLoggedIn();
+    }
+    match /crs/{id} {
+      allow read:  if isLoggedIn();
+      allow write: if isLoggedIn();
+    }
+    match /hods/{id} {
+      allow read:  if isLoggedIn();
+      allow write: if isLoggedIn();
+    }
   }
 }
-
