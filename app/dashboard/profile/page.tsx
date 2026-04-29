@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useGlobal } from "@/app/context/GlobalContext";
 import {
   FaUser, FaEnvelope, FaBuilding, FaUserTag, FaEdit, FaSave, FaTimes,
@@ -172,11 +173,15 @@ export default function ProfilePage() {
               <div className="relative group">
                 <div className="w-28 h-28 rounded-full bg-background p-1.5 shadow-xl">
                   {user?.photoURL ? (
-                    <img
-                      src={user.photoURL}
-                      alt={user.name}
-                      className="w-full h-full rounded-full object-cover"
-                    />
+                    <div className="relative w-full h-full rounded-full overflow-hidden">
+                      <Image
+                        src={user.photoURL}
+                        alt={user.name || "Avatar"}
+                        fill
+                        className="object-cover"
+                        sizes="112px"
+                      />
+                    </div>
                   ) : (
                     <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-4xl font-bold">
                       {user?.name?.charAt(0)?.toUpperCase()}
