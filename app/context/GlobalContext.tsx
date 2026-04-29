@@ -90,6 +90,7 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Issue 2: refreshUser re-fetches Firestore profile without a page reload
   const refreshUser = useCallback(async () => {
+    if (!auth || !db) return; // Firebase not initialized (env vars missing)
     const firebaseUser = auth.currentUser;
     if (!firebaseUser) return;
     try {
@@ -104,6 +105,10 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Login with email/password via Firebase Auth
   const login = async (email: string, password: string) => {
+    if (!auth || !db) {
+      toast.error("Firebase is not configured. Contact your administrator.");
+      return Promise.reject(new Error("Firebase not initialized"));
+    }
     setLoading(true);
     try {
       const credential = await signInWithEmailAndPassword(auth, email, password);
@@ -142,7 +147,7 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = useCallback(async () => {
     setLoading(true);
     try {
-      await firebaseSignOut(auth);
+      if (auth) await firebaseSignOut(auth);
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
@@ -155,6 +160,12 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Listen to Firebase Auth state changes to restore session on refresh
   useEffect(() => {
+    // If Firebase isn't initialized (env vars missing), just mark loading done.
+    if (!auth || !db) {
+      setLoading(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         try {
