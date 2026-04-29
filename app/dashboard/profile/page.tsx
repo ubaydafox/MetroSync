@@ -3,33 +3,37 @@
 import { useGlobal } from "@/app/context/GlobalContext";
 import {
   FaUser, FaEnvelope, FaBuilding, FaUserTag, FaEdit, FaSave, FaTimes,
-  FaLock, FaUserGraduate, FaIdBadge,
+  FaLock, FaUserGraduate, FaIdBadge, FaCamera,
 } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { toast } from "react-toastify";
 import { doc, updateDoc } from "firebase/firestore";
-import { db } from "@/utils/firebase";
+import { db, storage } from "@/utils/firebase";
+import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
   getAuth, reauthenticateWithCredential, EmailAuthProvider, updatePassword,
 } from "firebase/auth";
 
 export default function ProfilePage() {
-  const { user, departments } = useGlobal();
+  const { user, departments, refreshUser } = useGlobal();
   const [isEditing, setIsEditing] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [avatarUploading, setAvatarUploading] = useState(false);
   const [formData, setFormData] = useState({ name: user?.name || "" });
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
+  const avatarInputRef = useRef<HTMLInputElement>(null);
 
   const deptName =
     departments.find(d => d.id === Number(user?.department))?.name ||
     user?.department_name ||
     "Not Assigned";
 
+  // ─── Profile name save — Issue 2: uses refreshUser() not window.location.reload()
   const handleSave = async () => {
     if (!formData.name.trim()) { toast.error("Name cannot be empty"); return; }
     setSaving(true);
@@ -38,9 +42,9 @@ export default function ProfilePage() {
       const uid = auth.currentUser?.uid;
       if (!uid) throw new Error("Not authenticated");
       await updateDoc(doc(db, "users", uid), { name: formData.name });
+      await refreshUser();          // ← no page reload, context updates in memory
       toast.success("Profile updated!");
       setIsEditing(false);
-      window.location.reload();
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Failed to update profile");
     } finally {
@@ -48,6 +52,41 @@ export default function ProfilePage() {
     }
   };
 
+  // ─── Avatar upload (new feature)
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("Image must be under 2 MB");
+      return;
+    }
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image file");
+      return;
+    }
+
+    setAvatarUploading(true);
+    try {
+      const auth = getAuth();
+      const uid = auth.currentUser?.uid;
+      if (!uid) throw new Error("Not authenticated");
+
+      const fileRef = storageRef(storage, `avatars/${uid}`);
+      await uploadBytes(fileRef, file);
+      const downloadURL = await getDownloadURL(fileRef);
+
+      await updateDoc(doc(db, "users", uid), { photoURL: downloadURL });
+      await refreshUser();
+      toast.success("Avatar updated!");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to upload avatar");
+    } finally {
+      setAvatarUploading(false);
+    }
+  };
+
+  // ─── Password change — Issue 16: use error.code not error.message.includes()
   const handlePasswordChange = async () => {
     if (!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword) {
       toast.error("Please fill all fields"); return;
@@ -69,9 +108,13 @@ export default function ProfilePage() {
       toast.success("Password changed successfully!");
       setPasswordData({ currentPassword: "", newPassword: "", confirmPassword: "" });
       setIsChangingPassword(false);
-    } catch (e) {
-      if (e instanceof Error && e.message.includes("wrong-password")) {
+    } catch (e: unknown) {
+      // Issue 16 fix: check error.code (Firebase standard), not error.message
+      const code = (e as { code?: string })?.code;
+      if (code === "auth/wrong-password" || code === "auth/invalid-credential") {
         toast.error("Current password is incorrect");
+      } else if (code === "auth/too-many-requests") {
+        toast.error("Too many attempts. Please try again later.");
       } else {
         toast.error(e instanceof Error ? e.message : "Failed to change password");
       }
@@ -104,7 +147,7 @@ export default function ProfilePage() {
                   disabled={saving}
                   className="flex items-center gap-2 px-5 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors disabled:opacity-60"
                 >
-                  <FaSave /> {saving ? "Saving..." : "Save"}
+                  <FaSave /> {saving ? "Saving…" : "Save"}
                 </button>
               </>
             ) : (
@@ -125,11 +168,43 @@ export default function ProfilePage() {
 
           <div className="px-8 pb-8">
             <div className="flex items-end -mt-14 mb-6">
-              <div className="w-28 h-28 rounded-full bg-background p-2 shadow-xl">
-                <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-4xl font-bold">
-                  {user?.name?.charAt(0)?.toUpperCase()}
+              {/* Avatar with upload button */}
+              <div className="relative group">
+                <div className="w-28 h-28 rounded-full bg-background p-1.5 shadow-xl">
+                  {user?.photoURL ? (
+                    <img
+                      src={user.photoURL}
+                      alt={user.name}
+                      className="w-full h-full rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-4xl font-bold">
+                      {user?.name?.charAt(0)?.toUpperCase()}
+                    </div>
+                  )}
                 </div>
+                {/* Camera overlay for avatar upload */}
+                <button
+                  onClick={() => avatarInputRef.current?.click()}
+                  disabled={avatarUploading}
+                  className="absolute inset-0 w-28 h-28 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white cursor-pointer disabled:cursor-wait"
+                  title="Change avatar"
+                >
+                  {avatarUploading ? (
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white" />
+                  ) : (
+                    <FaCamera className="text-xl" />
+                  )}
+                </button>
+                <input
+                  ref={avatarInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleAvatarChange}
+                />
               </div>
+
               <div className="ml-5 mb-1">
                 <h2 className="text-2xl font-bold text-(--text)">{user?.name}</h2>
                 <p className="text-(--text)/60 capitalize text-sm">{user?.role}</p>
@@ -218,7 +293,7 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Password Change */}
+        {/* Password & Security */}
         <div className="bg-background rounded-2xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-bold text-(--text) flex items-center gap-2">
@@ -236,39 +311,28 @@ export default function ProfilePage() {
 
           {isChangingPassword ? (
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-(--text)/70 mb-1.5">Current Password</label>
-                <input
-                  type="password"
-                  value={passwordData.currentPassword}
-                  onChange={e => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
-                  className="w-full px-4 py-2.5 border border-(--primary)/30 rounded-xl bg-background text-(--text) focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter current password"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-(--text)/70 mb-1.5">New Password</label>
-                <input
-                  type="password"
-                  value={passwordData.newPassword}
-                  onChange={e => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-                  className="w-full px-4 py-2.5 border border-(--primary)/30 rounded-xl bg-background text-(--text) focus:ring-2 focus:ring-blue-500"
-                  placeholder="Min. 6 characters"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-(--text)/70 mb-1.5">Confirm New Password</label>
-                <input
-                  type="password"
-                  value={passwordData.confirmPassword}
-                  onChange={e => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
-                  className="w-full px-4 py-2.5 border border-(--primary)/30 rounded-xl bg-background text-(--text) focus:ring-2 focus:ring-blue-500"
-                  placeholder="Re-enter new password"
-                />
-              </div>
+              {[
+                { label: "Current Password", key: "currentPassword", placeholder: "Enter current password" },
+                { label: "New Password",     key: "newPassword",     placeholder: "Min. 6 characters" },
+                { label: "Confirm New Password", key: "confirmPassword", placeholder: "Re-enter new password" },
+              ].map(({ label, key, placeholder }) => (
+                <div key={key}>
+                  <label className="block text-sm font-medium text-(--text)/70 mb-1.5">{label}</label>
+                  <input
+                    type="password"
+                    value={passwordData[key as keyof typeof passwordData]}
+                    onChange={e => setPasswordData({ ...passwordData, [key]: e.target.value })}
+                    className="w-full px-4 py-2.5 border border-(--primary)/30 rounded-xl bg-background text-(--text) focus:ring-2 focus:ring-blue-500"
+                    placeholder={placeholder}
+                  />
+                </div>
+              ))}
               <div className="flex gap-3 pt-2">
                 <button
-                  onClick={() => { setIsChangingPassword(false); setPasswordData({ currentPassword: "", newPassword: "", confirmPassword: "" }); }}
+                  onClick={() => {
+                    setIsChangingPassword(false);
+                    setPasswordData({ currentPassword: "", newPassword: "", confirmPassword: "" });
+                  }}
                   className="flex-1 px-4 py-2.5 border border-(--primary)/30 rounded-xl hover:bg-background-light transition-colors text-(--text)/70"
                 >
                   Cancel
@@ -278,7 +342,7 @@ export default function ProfilePage() {
                   disabled={saving}
                   className="flex-1 px-4 py-2.5 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors font-medium disabled:opacity-60"
                 >
-                  {saving ? "Updating..." : "Update Password"}
+                  {saving ? "Updating…" : "Update Password"}
                 </button>
               </div>
             </div>

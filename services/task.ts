@@ -1,5 +1,5 @@
-import { collection, getDocs, doc, setDoc, updateDoc, deleteDoc, query, where } from "firebase/firestore";
-import { db } from "@/utils/firebase";
+import { collection, getDocs, doc, setDoc, updateDoc, deleteDoc, query, where, getDoc } from "firebase/firestore";
+import { db, auth } from "@/utils/firebase";
 import { toast } from "react-toastify";
 
 export interface Task {
@@ -86,3 +86,49 @@ export async function deleteTask(_token: string, courseId: string, taskId: numbe
     throw e;
   }
 }
+
+/**
+ * Mark a task as done for the current user.
+ * Writes to /task_completions/{uid}_{taskId} so it's per-user and doesn't
+ * mutate the shared task document.
+ */
+export async function markTaskDone(taskId: number): Promise<void> {
+  const uid = auth.currentUser?.uid;
+  if (!uid) throw new Error("Not authenticated");
+  const completionId = `${uid}_${taskId}`;
+  await setDoc(doc(db, "task_completions", completionId), {
+    uid,
+    taskId,
+    completedAt: new Date().toISOString(),
+  });
+}
+
+export async function unmarkTaskDone(taskId: number): Promise<void> {
+  const uid = auth.currentUser?.uid;
+  if (!uid) throw new Error("Not authenticated");
+  await deleteDoc(doc(db, "task_completions", `${uid}_${taskId}`));
+}
+
+export async function isTaskDone(taskId: number): Promise<boolean> {
+  const uid = auth.currentUser?.uid;
+  if (!uid) return false;
+  const snap = await getDoc(doc(db, "task_completions", `${uid}_${taskId}`));
+  return snap.exists();
+}
+
+/**
+ * Get all completed task IDs for the current user from a list of task IDs.
+ */
+export async function getCompletedTaskIds(taskIds: number[]): Promise<Set<number>> {
+  const uid = auth.currentUser?.uid;
+  if (!uid || taskIds.length === 0) return new Set();
+  const completed = new Set<number>();
+  await Promise.all(
+    taskIds.map(async (id) => {
+      const snap = await getDoc(doc(db, "task_completions", `${uid}_${id}`));
+      if (snap.exists()) completed.add(id);
+    })
+  );
+  return completed;
+}
+

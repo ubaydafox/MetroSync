@@ -31,6 +31,7 @@ type User = {
   batch?: string;
   batch_name?: string;
   roll?: string;
+  photoURL?: string;
 };
 
 interface GlobalContextType {
@@ -40,6 +41,7 @@ interface GlobalContextType {
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  refreshUser: () => Promise<void>;
   loading: boolean;
   setLoading: Dispatch<SetStateAction<boolean>>;
 }
@@ -54,11 +56,51 @@ export const useGlobal = () => {
   return context;
 };
 
+// Issue 4: Extracted helper — no more duplicate mapping blocks
+function mapUserData(uid: string, data: Record<string, unknown>): User {
+  return {
+    id: uid,
+    name: (data.name as string) || "",
+    email: (data.email as string) || "",
+    role: (data.role as string) || "student",
+    department: (data.department as string) || "",
+    department_name: (data.department_name as string) || "",
+    batch: (data.batch as string) || "",
+    batch_name: (data.batch_name as string) || "",
+    roll: (data.roll as string) || "",
+    photoURL: (data.photoURL as string) || "",
+  };
+}
+
+const firebaseErrorMessages: Record<string, string> = {
+  "auth/invalid-credential": "Wrong email or password. Please try again.",
+  "auth/user-not-found": "No account found with this email.",
+  "auth/wrong-password": "Incorrect password. Please try again.",
+  "auth/invalid-email": "Please enter a valid email address.",
+  "auth/user-disabled": "This account has been disabled. Contact support.",
+  "auth/too-many-requests": "Too many failed attempts. Please try again later.",
+  "auth/network-request-failed": "Network error. Check your connection and try again.",
+};
+
 export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+
+  // Issue 2: refreshUser re-fetches Firestore profile without a page reload
+  const refreshUser = useCallback(async () => {
+    const firebaseUser = auth.currentUser;
+    if (!firebaseUser) return;
+    try {
+      const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
+      if (userDoc.exists()) {
+        setUser(mapUserData(firebaseUser.uid, userDoc.data()));
+      }
+    } catch (error) {
+      console.error("Failed to refresh user:", error);
+    }
+  }, []);
 
   // Login with email/password via Firebase Auth
   const login = async (email: string, password: string) => {
@@ -73,20 +115,7 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
         throw new Error("User profile not found. Please register first.");
       }
 
-      const data = userDoc.data();
-      const userData: User = {
-        id: firebaseUser.uid,
-        name: data.name || firebaseUser.displayName || "",
-        email: data.email || firebaseUser.email || "",
-        role: data.role || "student",
-        department: data.department || "",
-        department_name: data.department_name || "",
-        batch: data.batch || "",
-        batch_name: data.batch_name || "",
-        roll: data.roll || "",
-      };
-
-      setUser(userData);
+      setUser(mapUserData(firebaseUser.uid, userDoc.data()));
 
       // Store Firebase ID token
       const idToken = await firebaseUser.getIdToken();
@@ -95,15 +124,6 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
       router.push("/dashboard");
     } catch (error: unknown) {
       console.error("Login error:", error);
-      const firebaseErrorMessages: Record<string, string> = {
-        "auth/invalid-credential": "Wrong email or password. Please try again.",
-        "auth/user-not-found": "No account found with this email.",
-        "auth/wrong-password": "Incorrect password. Please try again.",
-        "auth/invalid-email": "Please enter a valid email address.",
-        "auth/user-disabled": "This account has been disabled. Contact support.",
-        "auth/too-many-requests": "Too many failed attempts. Please try again later.",
-        "auth/network-request-failed": "Network error. Check your connection and try again.",
-      };
       let message = "Login failed. Please try again.";
       if (error && typeof error === "object" && "code" in error) {
         const code = (error as { code: string }).code;
@@ -143,17 +163,7 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
             const data = userDoc.data();
             // Only set user if onboarding is complete (has department)
             if (data.department) {
-              setUser({
-                id: firebaseUser.uid,
-                name: data.name || firebaseUser.displayName || "",
-                email: data.email || firebaseUser.email || "",
-                role: data.role || "student",
-                department: data.department || "",
-                department_name: data.department_name || "",
-                batch: data.batch || "",
-                batch_name: data.batch_name || "",
-                roll: data.roll || "",
-              });
+              setUser(mapUserData(firebaseUser.uid, data));
             }
           }
         } catch (error) {
@@ -192,6 +202,7 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
         isAuthenticated: !!user,
         login,
         logout,
+        refreshUser,
         loading,
         departments,
         setDepartments,

@@ -10,6 +10,15 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    // Task completions: each user can only access their own records
+    // Document ID format: {uid}_{taskId}
+    match /task_completions/{docId} {
+      allow read, write: if request.auth != null
+        && resource.data.uid == request.auth.uid;
+      allow create: if request.auth != null
+        && request.resource.data.uid == request.auth.uid;
+    }
+
     // ⚠️ TEMPORARY: All collections open for demo seeding.
     // After seeding, restrict writes to admin role only.
     match /departments/{id}    { allow read: if true; allow write: if true; }
@@ -25,3 +34,4 @@ service cloud.firestore {
     match /hods/{id}           { allow read: if true; allow write: if true; }
   }
 }
+

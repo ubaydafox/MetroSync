@@ -24,10 +24,12 @@ export interface User {
   password: string;
 }
 
+// Issue 8: Removed duplicate Department interface — single source of truth
 export interface Department {
   id: number;
   name: string;
-  full_name: string;
+  full_name?: string;
+  short_name?: string;
 }
 
 export interface Teacher {
@@ -52,11 +54,6 @@ export interface Batch {
   session: string;
   department_id: number;
   department_name?: string;
-}
-
-export interface Department {
-  id: number;
-  name: string;
 }
 
 export interface Room {

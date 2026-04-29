@@ -13,11 +13,32 @@ import { toast } from "react-toastify";
 
 const PAGE_SIZE = 8;
 
+// Custom delete confirmation
+function DeleteModal({ notice, onConfirm, onCancel }: { notice: Notice; onConfirm: () => void; onCancel: () => void }) {
+  return (
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-background rounded-2xl shadow-2xl max-w-sm w-full p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="p-3 rounded-full bg-red-100 dark:bg-red-900/30"><FaTrash className="text-red-600" /></div>
+          <h2 className="text-lg font-bold text-(--text)">Delete Notice</h2>
+        </div>
+        <p className="text-(--text)/70 text-sm mb-2">Are you sure you want to delete:</p>
+        <p className="font-medium text-sm bg-background-light/60 rounded-lg px-3 py-2 mb-6 text-(--text)">&ldquo;{notice.title}&rdquo;</p>
+        <div className="flex gap-3">
+          <button onClick={onCancel} className="flex-1 px-4 py-2.5 border border-(--primary)/30 rounded-xl hover:bg-background-light text-(--text)/70 text-sm">Cancel</button>
+          <button onClick={onConfirm} className="flex-1 px-4 py-2.5 bg-red-600 text-white rounded-xl hover:bg-red-700 text-sm">Delete</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function NotificationsPage() {
   const { user } = useGlobal();
   const [notices, setNotices] = useState<Notice[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<Notice | null>(null);
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -101,8 +122,13 @@ export default function NotificationsPage() {
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (!confirm("Delete this notice?")) return;
+  // Issue 6 — ownership check
+  const canDeleteNotice = (notice: Notice) =>
+    user?.role === "hod" ||
+    user?.role === "admin" ||
+    (canPost && notice.author_uid === user?.id);
+
+  const handleDelete = async (id: string) => {
     try {
       await deleteNotice("", id);
       setNotices(prev => prev.filter(n => n.id !== id));
@@ -110,6 +136,8 @@ export default function NotificationsPage() {
     } catch (e) {
       toast.error("Failed to delete notice");
       console.error(e);
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -254,9 +282,9 @@ export default function NotificationsPage() {
                       </div>
                     </div>
                   </div>
-                  {canPost && (
+                  {canDeleteNotice(notice) && (
                     <button
-                      onClick={() => handleDelete(notice.id)}
+                      onClick={() => setDeleteTarget(notice)}
                       className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors shrink-0"
                     >
                       <FaTrash className="text-sm" />
@@ -386,6 +414,15 @@ export default function NotificationsPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Custom Delete Confirmation Modal */}
+      {deleteTarget && (
+        <DeleteModal
+          notice={deleteTarget}
+          onConfirm={() => handleDelete(deleteTarget.id)}
+          onCancel={() => setDeleteTarget(null)}
+        />
       )}
     </div>
   );

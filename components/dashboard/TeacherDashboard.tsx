@@ -13,6 +13,39 @@ import {
 import { getTeacherDashboardData, TeacherDashboardData } from "@/services/stat";
 import { useGlobal } from "@/app/context/GlobalContext";
 
+// ─── Countdown badge ──────────────────────────────────────────────────────────
+function getCountdown(timeStr: string): string {
+  const [hourStr, minStr] = timeStr.split(":");
+  const now = new Date();
+  const classTime = new Date();
+  classTime.setHours(Number(hourStr), Number(minStr), 0, 0);
+  const diffMs = classTime.getTime() - now.getTime();
+  if (diffMs <= 0) return "In progress";
+  const diffMins = Math.floor(diffMs / 60000);
+  if (diffMins < 60) return `Starts in ${diffMins}m`;
+  const h = Math.floor(diffMins / 60);
+  const m = diffMins % 60;
+  return `Starts in ${h}h ${m > 0 ? `${m}m` : ""}`;
+}
+
+function ClassCountdownBadge({ startTime }: { startTime: string }) {
+  const [label, setLabel] = useState(() => getCountdown(startTime));
+  useEffect(() => {
+    const interval = setInterval(() => setLabel(getCountdown(startTime)), 60000);
+    return () => clearInterval(interval);
+  }, [startTime]);
+  const isLive = label === "In progress";
+  return (
+    <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
+      isLive
+        ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+        : "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300"
+    }`}>
+      {isLive ? "🟢 Live" : `⏱ ${label}`}
+    </span>
+  );
+}
+
 const EmptyState = ({ icon, title, subtitle }: { icon: React.ReactNode; title: string; subtitle: string }) => (
   <div className="text-center py-10 px-4">
     <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center text-primary/50 text-2xl">
@@ -239,28 +272,34 @@ export default function TeacherDashboard() {
 
             {upcoming_classes.length > 0 ? (
               <div className="space-y-4">
-                {upcoming_classes.map((cls) => (
-                  <div
-                    key={cls.id}
-                    className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/10 dark:to-pink-900/10 rounded-xl p-5 border border-purple-100 dark:border-purple-800/30 hover:shadow-md transition-all duration-300"
-                  >
-                    <div className="flex items-start">
-                      <div className="p-3 rounded-xl bg-purple-100 dark:bg-purple-900/30 mr-4">
-                        <FaBook className="text-purple-600 dark:text-purple-400 text-lg" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-(--text)">{cls.course}</h3>
-                        <p className="text-sm text-(--text)/70 mt-0.5">Batch: {cls.section}</p>
-                        <div className="mt-2 flex flex-wrap gap-2 text-sm text-(--text)/70">
-                          <span className="bg-background px-3 py-1 rounded-full">
-                            <FaClock className="inline mr-1 text-xs" /> {cls.time}
-                          </span>
-                          <span className="bg-background px-3 py-1 rounded-full">{cls.room}</span>
+                {upcoming_classes.map((cls) => {
+                  const startTime = cls.time.split("–")[0].trim();
+                  return (
+                    <div
+                      key={cls.id}
+                      className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/10 dark:to-pink-900/10 rounded-xl p-5 border border-purple-100 dark:border-purple-800/30 hover:shadow-md transition-all duration-300"
+                    >
+                      <div className="flex items-start">
+                        <div className="p-3 rounded-xl bg-purple-100 dark:bg-purple-900/30 mr-4">
+                          <FaBook className="text-purple-600 dark:text-purple-400 text-lg" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 flex-wrap mb-1">
+                            <h3 className="font-semibold text-(--text)">{cls.course}</h3>
+                            <ClassCountdownBadge startTime={startTime} />
+                          </div>
+                          <p className="text-sm text-(--text)/70 mt-0.5">Batch: {cls.section}</p>
+                          <div className="mt-2 flex flex-wrap gap-2 text-sm text-(--text)/70">
+                            <span className="bg-background px-3 py-1 rounded-full">
+                              <FaClock className="inline mr-1 text-xs" /> {cls.time}
+                            </span>
+                            <span className="bg-background px-3 py-1 rounded-full">{cls.room}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <EmptyState
