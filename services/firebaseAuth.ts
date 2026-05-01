@@ -2,6 +2,7 @@ import {
   signInWithPopup,
   signOut as firebaseSignOut,
   onAuthStateChanged,
+  sendPasswordResetEmail as firebaseSendPasswordResetEmail,
 } from "firebase/auth";
 import {
   doc,
@@ -89,6 +90,19 @@ export const signOut = async (): Promise<void> => {
     localStorage.removeItem("token");
   } catch (error) {
     console.error("Sign out error:", error);
+    throw error;
+  }
+};
+
+// Send password reset email
+export const sendPasswordResetEmail = async (email: string) => {
+  if (!auth) {
+    throw new Error("Firebase is not configured. Please set up Firebase environment variables.");
+  }
+  try {
+    return await firebaseSendPasswordResetEmail(auth, email);
+  } catch (error) {
+    console.error("Password reset error:", error);
     throw error;
   }
 };
